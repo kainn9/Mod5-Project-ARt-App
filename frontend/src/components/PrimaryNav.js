@@ -24,7 +24,7 @@ const PrimaryNav = (props) => {
   return(
       <div
       style={{ 
-        width: '90%', 
+        width: '75%', 
         margin: 'auto', 
         textAlign: 'center',
       }}
@@ -32,22 +32,22 @@ const PrimaryNav = (props) => {
         <Segment raised inverted >
           <Menu raised inverted color={'black'} icon='labeled'>
               <NavLink 
-                to='/login' 
+                to='/home' 
                 style={{ width: '25%' }}
               >
-                <Menu.Item name='login' >
-                    <Icon name='id badge' />
-                    Login
+                <Menu.Item name='home' >
+                    <Icon name='home' />
+                    Home
                 </Menu.Item>
               </NavLink>
 
               <NavLink 
-                to='/signup' 
+                to='/home/create-post' 
                 style ={{ width: '25%' }}
               >
-                <Menu.Item name='sign-up'>
-                  <Icon name='user secret' />
-                  Sign-Up
+                <Menu.Item name='create-post'>
+                  <Icon name='file image outline' />
+                  Create Post
                 </Menu.Item>
               </NavLink>
 
