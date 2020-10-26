@@ -1,5 +1,6 @@
-// imports
+// imports:
 import React from 'react';
+
 import { NavLink } from 'react-router-dom';
 
 import { Segment, Icon, Menu } from 'semantic-ui-react';

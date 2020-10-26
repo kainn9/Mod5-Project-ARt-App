@@ -1,8 +1,11 @@
-// imports
+// imports:
 import React from 'react';
+
 import { useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
+
 import { connect } from 'react-redux';
+
 import { Segment, Icon, Menu } from 'semantic-ui-react';
 // end of imports-----------------------------------------
 

@@ -1,3 +1,4 @@
+// imports:
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -7,6 +8,7 @@ import { signupUser } from '../redux/actions';
 
 import { Button, Form, Message, Segment, Menu, Icon } from 'semantic-ui-react';
 import cityScape from '../images/cityScape.jpg';
+// end of imports--------------------------------------------------------------
 
 const SignUpContainer = (props) => {
 

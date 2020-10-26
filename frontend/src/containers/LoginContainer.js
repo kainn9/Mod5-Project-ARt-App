@@ -1,12 +1,12 @@
 // imports:
 import React, { useState } from 'react';
+
 import { NavLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
 
 import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions';
 
-import { loginRoute } from '../railsRoutes';
 import { Button, Form, Message, Segment, Menu, Icon } from 'semantic-ui-react';
 import skyCastleImg from '../images/skyCastle.png';
 // end of imports -----------------------------------------------------------

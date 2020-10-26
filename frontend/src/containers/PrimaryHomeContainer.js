@@ -1,6 +1,10 @@
+// imports:
 import React from 'react';
-import PrimaryNav from '../components/PrimaryNav'
-import leaves from '../images/leaves.png'
+
+import PrimaryNav from '../components/PrimaryNav';
+
+import leaves from '../images/leaves.png';
+// end of imports -----------------------------------------
 
 const PrimaryHomeContainer = () => {
 
