@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { Segment, StepDescription } from 'semantic-ui-react';
+import { Segment, Menu, Input, Header, Icon } from 'semantic-ui-react';
 import PrimaryNav from './PrimaryNav';
 import cityScape from '../images/cityScape.jpg';
 
@@ -40,13 +40,16 @@ const ShowPost = (props) => {
     //         }
     //       });
     // }
-
+    const renderARView =() => {
+        setViewMode('ar')
+        const img = document.querySelector('#texture')
+        setDimensions({height: img.clientHeight, width: img.clientWidth})
+    }
     const prep3D = () => {
         const img = document.querySelector('#texture')
         const height = img.clientHeight;
         const width = img.clientWidth;
         render3D(width, height)
-
     }
 
     const render3D = (sWidth, sHeight) => {
@@ -176,10 +179,31 @@ const ShowPost = (props) => {
                     {/* <h1>{currentPost.title}</h1>
                     <h1>{currentPost.body}</h1> */}
                     
+
                     <PrimaryNav />
                     <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto'}}>
-                    {console.log(THREE)}
-                    {console.log(`http://localhost:4000/rails${currentPost.featured_image.url.split('rails')[1]}`)}
+                    <Header as='h2' icon textAlign='center'>
+                        <Icon name='image' />
+                        <Header.Content>{currentPost.title}</Header.Content>
+                    </Header>
+                    <Menu pointing  style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Menu.Item
+                            style = {{ width: '40%', color: 'blue' }}
+                            name='Standard View'
+                            
+                        />
+                        <Menu.Item
+                            style = {{ width: '40%', color: 'blue' }}
+                            name='Canvas View'
+                        />
+                        <Menu.Item
+                            name='Open AR View'
+                            style = {{ width: '20%', color: 'red'}}
+                            onClick={ renderARView }
+                            
+                        />
+    
+                    </Menu>
                     <img 
                         style ={{maxWidth: '100%'}}
                         id='texture'
@@ -191,7 +215,7 @@ const ShowPost = (props) => {
                         setViewMode('ar')
                         const test = document.querySelector('#texture')
                         setDimensions({height: test.clientHeight, width: test.clientWidth})
-                        console.log('t', dimensions)
+            
                         
                         }}>AR</button>
                 </>
@@ -211,7 +235,7 @@ const ShowPost = (props) => {
                 
                 <a-scene>
                     <a-marker preset="hiro">
-                        <a-box src={currentImg} position ='0 0 -2' scale = {`${ dimensions.width / 300 }, 0,5, ${ dimensions.height / 300}` } > </a-box>
+                        <a-box src={currentImg} position ='0 0 -2' scale = {`${ dimensions.width / 300 }, 0.2, ${ dimensions.height / 300}` } > </a-box>
                     </a-marker>
                 </a-scene>
                 <h1>LOL</h1>
