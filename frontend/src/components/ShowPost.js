@@ -2,24 +2,58 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+import {Entity, Scene} from 'aframe-react';
+
+
 const ShowPost = (props) => {
+    const AFRAME = window.AFRAME;
     const artScopeJWT = localStorage.getItem('artScopeJWT');
     const [currentPost, setCurrentPost] = useState(null);
     const [currentImg, setCurrentImg] = useState(null);
-    // const [imgWidth, setCurrentWidth] = useState(100);
-    // const [imgHeight, setCurrentHeight] = useState(100);   
+    const [viewMode, setViewMode] = useState('normal')
+    const [imgWidth, setImgWidth] = useState(0);
+    const [imgHeight, setImgHeight] = useState(0);   
     const tex = 'https://threejsfundamentals.org/threejs/resources/images/wall.jpg';
     
+
+    const testfn = () => {
+        AFRAME.registerComponent('canvas', {
+            schema: {
+              color: {
+                default: '#000'
+              },
+            },
+          
+            update: function() {
+              var material = new AFRAME.THREE.MeshBasicMaterial({
+                color: this.data.color,
+                wireframe: true
+              });
+          
+              var geometry = new AFRAME.THREE.BoxGeometry(1, 1, 1);
+          
+            this.el.setObject3D('mesh', new AFRAME.THREE.Mesh(geometry, material));
+        
+            },
+          
+            remove: function() {
+              this.el.removeObject3D('mesh');
+            }
+          });
+    }
+
     const prep3D = () => {
         const img = document.querySelector('#texture')
-        const height = img.clientHeight;
-        const width = img.clientWidth;
-        render3D(width, height)
+        if (!imgHeight) setImgHeight(img.clientHeight);
+        if(!imgWidth) setImgWidth(img.clientWidth);
+        setViewMode('three')
+        //render3D(imgWidth, imgHeight)
+
 
     }
 
     const render3D = (sWidth, sHeight) => {
-
+        
         function main() {
             const canvas = document.querySelector('#c');
             const renderer = new THREE.WebGLRenderer({canvas});
@@ -42,6 +76,7 @@ const ShowPost = (props) => {
           
             //const cubes = [];  // just an array we can use to rotate the cubes
             const loader = new THREE.TextureLoader();
+            
             loader.load(currentImg, (texture) => {
               const material = new THREE.MeshBasicMaterial({
                 map: texture,
@@ -49,7 +84,33 @@ const ShowPost = (props) => {
               const cube = new THREE.Mesh(geometry, material);
               scene.add(cube);
               
-              //cubes.push(cube);  // add to our list of cubes to rotate
+            //   AFRAME.registerComponent('canvas', {
+            //     schema: {
+            //       color: {
+            //         default: '#000'
+            //       },
+            //     },
+              
+            //     update: function() {
+            //     //   var material = new AFRAME.THREE.MeshBasicMaterial({
+            //     //     color: this.data.color,
+            //     //     wireframe: true
+            //     //   });
+              
+            //     //   var geometry = new AFRAME.THREE.BoxGeometry(1, 1, 1);
+              
+            //     this.el.setObject3D('mesh', cube);
+            
+            //     },
+              
+            //     remove: function() {
+            //       this.el.removeObject3D('mesh');
+            //     }
+            //   });
+            
+
+
+
             });
           
             function resizeRendererToDisplaySize(renderer) {
@@ -90,8 +151,15 @@ const ShowPost = (props) => {
           main();
     }
     
+
+    useEffect (() => {
+        if (viewMode === 'three') render3D(imgWidth, imgHeight);
+        //if (viewMode === 'ar') testfn()
+    }, [viewMode])
+
     useEffect(() => {
 
+        testfn()
         const fetchConfig = {
             method: 'GET',
             headers: {
@@ -106,42 +174,80 @@ const ShowPost = (props) => {
             setCurrentImg(`http://localhost:4000/rails${data.featured_image.url.split('rails')[1]}`)
         })
 
-        
     }, [])
 
-    return(
-        <>
-        <canvas 
+
+
+
+
+
+    if (viewMode === 'normal') {
+        return(
+            <>
+            <div>
+                <h1>test</h1>
+                <a-scene embedded>
+                    <a-marker preset="hiro">
+                        <a-entity canvas="color: green;" position="0 0 0"> </a-entity>   
+                    </a-marker>                                                         
+                </a-scene>
+            </div> 
+            {
+                // currentPost ? (
+                //     <>
+                //     <button onClick ={ prep3D }>3d</button>
+                    
+        
+                //         <h1>{currentPost.title}</h1>
+                //         <h1>{currentPost.body}</h1>
+                        
+                        
+                //         {console.log(THREE)}
+                //         {console.log(`http://localhost:4000/rails${currentPost.featured_image.url.split('rails')[1]}`)}
+                //         <img 
+                //             id='texture'
+                //             src={currentImg} 
+                            
+                //         />
+                //         <button onClick ={ prep3D }>3d</button>
+                //     </>
+                    
+                // ) : (
+                //     <h1>LOADING BRAH</h1>
+                // )
+            }
+       
+            </>
+        )
+    } else if(viewMode === 'ar') {
+         return (
+            <div>
+                <h1>test</h1>
+                <a-scene embedded>
+                    <a-marker preset="hiro">
+                        <a-entity canvas="color: green;" position="0 0 0"> </a-entity>   
+                    </a-marker>                                                         
+                </a-scene>
+            </div> 
+         )
+         
+    } else if (viewMode === 'three') {
+        return(
+            <>
+            <h1>test3D</h1>
+            <button onClick = {() => render3D(imgWidth, imgHeight)}> render</button>
+            <button onClick={() => setViewMode('ar')}>ar</button>
+            <canvas 
+            color='black'
             id="c"
             style={{width: '100%'}}
-        >
+        ></canvas>
 
-
-        </canvas>
-        {
-            currentPost ? (
-                <>
-                    
-                    <h1>{currentPost.title}</h1>
-                    <h1>{currentPost.body}</h1>
-                    
-                    
-                    {console.log(`http://localhost:4000/rails${currentPost.featured_image.url.split('rails')[1]}`)}
-                    <img 
-                        id='texture'
-                        src={currentImg} 
-                        
-                    />
-                    <button onClick ={ prep3D }>3d</button>
-                </>
-                
-            ) : (
-                <h1>LOADING BRAH</h1>
-            )
-        }
-   
-        </>
-    )
+         </>
+        )
+        
+    }
+    
 }
 
 export default ShowPost;

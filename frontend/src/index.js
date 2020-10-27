@@ -18,17 +18,19 @@ import * as serviceWorker from './serviceWorker';
 // end of imports---------------------------------
 
 let store = createStore(rootReducer, applyMiddleware(thunk));
+setTimeout(() => {
+  ReactDOM.render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <Provider store={store}>
+          <App />
+        </Provider>
+        </BrowserRouter>
+    </React.StrictMode>,
+    document.getElementById('root')
+  );
+}, 1500);
 
-ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-      </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
