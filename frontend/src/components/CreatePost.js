@@ -35,8 +35,8 @@ const CreatePost = () => {
 
     return(
         <>
-        <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
-        <script src="https://raw.githack.com/jeromeetienne/AR.js/2.0.4/aframe/build/aframe-ar.js"></script>
+        {/* <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+        <script src="https://raw.githack.com/jeromeetienne/AR.js/2.0.4/aframe/build/aframe-ar.js"></script> */}
         <Segment placeholder style={{width: '75%', margin: 'auto'}}>
             <Header icon>
                 <Icon name='image outline' />

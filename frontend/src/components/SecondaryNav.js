@@ -15,7 +15,7 @@ const SecondaryNav = () => {
     <div 
     style={{ 
       backgroundImage: `url(${skyCastleImg})`,
-      backgroundRepeat: 'repeat-y',
+      backgroundRepeat: 'repeat',
       height: 'fit',
       minHeight: '100%',
 

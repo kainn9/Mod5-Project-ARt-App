@@ -1,59 +1,56 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
-import {Entity, Scene} from 'aframe-react';
-
+import { Segment, StepDescription } from 'semantic-ui-react';
+import PrimaryNav from './PrimaryNav';
+import cityScape from '../images/cityScape.jpg';
 
 const ShowPost = (props) => {
     const AFRAME = window.AFRAME;
     const artScopeJWT = localStorage.getItem('artScopeJWT');
     const [currentPost, setCurrentPost] = useState(null);
     const [currentImg, setCurrentImg] = useState(null);
-    const [viewMode, setViewMode] = useState('normal')
-    const [imgWidth, setImgWidth] = useState(0);
-    const [imgHeight, setImgHeight] = useState(0);   
-    const tex = 'https://threejsfundamentals.org/threejs/resources/images/wall.jpg';
+    const [dimensions, setDimensions] = useState(0);
+    const [viewMode, setViewMode] = useState('normal');
+
+    
     
 
-    const testfn = () => {
-        AFRAME.registerComponent('canvas', {
-            schema: {
-              color: {
-                default: '#000'
-              },
-            },
+    // const testfn = () => {
+    //     AFRAME.registerComponent('canvas', {
+    //         schema: {
+    //           color: {
+    //             default: '#000'
+    //           },
+    //         },
           
-            update: function() {
-              var material = new AFRAME.THREE.MeshBasicMaterial({
-                color: this.data.color,
-                wireframe: true
-              });
+    //         update: function() {
+    //           var material = new AFRAME.THREE.MeshBasicMaterial({
+    //             color: this.data.color,
+    //             wireframe: true
+    //           });
           
-              var geometry = new AFRAME.THREE.BoxGeometry(1, 1, 1);
+    //           var geometry = new AFRAME.THREE.BoxGeometry(1, 1, 1);
           
-            this.el.setObject3D('mesh', new AFRAME.THREE.Mesh(geometry, material));
-        
-            },
+    //           this.el.setObject3D('mesh', new AFRAME.THREE.Mesh(geometry, material));
+    //         },
           
-            remove: function() {
-              this.el.removeObject3D('mesh');
-            }
-          });
-    }
+    //         remove: function() {
+    //           this.el.removeObject3D('mesh');
+    //         }
+    //       });
+    // }
 
     const prep3D = () => {
         const img = document.querySelector('#texture')
-        if (!imgHeight) setImgHeight(img.clientHeight);
-        if(!imgWidth) setImgWidth(img.clientWidth);
-        setViewMode('three')
-        //render3D(imgWidth, imgHeight)
-
+        const height = img.clientHeight;
+        const width = img.clientWidth;
+        render3D(width, height)
 
     }
 
     const render3D = (sWidth, sHeight) => {
-        
+        //testfn()
         function main() {
             const canvas = document.querySelector('#c');
             const renderer = new THREE.WebGLRenderer({canvas});
@@ -76,41 +73,40 @@ const ShowPost = (props) => {
           
             //const cubes = [];  // just an array we can use to rotate the cubes
             const loader = new THREE.TextureLoader();
-            
             loader.load(currentImg, (texture) => {
               const material = new THREE.MeshBasicMaterial({
                 map: texture,
               });
-              const cube = new THREE.Mesh(geometry, material);
+              const cube = new AFRAME.THREE.Mesh(geometry, material);
               scene.add(cube);
               
-            //   AFRAME.registerComponent('canvas', {
-            //     schema: {
-            //       color: {
-            //         default: '#000'
-            //       },
-            //     },
-              
-            //     update: function() {
-            //     //   var material = new AFRAME.THREE.MeshBasicMaterial({
-            //     //     color: this.data.color,
-            //     //     wireframe: true
-            //     //   });
-              
-            //     //   var geometry = new AFRAME.THREE.BoxGeometry(1, 1, 1);
-              
-            //     this.el.setObject3D('mesh', cube);
-            
-            //     },
-              
-            //     remove: function() {
-            //       this.el.removeObject3D('mesh');
-            //     }
-            //   });
-            
 
-
-
+              AFRAME.registerComponent('canvas', {
+                schema: {
+                  color: {
+                    default: '#000'
+                  },
+                },
+              
+                update: function() {
+                
+                    
+                    
+                  var amaterial = new AFRAME.THREE.MeshBasicMaterial({
+                    map: texture,
+                    wireframe: true
+                  });
+              
+                  var ageometry = new AFRAME.THREE.BoxGeometry(boxWidth, boxHeight, boxDepth)
+              
+                  this.el.setObject3D('mesh', new AFRAME.THREE.Mesh(ageometry));
+                },
+              
+                remove: function() {
+                  this.el.removeObject3D('mesh');
+                }
+              });
+              //cubes.push(cube);  // add to our list of cubes to rotate
             });
           
             function resizeRendererToDisplaySize(renderer) {
@@ -150,16 +146,9 @@ const ShowPost = (props) => {
           
           main();
     }
-    
-
-    useEffect (() => {
-        if (viewMode === 'three') render3D(imgWidth, imgHeight);
-        //if (viewMode === 'ar') testfn()
-    }, [viewMode])
 
     useEffect(() => {
 
-        testfn()
         const fetchConfig = {
             method: 'GET',
             headers: {
@@ -174,80 +163,74 @@ const ShowPost = (props) => {
             setCurrentImg(`http://localhost:4000/rails${data.featured_image.url.split('rails')[1]}`)
         })
 
+        
     }, [])
 
-
-
-
-
-
-    if (viewMode === 'normal') {
-        return(
-            <>
-            <div>
-                <h1>test</h1>
-                <a-scene embedded>
-                    <a-marker preset="hiro">
-                        <a-entity canvas="color: green;" position="0 0 0"> </a-entity>   
-                    </a-marker>                                                         
-                </a-scene>
-            </div> 
-            {
-                // currentPost ? (
-                //     <>
-                //     <button onClick ={ prep3D }>3d</button>
+    if (viewMode === 'normal') return(
+        <div style ={{ backgroundImage: `url(${cityScape})`, backgroundRepeat: 'repeat', height: '100%', width: '100%'}}>
+        {
+            currentPost ? (
+                <>
+                {/* <button onClick ={ prep3D }>3d</button> */}
                     
+                    {/* <h1>{currentPost.title}</h1>
+                    <h1>{currentPost.body}</h1> */}
+                    
+                    <PrimaryNav />
+                    <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto'}}>
+                    {console.log(THREE)}
+                    {console.log(`http://localhost:4000/rails${currentPost.featured_image.url.split('rails')[1]}`)}
+                    <img 
+                        style ={{maxWidth: '100%'}}
+                        id='texture'
+                        src={currentImg} 
+                        
+                    />
+                    </Segment >
+                    <button onClick ={ () => {
+                        setViewMode('ar')
+                        const test = document.querySelector('#texture')
+                        setDimensions({height: test.clientHeight, width: test.clientWidth})
+                        console.log('t', dimensions)
+                        
+                        }}>AR</button>
+                </>
+                
+            ) : (
+                null
+            )
+        }
+   
+        </div>
+    )
+
+    if (viewMode === 'ar') return (
+        <>
         
-                //         <h1>{currentPost.title}</h1>
-                //         <h1>{currentPost.body}</h1>
-                        
-                        
-                //         {console.log(THREE)}
-                //         {console.log(`http://localhost:4000/rails${currentPost.featured_image.url.split('rails')[1]}`)}
-                //         <img 
-                //             id='texture'
-                //             src={currentImg} 
-                            
-                //         />
-                //         <button onClick ={ prep3D }>3d</button>
-                //     </>
-                    
-                // ) : (
-                //     <h1>LOADING BRAH</h1>
-                // )
-            }
-       
-            </>
-        )
-    } else if(viewMode === 'ar') {
-         return (
-            <div>
-                <h1>test</h1>
-                <a-scene embedded>
+
+                
+                <a-scene>
                     <a-marker preset="hiro">
-                        <a-entity canvas="color: green;" position="0 0 0"> </a-entity>   
-                    </a-marker>                                                         
+                        <a-box src={currentImg} position ='0 0 -2' scale = {`${ dimensions.width / 300 }, 0,5, ${ dimensions.height / 300}` } > </a-box>
+                    </a-marker>
                 </a-scene>
-            </div> 
-         )
-         
-    } else if (viewMode === 'three') {
-        return(
-            <>
-            <h1>test3D</h1>
-            <button onClick = {() => render3D(imgWidth, imgHeight)}> render</button>
-            <button onClick={() => setViewMode('ar')}>ar</button>
+                <h1>LOL</h1>
+               
+            
+        </>
+    )
+
+    if (viewMode === 'three') return (
+        <>
+            <PrimaryNav />
+            <Segment>
             <canvas 
-            color='black'
-            id="c"
-            style={{width: '100%'}}
-        ></canvas>
-
-         </>
-        )
-        
-    }
-    
+                    id="c"
+                    style={{width: '100%', position: 'bottom'}}
+                     ></canvas>
+            </Segment>
+        </>
+    )
 }
-
+//scale = '4 0.5 4'
 export default ShowPost;

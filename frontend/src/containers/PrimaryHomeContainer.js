@@ -27,7 +27,7 @@ const PrimaryHomeContainer = () => {
                 render={ () => (
                     <div style={{
                         backgroundImage: `url(${leaves})`,
-                        backgroundRepeat: 'repeat-y',
+                        backgroundRepeat: 'repeat',
                         height: 'fit%',
                         minHeight: '100%',
                     }}
@@ -42,7 +42,7 @@ const PrimaryHomeContainer = () => {
                 render={() => (
                 <div style={{
                     backgroundImage: `url(${leaves})`,
-                    backgroundRepeat: 'repeat-y',
+                    backgroundRepeat: 'repeat',
                     height: 'fit%',
                     minHeight: '100%',
                 }}
