@@ -10,28 +10,39 @@ import { Button, Form, Message, Segment, Menu, Icon } from 'semantic-ui-react';
 import cityScape from '../images/cityScape.jpg';
 // end of imports--------------------------------------------------------------
 
+// page for user signup
 const SignUpContainer = (props) => {
-
+    // history hook
     const history = useHistory();
+    // state to control forms:
     const [usernameInput, setUserNameInput] =  useState('');
     const [passwordInput, setPasswordInput] =  useState('');
     const [passwordInput2, setPasswordInput2] =  useState('');
+    // state for error messages
     const [loginFailed, setLoginFailed] =  useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    // handle sign-up
     const signupHandler = () => {
-
+        // inputs should match
         if (passwordInput !== passwordInput2) {
             setErrorMessage('passwords do not Match please try again')
             setLoginFailed(true)
-        } else if (usernameInput.length < 5) {
+
+            // username length must be greater than or equal to 5
+        } else if (usernameInput.length <= 5) {
             setErrorMessage('username must be at least 5 characters')
             setLoginFailed(true)
+
+            // password cannot be blank
         } else if (passwordInput.length <= 0) {
             setErrorMessage('password cannot be blank')
             setLoginFailed(true)
-        } else {
 
+            // attempt to signup
+        } else {
+            // redux action
+            // pass in the form information, setter hooks for errors, and history hook for redirect
             props.signupUser({ 
                 username: usernameInput, 
                 password: passwordInput 
@@ -43,33 +54,32 @@ const SignUpContainer = (props) => {
     }
 
     return(
-        <div 
-            id='login'
-            style = {{ height: '100%', width: '100%', backgroundImage: `url(${cityScape})` }}
-        >
-            <Menu raised inverted color={'black'} icon='labeled'>
-        <NavLink 
-          to='/login' 
-          style={{ width: '50%' }}
-        >
-          <Menu.Item name='login' >
-              <Icon name='id badge' />
-              Login
-          </Menu.Item>
-        </NavLink>
+        <div id='login' style = {{ height: '100%', width: '100%', backgroundImage: `url(${ cityScape })` }} >
 
-        <NavLink 
-          to='/signup' 
-          style ={{ width: '50%' }}
-        >
-          <Menu.Item name='sign-up'>
-            <Icon name='user secret' />
-            Sign-Up
-          </Menu.Item>
-        </NavLink>
-    </Menu>
-        <Segment
-        raised
+            <Menu raised inverted color={'black'} icon='labeled'>
+
+                <NavLink to='/login' style={{ width: '50%' }}>
+
+                    <Menu.Item name='login' >
+                        <Icon name='id badge' />
+                        Login
+                    </Menu.Item>
+
+                </NavLink>
+
+                <NavLink to='/signup' style ={{ width: '50%' }} >
+
+                    <Menu.Item name='sign-up'>
+                        <Icon name='user secret' />
+                        Sign-Up
+                    </Menu.Item>
+
+                </NavLink>
+
+            </Menu>
+
+        <Segment 
+            raised
             style ={{
                 height: '30',
                 width: '50%',
@@ -78,32 +88,35 @@ const SignUpContainer = (props) => {
                 position: 'relative',
             }}
         >
-            <Form error={loginFailed}>
+            <Form error={ loginFailed }>
+
                 <Form.Input 
                     type='text' 
                     label='enter username:' 
                     placeholder='username42'
-                    value={usernameInput}
-                    onChange={ (e) => setUserNameInput(e.target.value)}
+                    value={ usernameInput }
+                    onChange={ e => setUserNameInput(e.target.value)}
                 />
+
                 <Form.Input 
                     type='password' 
                     label='enter password:' 
                     placeholder='password goes here'
-                    value={passwordInput}
-                    onChange={ (e) => setPasswordInput(e.target.value)}
+                    value={ passwordInput }
+                    onChange={ e => setPasswordInput(e.target.value)}
                 />
+
                 <Form.Input 
                     type='password' 
                     label='confirm password:' 
                     placeholder='one more time please'
-                    value={passwordInput2}
-                    onChange={ (e) => setPasswordInput2(e.target.value)}
+                    value={ passwordInput2 }
+                    onChange={ e => setPasswordInput2(e.target.value)}
                 />
                 <Message
                     error
                     header='Error'
-                    content={errorMessage}
+                    content={ errorMessage }
                 />
                 <Button
                     onClick={ signupHandler }
@@ -116,6 +129,6 @@ const SignUpContainer = (props) => {
     );
 };
 
-
+// pass in the form information, setter hooks for errors, and history hook for redirect
 const mdp = (dispatch) => ({ signupUser: (userData, setErrorMessage, setLoginFailed, history) => dispatch(signupUser(userData, setErrorMessage, setLoginFailed, history)) });
 export default connect(null, mdp)(SignUpContainer);

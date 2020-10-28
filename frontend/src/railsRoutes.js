@@ -1,6 +1,10 @@
-export const getUserRoute = 'http://localhost:4000/api/v1/profile/';
+// gets user with existing token
+export const getUserRoute = 'http://localhost:3000/api/v1/profile/';
 
-export const loginRoute = 'http://localhost:4000/api/v1/login/';
+// login for token
+export const loginRoute = 'http://localhost:3000/api/v1/login/';
 
-// method post for sign-up...
-export const usersRoute = 'http://localhost:4000/api/v1/users/';
+// post method for sign-up...
+export const usersRoute = 'http://localhost:3000/api/v1/users/';
+// post to create get for index
+export const postsRoute = 'http://localhost:3000/api/v1/posts'

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Segment } from 'semantic-ui-react';
-import { getUserFromJWT } from '../redux/actions';
+
 
 const UserFeed = () => {
     return(

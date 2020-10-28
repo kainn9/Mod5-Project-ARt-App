@@ -1,157 +1,142 @@
-import React, { useState, useEffect, useRef } from 'react';
+// imports 
+
+    // React:
+import React, { useState, useEffect } from 'react';
+    // three related:
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+    // Semantic UI
 import { Segment, Menu, Input, Header, Icon } from 'semantic-ui-react';
+
+// My relative imports:
 import PrimaryNav from './PrimaryNav';
 import cityScape from '../images/cityScape.jpg';
 
+
+// Primary Show Component for Posts... Has 3 view modes set from state/hooks: 'normal, 'ar', 'three'
 const ShowPost = (props) => {
-    const AFRAME = window.AFRAME;
+
+    // auth token
     const artScopeJWT = localStorage.getItem('artScopeJWT');
+    // state/hook for post being viewed
     const [currentPost, setCurrentPost] = useState(null);
+    // state/hook for img url
     const [currentImg, setCurrentImg] = useState(null);
+    // state/hook for picture dimensions --> used to render 3D and AR versions
     const [dimensions, setDimensions] = useState(0);
+    // state/hook to track current view mode
     const [viewMode, setViewMode] = useState('normal');
 
-    
-    
+    // gets Dimesions from img and then uses Set Dimensions hook to save in state
+    const getDimensions  = () => {
+        // grab image
+        const img = document.querySelector('#texture');
 
-    // const testfn = () => {
-    //     AFRAME.registerComponent('canvas', {
-    //         schema: {
-    //           color: {
-    //             default: '#000'
-    //           },
-    //         },
-          
-    //         update: function() {
-    //           var material = new AFRAME.THREE.MeshBasicMaterial({
-    //             color: this.data.color,
-    //             wireframe: true
-    //           });
-          
-    //           var geometry = new AFRAME.THREE.BoxGeometry(1, 1, 1);
-          
-    //           this.el.setObject3D('mesh', new AFRAME.THREE.Mesh(geometry, material));
-    //         },
-          
-    //         remove: function() {
-    //           this.el.removeObject3D('mesh');
-    //         }
-    //       });
-    // }
+        // if viewMode !== normal the img does not exist,  grab natural height and length otherwise, view mode always starts as nornal
+        if (viewMode === 'normal') setDimensions({height: img.naturalHeight, width: img.naturalWidth});
+    }
+
+    // sets view state to ar and grabs pic dimensions for render(if need be)
     const renderARView =() => {
-        setViewMode('ar')
-        const img = document.querySelector('#texture')
-        setDimensions({height: img.clientHeight, width: img.clientWidth})
+        setViewMode('ar');
+        getDimensions();
     }
+
+    // sets view state to three and grabs pic dimensions for render(if need be)
     const prep3D = () => {
-        const img = document.querySelector('#texture')
-        const height = img.clientHeight;
-        const width = img.clientWidth;
-        render3D(width, height)
+        setViewMode('three');
+        getDimensions();
     }
 
+    // renders 3D 'canvas' of img --> takes in image dimensions as args
     const render3D = (sWidth, sHeight) => {
-        //testfn()
-        function main() {
-            const canvas = document.querySelector('#c');
-            const renderer = new THREE.WebGLRenderer({canvas});
-          
-            const fov = 70;
-            const aspect = 2;  // the canvas default
-            const near = 0.1;
-            const far = 3000;
-            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-            camera.position.z = 2;
-          
-            const controls = new OrbitControls(camera, canvas);
+        
+        // where we render renderer(canvas must exist as JSX)
+        const canvas = document.querySelector('#k');
 
-            const scene = new THREE.Scene();
+        // create 3D renderer using canvas
+        const renderer = new THREE.WebGLRenderer({canvas});
+        // camera settings:
+        const fov = 70; // field of view
+        const aspect = 2;  // canvas default 
+        const near = 0.1; // zoom
+        const far = 3000; // clipping zone
+
+        // make camera using settings
+        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        
+        // small positioning change
+        camera.position.z = 2;
+        
+        // camera controls (declared after camera/canvas)
+        const controls = new OrbitControls(camera, canvas);
+
+        // scene to render
+        const scene = new THREE.Scene();
+        
+        // 'canvas' geometry settings(scaled from image dimensions):
+        const boxWidth = sWidth / 128;
+        const boxHeight = sHeight / 128;
+        const boxDepth = 1;
+
+        // declaring 'canvas' geomtry var
+        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
           
-            const boxWidth = sWidth / 100;
-            const boxHeight = sHeight / 100;
-            const boxDepth = 1;
-            const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-          
-            //const cubes = [];  // just an array we can use to rotate the cubes
-            const loader = new THREE.TextureLoader();
-            loader.load(currentImg, (texture) => {
-              const material = new THREE.MeshBasicMaterial({
+        // texture loader to turn img into three material
+        const loader = new THREE.TextureLoader();
+
+        
+        loader.load(currentImg, (texture) => {
+            // set img to material/texture
+            const material = new THREE.MeshBasicMaterial({
                 map: texture,
-              });
-              const cube = new AFRAME.THREE.Mesh(geometry, material);
-              scene.add(cube);
-              
-
-              AFRAME.registerComponent('canvas', {
-                schema: {
-                  color: {
-                    default: '#000'
-                  },
-                },
-              
-                update: function() {
-                
-                    
-                    
-                  var amaterial = new AFRAME.THREE.MeshBasicMaterial({
-                    map: texture,
-                    wireframe: true
-                  });
-              
-                  var ageometry = new AFRAME.THREE.BoxGeometry(boxWidth, boxHeight, boxDepth)
-              
-                  this.el.setObject3D('mesh', new AFRAME.THREE.Mesh(ageometry));
-                },
-              
-                remove: function() {
-                  this.el.removeObject3D('mesh');
-                }
-              });
-              //cubes.push(cube);  // add to our list of cubes to rotate
             });
-          
-            function resizeRendererToDisplaySize(renderer) {
-              const canvas = renderer.domElement;
-              const width = canvas.clientWidth;
-              const height = canvas.clientHeight;
-              const needResize = canvas.width !== width || canvas.height !== height;
-              if (needResize) {
+            // make mesh out of 'canvas' geometry and material
+            const cube = new THREE.Mesh(geometry, material);
+            // add the mesh to scene
+            scene.add(cube);
+        });
+        
+        
+        // fits renderer usings canvas properties --> takes renderer as arg
+        function resizeRendererToDisplaySize(renderer) {
+            // grabs dimensions from canvas element attached to renderer
+            const canvas = renderer.domElement;
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            // grabs boolean if canvas h/w doesnt match the values currently grabbed
+            const needResize = canvas.width !== width || canvas.height !== height;
+            
+            // resizes renderer if bool is true
+            if (needResize) {
                 renderer.setSize(width, height, false);
-              }
-              return needResize;
             }
+            
+            return needResize;
+        }
           
-            function render(time) {
-              time *= 0.001;
-          
-              if (resizeRendererToDisplaySize(renderer)) {
+        function render(time) {
+            time *= 0.001;
+            // checks if render was resized
+            if (resizeRendererToDisplaySize(renderer)) {
+
                 const canvas = renderer.domElement;
+                // adjusts camera accordingly
                 camera.aspect = canvas.clientWidth / canvas.clientHeight;
                 camera.updateProjectionMatrix();
-              }
-          
-            //   cubes.forEach((cube, ndx) => {
-            //     const speed = .2 + ndx * .1;
-            //     const rot = time * speed;
-            //     cube.rotation.x = rot;
-            //     cube.rotation.y = rot;
-            //   });
-          
-              renderer.render(scene, camera);
-          
-              requestAnimationFrame(render);
             }
+
+            // render scene
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
+        }
           
             requestAnimationFrame(render);
-          }
-          
-          main();
     }
 
-    useEffect(() => {
-
+    // gets current post from rails api
+    const fetchCurrentPost = () => {
         const fetchConfig = {
             method: 'GET',
             headers: {
@@ -159,102 +144,92 @@ const ShowPost = (props) => {
             }
         }
 
-        fetch(`http://localhost:4000/api/v1/posts/${props.postID}`, fetchConfig)
+        fetch(`http://localhost:3000/api/v1/posts/${props.postID}`, fetchConfig)
         .then( response => response.json())
         .then(data => {
             setCurrentPost(data)
-            setCurrentImg(`http://localhost:4000/rails${data.featured_image.url.split('rails')[1]}`)
+            setCurrentImg(`http://localhost:3000/rails${data.featured_image.url.split('rails')[1]}`)
         })
-
+    }
+          
         
+    // if user leaves normal view store the img dimensions for rendering later
+    useEffect(() => {if(viewMode === 'three') return render3D(dimensions.width, dimensions.height)}, [viewMode])
+
+    // on component load/mount
+    useEffect(() => {
+        fetchCurrentPost();
     }, [])
 
+    // normal view:
     if (viewMode === 'normal') return(
-        <div style ={{ backgroundImage: `url(${cityScape})`, backgroundRepeat: 'repeat', height: '100%', width: '100%'}}>
+        <div style ={{ backgroundImage: `url(${cityScape})`, backgroundRepeat: 'repeat', minHeight: '100%', height: 'fit', width: '100%', textAlign: 'center'}}>
         {
             currentPost ? (
                 <>
-                {/* <button onClick ={ prep3D }>3d</button> */}
-                    
-                    {/* <h1>{currentPost.title}</h1>
-                    <h1>{currentPost.body}</h1> */}
-                    
-
                     <PrimaryNav />
-                    <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto'}}>
-                    <Header as='h2' icon textAlign='center'>
-                        <Icon name='image' />
-                        <Header.Content>{currentPost.title}</Header.Content>
-                    </Header>
-                    <Menu pointing  style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Menu.Item
-                            style = {{ width: '40%', color: 'blue' }}
-                            name='Standard View'
-                            
-                        />
-                        <Menu.Item
-                            style = {{ width: '40%', color: 'blue' }}
-                            name='Canvas View'
-                        />
-                        <Menu.Item
-                            name='Open AR View'
-                            style = {{ width: '20%', color: 'red'}}
-                            onClick={ renderARView }
-                            
-                        />
+
+                    <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto' }} >
+
+                        <Header as='h2' icon textAlign='center' >
+                            <Icon name='image' />
+                            <Header.Content>{ currentPost.title }</Header.Content>
+                        </Header>
+
+                        <Menu pointing style={{ display: 'flex', justifyContent: 'center' }} >
+
+                            <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {{ width: '40%', color: 'blue' }} />
+                        
+                            <Menu.Item name='Canvas View' onClick={ () => prep3D()} style = {{ width: '40%', color: 'blue' }} />
+                        
+                            <Menu.Item name='Open AR View' onClick={ renderARView } style = {{ width: '20%', color: 'red' }} />
     
-                    </Menu>
-                    <img 
-                        style ={{maxWidth: '100%'}}
-                        id='texture'
-                        src={currentImg} 
-                        
-                    />
+                        </Menu>
+                    
+                        <img id='texture' src={currentImg} style ={{ maxWidth: '100%' }} />
                     </Segment >
-                    <button onClick ={ () => {
-                        setViewMode('ar')
-                        const test = document.querySelector('#texture')
-                        setDimensions({height: test.clientHeight, width: test.clientWidth})
-            
-                        
-                        }}>AR</button>
+                    
                 </>
                 
             ) : (
                 null
             )
         }
-   
         </div>
     )
 
+    // view mode for AR
     if (viewMode === 'ar') return (
         <>
-        
-
-                
-                <a-scene>
-                    <a-marker preset="hiro">
-                        <a-box src={currentImg} position ='0 0 -2' scale = {`${ dimensions.width / 300 }, 0.2, ${ dimensions.height / 300}` } > </a-box>
-                    </a-marker>
-                </a-scene>
-                <h1>LOL</h1>
-               
-            
+            <a-scene arjs='sourceTypff: webcam; sourceWidth:1920; sourceHeight:1080; displayWidth: 1920; displayHeight: 1080;' >
+                <a-marker preset="hiro">
+                    <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 256 } width={dimensions.width / 256} height='0.01'> </a-box>
+                </a-marker>
+            </a-scene>    
         </>
     )
-
+    // view mode for three
     if (viewMode === 'three') return (
-        <>
+        
+        <div style ={{ backgroundImage: `url(${ cityScape })`, backgroundRepeat: 'repeat', minHeight: '100%', height: 'fit', width: '100%'}}>
+            
             <PrimaryNav />
-            <Segment>
-            <canvas 
-                    id="c"
-                    style={{width: '100%', position: 'bottom'}}
-                     ></canvas>
+
+            <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto'}}>
+
+                <Menu pointing  style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {{ width: '40%', color: 'blue' }} />
+
+                    <Menu.Item name='Canvas View' onClick={ () => prep3D()} style = {{ width: '40%', color: 'blue' }} />
+                    
+                    <Menu.Item name='Open AR View' onClick={ renderARView } style = {{ width: '20%', color: 'red'}} />
+    
+                </Menu>
+                <canvas id="k" style={{ width: '100%', position: 'bottom' }} />
             </Segment>
-        </>
+        </div>
+    
     )
 }
-//scale = '4 0.5 4'
+
 export default ShowPost;

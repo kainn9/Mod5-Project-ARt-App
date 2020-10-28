@@ -1,24 +1,36 @@
+// imports:
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+import { postsRoute } from '../railsRoutes';
 import { Segment, Header, Icon, Button, Input, Label, TextArea } from 'semantic-ui-react';
+// end of imports ------------------------------------------------------------------------
 
+// form for uploading images with title and body
 const CreatePost = () => {
-    const history = useHistory();
-    const artScopeJWT = localStorage.getItem('artScopeJWT');
-    const [title, setTitle] = useState('test');
-    const [body, setBody] = useState('test2');
-    const [img, setImg] = useState(null);
 
+    // auth token
+    const artScopeJWT = localStorage.getItem('artScopeJWT');
+    
+    // hooks
+
+    // input control hooks
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
+    const [img, setImg] = useState(null);
+    // for redirect / access to history
+    const history = useHistory();
+
+    // handles submit action
     const submitHandler = e => {
         e.preventDefault();
 
+        // sending as formData so rails api can store img active storage
         const formData = new FormData();
-
         formData.append('title', title);
         formData.append('body', body);
         formData.append('featured_image', img);
 
-        fetch('http://localhost:4000/api/v1/posts', {
+        fetch(postsRoute, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${artScopeJWT}`, 
@@ -26,92 +38,69 @@ const CreatePost = () => {
           body: formData
         })
         .then( response => response.json() )
+        // use new post id for the routing
         .then( post => history.push(`/home/post/${post.id}`))
     }
 
+    // sets img hook/state to selected file/img
     const imgChangeHandler = e => {
         setImg(e.target.files[0])
     }
 
     return(
         <>
-        {/* <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
-        <script src="https://raw.githack.com/jeromeetienne/AR.js/2.0.4/aframe/build/aframe-ar.js"></script> */}
-        <Segment placeholder style={{width: '75%', margin: 'auto'}}>
+        <Segment placeholder style={{ width: '75%', margin: 'auto' }} >
+
             <Header icon>
                 <Icon name='image outline' />
                 Create a Post!
             </Header>
-            <form onSubmit={ submitHandler } style={{textAlign: 'center', width: '100%'}}>
-                <Label
-                    style={{ width: '280px'}} 
-                    color='purple' 
-                    horizontal
-                > 
+
+            <form onSubmit={ submitHandler } style={{ textAlign: 'center', width: '100%' }} >
+                <Label color='purple' horizontal style={{ width: '280px'}}> 
                     Post Title:
-                </Label> <br></br>
+                </Label> 
 
-                <Input 
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
-                    focus 
-                    placeholder='enter title here...' 
-                    style ={{width: '290px'}} 
-                /> 
-                <div 
-                    className='filler'
-                    style ={{ height: '10vh'}}
-                />
-                <Label
-                    style={{ width: '280px'}} 
-                    color='purple' 
-                    horizontal
-                > 
+                <br></br>
+
+                <Input value={ title } placeholder='enter title here...' focus onChange={ e => setTitle(e.target.value) } style ={{ width: '290px' }} /> 
+                
+                <div className='filler' style ={{ height: '10vh'}}/>
+                
+                <Label color='purple' horizontal style={{ width: '280px'}} > 
                     Body:
-                </Label> <br></br>
-                <TextArea 
-                    value={body}
-                    onChange={e => setBody(e.target.value)}
-                    focus 
-                    placeholder='Tell people about stuff!' 
-                    style ={{ 'max-width': '100%', width: '280px', 'min-height': '20vh'}} 
-                    />
-                <div 
-                    className='filler'
-                    style ={{ height: '15vh'}}
-                />
-
+                </Label> 
                 
                 <br></br>
 
-                <label
-                style ={{
+                <TextArea value={body}
+                    focus 
+                    placeholder='Tell people about stuff!' 
+                    onChange={e => setBody(e.target.value)}
+                    style ={{ 'max-width': '100%', width: '280px', 'min-height': '20vh'}} 
+                />
+
+                <div className='filler' style ={{ height: '15vh'}} />
+
+                <br></br>
+
+                <label style = {{
                     border: '1px solid #ccc',
                     display: 'inline-block',
                     padding: '6px 12px',
                     cursor: 'pointer',
 
-                 }}
+                    }}
                 >
-                    <input 
-                        type="file" 
-                        accept="image/*" 
-                        multiple={false} 
-                        onChange={ e => imgChangeHandler(e) }
-                        
-                    />
+                <input type="file" accept="image/*" multiple={false} onChange={ e => imgChangeHandler(e) } />
                 </label>
+
                 <br></br>
-                <Button style={{ width: '290px', 'max-width': '100%'}} primary>Submit Me!</Button>
+
+                <Button primary style={{ width: '290px', 'max-width': '100%'}}>Submit Me!</Button>
             </form>
     
         </Segment>
-            {/* <form onSubmit={ submitHandler }>
-            
-                <h1> CreatePost </h1>
-                <input type="file" accept="image/*" multiple={false} onChange={ e => imgChangeHandler(e) } />
-                <button>Submit</button>
-            </form> */}
         </>
     );
 };
