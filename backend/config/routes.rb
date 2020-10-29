@@ -5,9 +5,10 @@ Rails.application.routes.draw do
       
       resources :users, only: [:create, :show]
       resources :posts, only: [:create, :index, :show]
-
+      resources :liked_posts, only: [:create]
       post '/login', to: 'auth#create'
       get '/profile', to:'users#profile'
+      delete '/liked_posts', to:'liked_posts#destroy'
       
       # post '/posts', to: 'posts#create'
       # get "/posts", to: "posts#index"

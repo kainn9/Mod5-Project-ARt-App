@@ -208,7 +208,7 @@ const ShowPost = (props) => {
     // view mode for AR
     if (viewMode === 'ar') return (
         <>
-            <a-scene arjs='sourceTypff: webcam; sourceWidth:1920; sourceHeight:1080; displayWidth: 1920; displayHeight: 1080;' >
+            <a-scene arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;' >
                 <a-marker preset="hiro">
                     <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 256 } width={dimensions.width / 256} height='0.01'> </a-box>
                 </a-marker>

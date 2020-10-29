@@ -1,6 +1,6 @@
 class PostSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :title, :body, :featured_image, :filteredUser
+  attributes :id, :title, :body, :featured_image, :filteredUser, :suscribedUsers
 
 
   def featured_image

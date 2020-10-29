@@ -5,7 +5,8 @@ import PostPreview from '../components/PostPreview';
 import { Segment, Header, Image } from 'semantic-ui-react';
 // end of imports ------------------------------------------------------
 
-const UserPostContainer = (props) => {
+
+const UserLikedContainer = (props) => {
     // auth token
     const artScopeJWT = localStorage.getItem('artScopeJWT');
     // state for current user show page
@@ -44,6 +45,7 @@ const UserPostContainer = (props) => {
             viewingUser ? (
                 <Segment inverted secondary style={{  width: '75%', margin: 'auto', textAlign: 'center' }}>
                     <Header as='h2'>
+                        
                         <Image circular src='https://react.semantic-ui.com/images/avatar/large/patrick.png' />
                         {viewingUser.user.username}'s Page:
                         {console.log(viewingUser)}
@@ -61,4 +63,4 @@ const UserPostContainer = (props) => {
     )
 };
 
-export default UserPostContainer;
+export default UserLikedContainer;

@@ -34,6 +34,21 @@ const PrimaryNav = (props) => {
             </Menu.Item>
           </NavLink>
 
+          <NavLink to={ `/home/user/${props.user.user.id}` } style ={{ width: '25%' }} >
+            <Menu.Item name='My Posts'>
+              <Icon name='folder open' />
+              My Posts
+            </Menu.Item>
+          </NavLink>
+
+          <NavLink to={ `/home/user/${props.user.user.id}/liked` } style ={{ width: '25%' }} >
+            <Menu.Item name='Liked Posts'>
+              <Icon name='folder open outline' />
+              Liked Posts
+            </Menu.Item>
+          </NavLink>
+
+
           <NavLink to='/home/create-post' style ={{ width: '25%' }} >
             <Menu.Item name='create-post'>
               <Icon name='file image outline' />
@@ -41,7 +56,6 @@ const PrimaryNav = (props) => {
             </Menu.Item>
           </NavLink>
 
-            
           <Menu.Item id='filler' style ={{ width: '50%' }} />
             
           <Menu.Item name='logOut' onClick={ logoutHandler }>
@@ -59,5 +73,5 @@ const PrimaryNav = (props) => {
 
 // set user to null in redux
 const mdp = dispatch => ({ logoutUser: () => dispatch({ type: 'logoutUser' }) })
-
-export default connect(null, mdp)(PrimaryNav);
+const msp = state => ({ user: state.user })
+export default connect(msp, mdp)(PrimaryNav);

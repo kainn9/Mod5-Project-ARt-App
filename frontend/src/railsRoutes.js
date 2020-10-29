@@ -6,10 +6,12 @@ export const loginRoute = 'http://localhost:3000/api/v1/login/';
 
 // post method for sign-up...add id for show page
 export const usersRoute = 'http://localhost:3000/api/v1/users/';
+
 // post to create get for index
 export const postsRoute = 'http://localhost:3000/api/v1/posts'
 
-
+// Post to create, Delete to to remove--> does not use url params pass in user_id and post_id
+export const likedPostsRoute = 'http://localhost:3000/api/v1/liked_posts'
 
 // converts activeStorage url into usable url:
 export const activeStorageUrlConverter = (url) => {
