@@ -16,6 +16,6 @@ class Api::V1::PostsController < ApplicationController
 
     private
     def post_params
-        params.permit(:title, :body, :featured_image)
+        params.permit(:title, :body, :featured_image, :user_id)
     end
 end

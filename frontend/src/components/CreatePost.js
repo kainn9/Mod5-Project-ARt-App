@@ -1,12 +1,14 @@
 // imports:
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+import { connect } from 'react-redux';
+
 import { postsRoute } from '../railsRoutes';
 import { Segment, Header, Icon, Button, Input, Label, TextArea } from 'semantic-ui-react';
 // end of imports ------------------------------------------------------------------------
 
 // form for uploading images with title and body
-const CreatePost = () => {
+const CreatePost = (props) => {
 
     // auth token
     const artScopeJWT = localStorage.getItem('artScopeJWT');
@@ -28,6 +30,7 @@ const CreatePost = () => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('body', body);
+        formData.append('user_id', props.user.user.id);
         formData.append('featured_image', img);
 
         fetch(postsRoute, {
@@ -104,5 +107,7 @@ const CreatePost = () => {
         </>
     );
 };
+// read current user from redux store
+const msp = state => ({ user: state.user })
 
-export default CreatePost
+export default connect(msp, null)(CreatePost)

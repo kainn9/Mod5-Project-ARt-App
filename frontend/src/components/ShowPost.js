@@ -2,6 +2,7 @@
 
     // React:
 import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
     // three related:
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -10,6 +11,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Segment, Menu, Input, Header, Icon } from 'semantic-ui-react';
 
 // My relative imports:
+import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
 import PrimaryNav from './PrimaryNav';
 import cityScape from '../images/cityScape.jpg';
 
@@ -144,11 +146,11 @@ const ShowPost = (props) => {
             }
         }
 
-        fetch(`http://localhost:3000/api/v1/posts/${props.postID}`, fetchConfig)
+        fetch(`${postsRoute}/${props.postID}`, fetchConfig)
         .then( response => response.json())
         .then(data => {
             setCurrentPost(data)
-            setCurrentImg(`http://localhost:3000/rails${data.featured_image.url.split('rails')[1]}`)
+            setCurrentImg(activeStorageUrlConverter(data.featured_image.url))
         })
     }
           
@@ -167,6 +169,7 @@ const ShowPost = (props) => {
         {
             currentPost ? (
                 <>
+                {console.log(currentPost.filteredUser.id)}
                     <PrimaryNav />
 
                     <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto' }} >
@@ -175,6 +178,10 @@ const ShowPost = (props) => {
                             <Icon name='image' />
                             <Header.Content>{ currentPost.title }</Header.Content>
                         </Header>
+
+                        <NavLink to={ `/home/user/${currentPost.filteredUser.id}` } >
+                            <Header color='violet' size='medium' > Post By: {currentPost.filteredUser.username} </Header>
+                        </NavLink>
 
                         <Menu pointing style={{ display: 'flex', justifyContent: 'center' }} >
 
