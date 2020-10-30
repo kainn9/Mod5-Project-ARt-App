@@ -51,5 +51,4 @@ function App(props) {
 const msp = state => ({ user: state.user })
 const mdp = dispatch => ({ getUser: () => dispatch(getUserFromJWT()) })
 
-
 export default connect(msp, mdp)(App);

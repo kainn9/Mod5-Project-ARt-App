@@ -14,7 +14,9 @@ import { Segment, Menu, Input, Header, Icon } from 'semantic-ui-react';
 import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
 import PrimaryNav from './PrimaryNav';
 import cityScape from '../images/cityScape.jpg';
-
+import canvasTexture from '../images/canvas.jpg';
+import canvasBack from '../images/canvasBack.jpg';
+// end of imports ----------------------------------
 
 // Primary Show Component for Posts... Has 3 view modes set from state/hooks: 'normal, 'ar', 'three'
 const ShowPost = (props) => {
@@ -89,17 +91,23 @@ const ShowPost = (props) => {
         const loader = new THREE.TextureLoader();
 
         
-        loader.load(currentImg, (texture) => {
-            // set img to material/texture
-            const material = new THREE.MeshBasicMaterial({
-                map: texture,
-            });
-            // make mesh out of 'canvas' geometry and material
-            const cube = new THREE.Mesh(geometry, material);
-            // add the mesh to scene
-            scene.add(cube);
-        });
-        
+  
+        // canvas textures
+        const materials = [
+            new THREE.MeshBasicMaterial({map: loader.load(canvasTexture)}),
+            new THREE.MeshBasicMaterial({map: loader.load(canvasTexture)}),
+            new THREE.MeshBasicMaterial({map: loader.load(canvasTexture)}),
+            new THREE.MeshBasicMaterial({map: loader.load(canvasTexture)}), // depth faces
+            new THREE.MeshBasicMaterial({map: loader.load(currentImg)}), //front
+            new THREE.MeshBasicMaterial({map: loader.load(canvasBack)}), //back
+        ];
+
+        // make mesh out of 'canvas' geometry and material
+        const canvas3D = new THREE.Mesh(geometry, materials);
+        // add the mesh to scene
+        scene.add(canvas3D);
+            
+ 
         
         // fits renderer usings canvas properties --> takes renderer as arg
         function resizeRendererToDisplaySize(renderer) {

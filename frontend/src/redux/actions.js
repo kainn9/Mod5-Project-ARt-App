@@ -101,3 +101,10 @@ export const loginUser = (userData, setErrorMessage, setLoginFailed, history) =>
     }
     
 }
+
+export const updateUserLikes = (newLikeID) => {
+    return function(dispatch) {
+        dispatch({ type: 'updateLikes', payload: newLikeID })
+    }
+    
+}

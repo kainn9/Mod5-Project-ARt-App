@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { updateUserLikes } from '../redux/actions'
 import { likedPostsRoute } from '../railsRoutes';
 
 
@@ -17,8 +18,10 @@ const PostPreview = (props) => {
     // auth token
     const artScopeJWT = localStorage.getItem('artScopeJWT');
 
-    // these in state so we can update render pessimistically without a full refresh after fetches
-    const [likedPosts, setLikedPosts] = useState(props.user.user.likedPosts)
+   
+    // lisening for redux change on likes --> tracking from redux to main SSOT when jumping between my posts/liked posts
+    useEffect(() => {}, [props.reduxLikedPosts])
+    // we do a local state for like count since its not the most important information to update in realtime...probably should be moved to redux store eventually
     const [likedPostsCounter, setLikedPostsCounter] = useState(props.data.subs.length)
 
     
@@ -26,7 +29,7 @@ const PostPreview = (props) => {
     const hasUserLikedPost = () => {
         let liked = false;
 
-        likedPosts.forEach( post => {
+        props.reduxLikedPosts.forEach( post => {
             if (post.id === props.data.id) liked = true;
         })
 
@@ -53,19 +56,16 @@ const PostPreview = (props) => {
         .then( response => response.json() )
         .then(json => {
             
-            //updating render by manipulating hooks.state based on callback of like/unlike fetch
+            //updating render, props.upateCurrentUserLikes is a redux action and maintains that state in store likeCounter is local state
             if (json.message === 'created') {
                 
-                setLikedPosts(current => [...current, {id: props.data.id} ])
+                props.updateCurrentUserLikes(props.data.id)
                 setLikedPostsCounter(current => current + 1 )
 
             } else if (json.message === 'deleted') {
-
+                props.updateCurrentUserLikes(props.data.id)
                 setLikedPostsCounter(current => current - 1 )
-                setLikedPosts(current => {
-                    let newLikes = [...current.filter(like => like.id !== props.data.id)]
-                    return newLikes;
-                })
+                
             }
         })
 
@@ -73,7 +73,7 @@ const PostPreview = (props) => {
 
     return(
         <div>
-            {console.log('msp', props.data)}
+            {console.log(props.reduxLikedPosts)}
             <NavLink to={`/home/post/${props.data.id}`}>
                 <Card style={{ height: '25vh', marginTop: 0 }} onClick={ () => null } >
                     <img src={activeStorageUrlConverter(props.data.img)} wrapped ui={false} style={{ height: '50%', objectFit: 'scale-down', backgroundImage: `url(${canvasTexture})`}}/>
@@ -93,5 +93,6 @@ const PostPreview = (props) => {
     )
 }
 
-const msp = state => ({ user: state.user })
-export default connect(msp, null)(PostPreview);
+const msp = state => ({ user: state.user, reduxLikedPosts: state.user.user.likedPosts });
+const mdp = dispatch => ({ updateCurrentUserLikes: (newLikeID) => dispatch(updateUserLikes(newLikeID)) });
+export default connect(msp, mdp)(PostPreview);

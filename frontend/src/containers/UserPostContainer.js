@@ -1,64 +1,100 @@
 // imports
-import React, { useState, useEffect } from 'react';
-import { activeStorageUrlConverter ,usersRoute } from '../railsRoutes';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { usersRoute } from '../railsRoutes';
 import PostPreview from '../components/PostPreview';
-import { Segment, Header, Image } from 'semantic-ui-react';
+import { Segment, Header, Image, Button } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
 // end of imports ------------------------------------------------------
 
-const UserPostContainer = (props) => {
-    // auth token
-    const artScopeJWT = localStorage.getItem('artScopeJWT');
-    // state for current user show page
-    const [viewingUser, setViewingUser] = useState(null);
+// class copment that handles rendering the post previews for a user
+// I made it a class so I could extend from it when making UserLikesContainer
+class UserPostContainer extends Component {
 
-    //creates post previews JSX
-    const renderPostPreviewsFromUserData = () => (
-        viewingUser.user.posts.map( postData => <PostPreview key={postData.id} data={postData} userID={props.userID} />)
+    headerChange = 'Page:'
+
+    state = {
+        token: localStorage.getItem('artScopeJWT'),
+        user: null,
+    }
+
+    linkToLikesOrMain = () => (
+        <Button color='orange'>view likes</Button>
     )
-
+    // place holder for extended classes since Redux does not play nice
+    isViewerFollowing = () => {
+        return true;
+    }
+    // place holder for extended classes since Redux does not play nice
+    isViewerUser = () => {
+        return true;
+    }
+    // maps over provided users posts and creates PostPreview Components from the data
+    renderPostPreviewsFromUserData = () => {
+        return this.state.user.user.posts.map( postData => <PostPreview key={postData.id} data={postData} userID={this.props.userID} />)
+    }
     
-
-    // fetches user and saves to state for render
-    const fetchUserData = () => {
-
+    // fetchs user based on provided user(router params)
+    fetchUserData = () => {
         const fetchConfig = {
             method: 'GET', 
-            headers: { Authorization: `Bearer ${artScopeJWT}` }
+            headers: { Authorization: `Bearer ${this.state.token}` }
         }
 
-        fetch(usersRoute + `/${props.userID}`, fetchConfig)
+        fetch(usersRoute + `/${this.props.userID}`, fetchConfig)
         .then( response => response.json() )
-        .then( foundUser => setViewingUser(foundUser) )
+        // rerender upon getting user from resp
+        .then( foundUser => this.setState({user: foundUser}) )
     }
-    // runs when component mounts -> fetches user triggering rerender on state change
-    useEffect(() => {
+    // fethc user on mount
+    componentDidMount () {
+        this.fetchUserData()
+    }
 
-        fetchUserData()
+    render() {
+        return (
+            <>
+            {
+                this.state.user ? (
+                    <Segment inverted secondary style={{  width: '75%', margin: 'auto', textAlign: 'center' }}>
+                        <Header as='h2'>
+                            <Image circular src='https://react.semantic-ui.com/images/avatar/large/patrick.png' />
+                            {this.state.user.user.username}'s {this.headerChange}
+                            <br></br>
+                            {
+                                !this.isViewerUser ? null : (
+                                    <>
+                                    <NavLink to={`/home/user/${this.state.user.user.id}/liked`}>
+                                        <Button color='orange' style ={{ width: '50%' }} >View Likes</Button>
+                                    </NavLink>
+                                    <br></br>
+                                        {!this.isViewerFollowing() ? 
+                                            (<Button color='red' style ={{ width: '50%' }} >unfollow</Button>) 
+                                        : 
+                                            (<Button color='blue' style ={{ width: '50%' }} >Follow</Button>)
+                                        }
+                                    </>
+                                    
+                                        
+                                )
 
-    }, []) 
-    
-
-    return (
-        <>
-        {
-            viewingUser ? (
-                <Segment inverted secondary style={{  width: '75%', margin: 'auto', textAlign: 'center' }}>
-                    <Header as='h2'>
-                        <Image circular src='https://react.semantic-ui.com/images/avatar/large/patrick.png' />
-                        {viewingUser.user.username}'s Page:
-                        {console.log(viewingUser)}
-                    </Header>
-                    <Segment inverted style={{ display: 'grid', gridTemplateColumns: '25% 25% 25% 25%', border: '2px dashed rgba(114, 186, 94, 0.35)' }} >
-                    
-                        {renderPostPreviewsFromUserData()}
+                            }
+                        </Header>
+                        <Segment inverted style={{ display: 'grid', gridTemplateColumns: '25% 25% 25% 25%', border: '2px dashed rgba(114, 186, 94, 0.35)' }} >
+                        
+                            {this.renderPostPreviewsFromUserData()}
+                            
+                        </Segment>
                     </Segment>
-                </Segment>
-
-            ) 
-            : ( null )
-        }
-        </>
-    )
+    
+                ) 
+                : ( null )
+            }
+            </>
+        )
+    }
+    
 };
+const msp = state => ({ viewingUser: state.user })
 
 export default UserPostContainer;
