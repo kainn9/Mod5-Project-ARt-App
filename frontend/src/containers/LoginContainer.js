@@ -1,20 +1,15 @@
 // imports:
 import React, { useState } from 'react';
-
 import { NavLink } from 'react-router-dom';
-import { useHistory } from 'react-router';
-
 import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions';
-
 import { Button, Form, Message, Segment, Menu, Icon } from 'semantic-ui-react';
 import skyCastleImg from '../images/skyCastle.png';
 // end of imports -----------------------------------------------------------
 
 // login page
 const LoginContainer = (props) => {
-    // history hook
-    const history = useHistory()
+  
     // state to control inputs:
     const [usernameInput, setUserNameInput] =  useState('');
     const [passwordInput, setPasswordInput] =  useState('');
@@ -43,7 +38,7 @@ const LoginContainer = (props) => {
             props.loginUser({ 
                 username: usernameInput,
                 password: passwordInput,
-            }, setErrorMessage, setLoginFailed, history)
+            }, setErrorMessage, setLoginFailed, props.history)
         }
     }
 

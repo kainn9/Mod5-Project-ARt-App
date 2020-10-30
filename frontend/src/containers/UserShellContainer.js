@@ -1,6 +1,5 @@
 // imports
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { usersRoute } from '../railsRoutes';
 import PostPreview from '../components/PostPreview';
 import { Segment, Header, Image, Button } from 'semantic-ui-react';
@@ -63,14 +62,24 @@ class UserShellContainer extends Component {
                             {
                                 this.isViewerUser() ? null : (
                                     <>
-                                    <NavLink to={`/home/user/${this.state.user.user.id}/liked`}>
-                                        <Button color='orange' style ={{ width: '50%' }} >View Likes</Button>
-                                    </NavLink>
+                                    {
+                                        this.headerChange === 'Page:' ? (
+                                            <NavLink to={`/home/user/${this.state.user.user.id}/liked`}>
+                                                <Button color='orange' style ={{ width: '50%' }} >View Likes</Button>
+                                            </NavLink>
+                                        ) :
+                                        (
+                                            <NavLink to={`/home/user/${this.state.user.user.id}`}>
+                                                <Button color='orange' style ={{ width: '50%' }} >View Collection</Button>
+                                            </NavLink>
+                                        )
+                                    }
+                                    
                                     <br></br>
-                                        {!this.isViewerFollowing() ? 
-                                            (<Button color='red' style ={{ width: '50%' }} >unfollow</Button>) 
+                                        {this.isViewerFollowing() ? 
+                                            (<Button color='red' onClick={this.followHandler} style ={{ width: '50%' }} >unfollow</Button>) 
                                         : 
-                                            (<Button color='blue' style ={{ width: '50%' }} >Follow</Button>)
+                                            (<Button color='blue' onClick={this.followHandler} style ={{ width: '50%' }} >Follow</Button>)
                                         }
                                     </>
                                     

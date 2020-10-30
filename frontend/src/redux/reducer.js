@@ -32,6 +32,24 @@ function userReducer(state = defaultState.user, action) {
             )
             
         return shallowClone
+
+        case 'updateFollows':
+            let shallowClone2 = {...state}
+            let following = false;
+            console.log(shallowClone2.user.isFollowing)
+
+            shallowClone2.user.isFollowing.forEach( user => { if (user.id === action.payload) following = true })
+
+            following ? 
+            (
+                shallowClone2.user.isFollowing = shallowClone2.user.isFollowing.filter(user => user.id !== action.payload)
+            ) 
+                : 
+            (   
+                 shallowClone2.user.isFollowing = [...shallowClone2.user.isFollowing, { id: action.payload }]
+            )
+            
+        return shallowClone2
         
 
 

@@ -171,6 +171,7 @@ const ShowPost = (props) => {
         fetchCurrentPost();
     }, [])
 
+
     // normal view:
     if (viewMode === 'normal') return(
         <div style ={{ backgroundImage: `url(${cityScape})`, backgroundRepeat: 'repeat', minHeight: '100%', height: 'fit', width: '100%', textAlign: 'center'}}>

@@ -1,6 +1,7 @@
 // imports
 import PostPreview from '../components/PostPreview';
 import UserShellContainer from './UserShellContainer';
+import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 // end of imports ------------------------------------------------------
 
@@ -11,17 +12,16 @@ class UserLikedContainer extends UserShellContainer {
     headerChange = 'Likes:'
 
 
-    linkToLikesOrMain = () => (
-        <Button color='orange'>view likes</Button>
-    )
+
     // place holder for extended classes since Redux does not play nice
     isViewerFollowing = () => {
-        return true;
+        console.log(this.props.viewingUser.user.isFollowing)
+        const idsOfFollowing = this.props.viewingUser.user.isFollowing.map(user => user.id)
+
+        return idsOfFollowing.includes(this.state.user.user.id)
     }
     // place holder for extended classes since Redux does not play nice
-    isViewerUser = () => {
-        return true;
-    }
+    isViewerUser = () => this.props.viewingUser.user.id === this.state.user.user.id
     // maps over provided users liked posts and creates PostPreview Components from the data
     renderPostPreviewsFromUserData = () => {
         console.log(this.state.user.user.likedPosts)
@@ -30,5 +30,6 @@ class UserLikedContainer extends UserShellContainer {
 
 }
 
+const msp = state => ({ viewingUser: state.user })
 
-export default UserLikedContainer;
+export default connect(msp, null)(UserLikedContainer);

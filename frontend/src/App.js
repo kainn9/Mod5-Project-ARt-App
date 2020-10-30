@@ -3,7 +3,7 @@ import './App.css';
 
 import React, { useEffect } from 'react';
 
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 
 
@@ -20,6 +20,7 @@ import SignUpContainer from './containers/SignUpContainer';
 // end of imports ------------------------------------
 
 function App(props) {
+  const history = useHistory()
 
   useEffect(() => {
     return props.getUser();
@@ -34,13 +35,13 @@ function App(props) {
         </Route>
         {
           props.user ? (
-            <Route  path='/home' render={ () => <PrimaryHomeContainer/>} />
+            <Route path='/home' render={ () => <PrimaryHomeContainer history={history} />} />
           ) : (
-            <Route path='/home' render={ () => <SecondaryHomeContainer /> } />
+            <Route path='/home' render={ () => <SecondaryHomeContainer history /> } />
           )
         }
-        <Route path='/login'  render={ () => < LoginContainer /> } />
-        <Route path='/signup'  render={ () => < SignUpContainer /> } />
+        <Route path='/login'  render={ () => < LoginContainer history={history} /> } />
+        <Route path='/signup'  render={ () => < SignUpContainer history={history} /> } />
       </Switch>
     </>
   );

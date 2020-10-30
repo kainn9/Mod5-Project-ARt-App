@@ -1,7 +1,6 @@
 // imports:
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-
 import PrimaryNav from '../components/PrimaryNav';
 import UserFeed from '../components/UserFeed';
 import ShowPost from '../components/ShowPost';
@@ -12,7 +11,7 @@ import leaves from '../images/leaves.png';
 // end of imports -----------------------------------------
 
 // primary container/page for logged in users --> has client side routing
-const PrimaryHomeContainer = () => {
+const PrimaryHomeContainer = (props) => {
 
     return(
         
@@ -33,7 +32,7 @@ const PrimaryHomeContainer = () => {
                     minHeight: '100%',
                     }}
             >
-                    <PrimaryNav />
+                    <PrimaryNav history={props.history} />
                     <h1>inside edit</h1>
                     </div>
                 )
@@ -55,7 +54,7 @@ const PrimaryHomeContainer = () => {
                     minHeight: '100%',
                     }}
             >
-                    <PrimaryNav />
+                    <PrimaryNav history={props.history} />
                     <UserLikedContainer userID={id} />
                 
                     </div>
@@ -78,7 +77,7 @@ const PrimaryHomeContainer = () => {
                     minHeight: '100%',
                     }}
             >
-                    <PrimaryNav />
+                    <PrimaryNav history={props.history} />
                     <UserPostContainer userID={id} />
                 
                     </div>
@@ -105,7 +104,7 @@ const PrimaryHomeContainer = () => {
                         minHeight: '100%',
                         }}
                     >
-                        <PrimaryNav />
+                        <PrimaryNav history={props.history} />
                         <CreatePost />
                     
                     </div>
@@ -121,7 +120,7 @@ const PrimaryHomeContainer = () => {
                     minHeight: '100%',
                 }}
             >
-                    <PrimaryNav />
+                    <PrimaryNav history={props.history} />
                     <UserFeed />
                 
                 </div>

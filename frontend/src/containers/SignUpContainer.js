@@ -1,7 +1,6 @@
 // imports:
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useHistory } from 'react-router';
 
 import { connect } from 'react-redux';
 import { signupUser } from '../redux/actions';
@@ -12,8 +11,7 @@ import cityScape from '../images/cityScape.jpg';
 
 // page for user signup
 const SignUpContainer = (props) => {
-    // history hook
-    const history = useHistory();
+
     // state to control forms:
     const [usernameInput, setUserNameInput] =  useState('');
     const [passwordInput, setPasswordInput] =  useState('');
@@ -46,7 +44,7 @@ const SignUpContainer = (props) => {
             props.signupUser({ 
                 username: usernameInput, 
                 password: passwordInput 
-            }, setErrorMessage, setLoginFailed, history);
+            }, setErrorMessage, setLoginFailed, props.history);
         }
 
         
