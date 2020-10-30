@@ -1,15 +1,27 @@
 // imports
-import React, { useState, useEffect } from 'react';
-import { usersRoute } from '../railsRoutes';
 import PostPreview from '../components/PostPreview';
-import UserPostContainer from './UserPostContainer';
-import { Segment, Header, Image } from 'semantic-ui-react';
-
+import UserShellContainer from './UserShellContainer';
+import { Button } from 'semantic-ui-react';
 // end of imports ------------------------------------------------------
 
+
+
 // same as user posts but filters base likes also
-class UserLikedContainer extends UserPostContainer {
+class UserLikedContainer extends UserShellContainer {
     headerChange = 'Likes:'
+
+
+    linkToLikesOrMain = () => (
+        <Button color='orange'>view likes</Button>
+    )
+    // place holder for extended classes since Redux does not play nice
+    isViewerFollowing = () => {
+        return true;
+    }
+    // place holder for extended classes since Redux does not play nice
+    isViewerUser = () => {
+        return true;
+    }
     // maps over provided users liked posts and creates PostPreview Components from the data
     renderPostPreviewsFromUserData = () => {
         console.log(this.state.user.user.likedPosts)
