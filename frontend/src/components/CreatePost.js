@@ -87,6 +87,10 @@ const CreatePost = (props) => {
 
                 <br></br>
 
+                <img src ={img ? URL.createObjectURL(img) : null} alt='upload preview' style={{ height: '25%', width: '100%' }} />
+
+                <br></br>
+
                 <label style = {{
                     border: '1px solid #ccc',
                     display: 'inline-block',

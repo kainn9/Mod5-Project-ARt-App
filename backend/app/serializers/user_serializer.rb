@@ -25,4 +25,16 @@ class UserSerializer < ActiveModel::Serializer
     }
     end
   end
+
+  def isFollowing
+    
+    object.isFollowing.map { |user| { id: user.id, username: user.username } }
+  
+  end
+
+  def isFollowedBy
+    
+    object.isFollowedBy.map { |user| { id: user.id, username: user.username } }
+    
+  end
 end

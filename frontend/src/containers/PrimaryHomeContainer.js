@@ -8,6 +8,7 @@ import CreatePost from '../components/CreatePost';
 import UserPostContainer from './UserPostContainer';
 import UserLikedContainer from './UserLikedContainer'
 import leaves from '../images/leaves.png';
+import UserConnections from '../components/UserConnections';
 // end of imports -----------------------------------------
 
 // primary container/page for logged in users --> has client side routing
@@ -34,6 +35,28 @@ const PrimaryHomeContainer = (props) => {
             >
                     <PrimaryNav history={props.history} />
                     <h1>inside edit</h1>
+                    </div>
+                )
+            }}
+            />
+            {/* for followers/following */}
+            <Route path='/home/user/:id/connections'
+                render={ routerProps => { 
+                    
+                const id = parseInt(routerProps.match.params.id) 
+
+                return(
+
+                    <div style={{
+                    backgroundImage: `url(${ leaves })`,
+                    backgroundRepeat: 'repeat',
+                    height: 'fit%',
+                    minHeight: '100%',
+                    }}
+                >
+                    <PrimaryNav history={props.history} />
+                    <UserConnections userID={id} />
+                
                     </div>
                 )
             }}

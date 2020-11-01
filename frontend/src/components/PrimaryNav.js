@@ -86,7 +86,7 @@ const PrimaryNav = (props) => {
   return(
     <div style={{ width: '75%', margin: 'auto', textAlign: 'center' }} >
 
-      <Segment raised inverted >
+      <Segment raised inverted  style={{ margin: 0 }} >
 
         <Menu raised inverted color={'black'} icon='labeled'>
           <NavLink to='/home' style={{ width: '25%' }} >
@@ -97,9 +97,9 @@ const PrimaryNav = (props) => {
           </NavLink>
 
           <NavLink to={ `/home/user/${props.user.user.id}` } style ={{ width: '25%' }} >
-            <Menu.Item name='My Posts'>
+            <Menu.Item name='My Page'>
               <Icon name='folder open' />
-              My Posts
+              My Page
             </Menu.Item>
           </NavLink>
 
@@ -117,18 +117,6 @@ const PrimaryNav = (props) => {
               Create Post
             </Menu.Item>
           </NavLink>
-
-          {/* <Menu.Item id='filler' style ={{ width: '50%' }} /> */}
-          <Menu.Item >
-          <Search
-            fluid
-            loading={isLoading}
-            onResultSelect={handleResultSelect}
-            onSearchChange={({ target }) => searchHandler(target)}
-            results={results}
-           value={searchInput}
-          />
-          </Menu.Item>
             
           <Menu.Item name='logOut' onClick={ logoutHandler }>
             <Icon name='hand peace' />
@@ -136,7 +124,21 @@ const PrimaryNav = (props) => {
           </Menu.Item>
 
         </Menu>
-      
+  
+      </Segment>
+
+      <Segment inverted color='teal' style={{ margin: 0 }}>
+        <Search
+          id='mainSearchBar'
+          fluid
+          placeholder='search for users or posts'
+          loading={isLoading}
+          onResultSelect={handleResultSelect}
+          onSearchChange={({ target }) => searchHandler(target)}
+          results={results}
+          value={searchInput}
+        
+        />
       </Segment>
     </div>
   );

@@ -55,6 +55,8 @@ class UserShellContainer extends Component {
             {
                 this.state.user ? (
                     <Segment inverted secondary style={{  width: '75%', margin: 'auto', textAlign: 'center' }}>
+                        {console.log('kain look', this.state.user.user)}
+                        {console.log('kain look2', this.props.viewingUser.user)}
                         <Header as='h2'>
                             <Image circular src='https://react.semantic-ui.com/images/avatar/large/patrick.png' />
                             {this.state.user.user.username}'s {this.headerChange}
@@ -64,9 +66,16 @@ class UserShellContainer extends Component {
                                     <>
                                     {
                                         this.headerChange === 'Page:' ? (
-                                            <NavLink to={`/home/user/${this.state.user.user.id}/liked`}>
-                                                <Button color='orange' style ={{ width: '50%' }} >View Likes</Button>
-                                            </NavLink>
+                                            <>
+                                                <NavLink to={`/home/user/${this.state.user.user.id}/liked`}>
+                                                    <Button color='orange' style ={{ width: '50%' }} >View Likes</Button>
+                                                </NavLink>
+
+                                                <NavLink to={`/home/user/${this.state.user.user.id}/connections`}>
+                                                    <Button color='pink' style ={{ width: '50%' }} >Followers/Following</Button>
+                                                </NavLink>
+                                            </>
+                                            
                                         ) :
                                         (
                                             <NavLink to={`/home/user/${this.state.user.user.id}`}>
