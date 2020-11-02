@@ -1,6 +1,6 @@
 // imports
 import React, { Component } from 'react';
-import { usersRoute } from '../railsRoutes';
+import { activeStorageUrlConverter, usersRoute } from '../railsRoutes';
 import PostPreview from '../components/PostPreview';
 import { Segment, Header, Image, Button } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
@@ -58,11 +58,15 @@ class UserShellContainer extends Component {
                         {console.log('kain look', this.state.user.user)}
                         {console.log('kain look2', this.props.viewingUser.user)}
                         <Header as='h2'>
-                            <Image circular src='https://react.semantic-ui.com/images/avatar/large/patrick.png' />
+                            <Image circular src={activeStorageUrlConverter(this.state.user.user.proPic.url)} />
                             {this.state.user.user.username}'s {this.headerChange}
                             <br></br>
                             {
-                                this.isViewerUser() ? null : (
+                                this.isViewerUser() ? (
+                                    <NavLink to={`/home/user/${this.state.user.user.id}/connections`}>
+                                        <Button color='pink' style ={{ width: '50%' }} >My Followers/Following</Button>
+                                    </NavLink>
+                                    ) : (
                                     <>
                                     {
                                         this.headerChange === 'Page:' ? (

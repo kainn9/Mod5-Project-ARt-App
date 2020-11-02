@@ -1,7 +1,7 @@
 // imports
 import { connect } from 'react-redux';
 import PostPreview from '../components/PostPreview';
-import { updateFollows } from '../redux/actions'
+import { updateFollows } from '../redux/actions';
 import { followersRoute } from '../railsRoutes';
 import UserShellContainer from './UserShellContainer';
 // end of imports ------------------------------------------------------

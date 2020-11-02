@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { connect } from 'react-redux';
 
 import { postsRoute } from '../railsRoutes';
-import { Segment, Header, Icon, Button, Input, Label, TextArea } from 'semantic-ui-react';
+import { Segment, Header, Icon, Button, Input, Label, TextArea, Form, Message } from 'semantic-ui-react';
 // end of imports ------------------------------------------------------------------------
 
 // form for uploading images with title and body
@@ -12,6 +12,10 @@ const CreatePost = (props) => {
 
     // auth token
     const artScopeJWT = localStorage.getItem('artScopeJWT');
+
+    // state for error messages
+    const [loginFailed, setLoginFailed] =  useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     
     // hooks
 
@@ -25,24 +29,41 @@ const CreatePost = (props) => {
     // handles submit action
     const submitHandler = e => {
         e.preventDefault();
+        
+        // front end validations
 
-        // sending as formData so rails api can store img active storage
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('body', body);
-        formData.append('user_id', props.user.user.id);
-        formData.append('featured_image', img);
+        if (!title) {
+            setLoginFailed(true);
+            setErrorMessage('Please Enter a post title')
+        } else if (!body) {
+            setLoginFailed(true);
+            setErrorMessage('Please enter a small post description in the body input')
+        } else if(!img) {
+            setLoginFailed(true);
+            setErrorMessage('No image selected to upload!')
+        } else {
 
-        fetch(postsRoute, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${artScopeJWT}`, 
-          },
-          body: formData
-        })
-        .then( response => response.json() )
-        // use new post id for the routing
-        .then( post => history.push(`/home/post/${post.id}`))
+            // sending as formData so rails api can store img active storage
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('body', body);
+            formData.append('user_id', props.user.user.id);
+            formData.append('featured_image', img);
+
+            fetch(postsRoute, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${artScopeJWT}`, 
+            },
+            body: formData
+            })
+            .then( response => response.json() )
+            // use new post id for the routing
+            .then( post => history.push(`/home/post/${post.id}`))
+        }
+
+
+        
     }
 
     // sets img hook/state to selected file/img
@@ -52,25 +73,32 @@ const CreatePost = (props) => {
 
     return(
         <>
-        <Segment placeholder style={{ width: '75%', margin: 'auto' }} >
+        <Segment inverted secondary placeholder style={{ width: '75%', margin: 'auto' }} >
 
             <Header icon>
                 <Icon name='image outline' />
                 Create a Post!
             </Header>
 
-            <form onSubmit={ submitHandler } style={{ textAlign: 'center', width: '100%' }} >
-                <Label color='purple' horizontal style={{ width: '280px'}}> 
+            <Form error={loginFailed} onSubmit={ submitHandler } style={{ textAlign: 'center', width: '100%' }} >
+
+                    <Message
+                        error
+                        header='Error'
+                        content={ errorMessage }
+                    />
+
+                <Label color='purple' horizontal style={{ width: '80%'}}> 
                     Post Title:
                 </Label> 
 
                 <br></br>
 
-                <Input value={ title } placeholder='enter title here...' focus onChange={ e => setTitle(e.target.value) } style ={{ width: '290px' }} /> 
+                <Input value={ title } placeholder='enter title here...' focus onChange={ e => setTitle(e.target.value) } style ={{ width: '80%' }} /> 
                 
                 <div className='filler' style ={{ height: '10vh'}}/>
                 
-                <Label color='purple' horizontal style={{ width: '280px'}} > 
+                <Label color='purple' horizontal style={{ width: '80%'}} > 
                     Body:
                 </Label> 
                 
@@ -80,14 +108,14 @@ const CreatePost = (props) => {
                     focus 
                     placeholder='Tell people about stuff!' 
                     onChange={e => setBody(e.target.value)}
-                    style ={{ 'max-width': '100%', width: '280px', 'min-height': '20vh'}} 
+                    style ={{ 'max-width': '100%', width: '80%', 'min-height': '20vh'}} 
                 />
 
                 <div className='filler' style ={{ height: '15vh'}} />
 
                 <br></br>
 
-                <img src ={img ? URL.createObjectURL(img) : null} alt='upload preview' style={{ height: '25%', width: '100%' }} />
+                <img src ={img ? URL.createObjectURL(img) : null} alt='upload preview' hidden={ !img } style={{ height: '25%', width: '100%' }} />
 
                 <br></br>
 
@@ -105,7 +133,7 @@ const CreatePost = (props) => {
                 <br></br>
 
                 <Button primary style={{ width: '290px', 'max-width': '100%'}}>Submit Me!</Button>
-            </form>
+            </Form>
     
         </Segment>
         </>

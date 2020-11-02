@@ -8,7 +8,7 @@ import CreatePost from '../components/CreatePost';
 import UserPostContainer from './UserPostContainer';
 import UserLikedContainer from './UserLikedContainer'
 import leaves from '../images/leaves.png';
-import UserConnections from '../components/UserConnections';
+import UserConnectionsContainer from './UCC';
 // end of imports -----------------------------------------
 
 // primary container/page for logged in users --> has client side routing
@@ -52,10 +52,11 @@ const PrimaryHomeContainer = (props) => {
                     backgroundRepeat: 'repeat',
                     height: 'fit%',
                     minHeight: '100%',
+                    width: '100%'
                     }}
                 >
                     <PrimaryNav history={props.history} />
-                    <UserConnections userID={id} />
+                    <UserConnectionsContainer userID={id} />
                 
                     </div>
                 )
@@ -142,7 +143,7 @@ const PrimaryHomeContainer = (props) => {
                     height: 'fit%',
                     minHeight: '100%',
                 }}
-            >
+                >
                     <PrimaryNav history={props.history} />
                     <UserFeed />
                 

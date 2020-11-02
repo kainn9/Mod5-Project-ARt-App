@@ -55,7 +55,7 @@ const PrimaryNav = (props) => {
         setQueryDelay(false)
         setIsLoading(false)
 
-        const structUserData = matches.users.map( user => ({title: user.username, description: 'user', id: user.id, key: user.id}))
+        const structUserData = matches.users.map( user => ({title: user.username, description: 'user', id: user.id, key: user.id , image: activeStorageUrlConverter(user.proPic.url)}))
         const structPostData = matches.posts.map( post => ({title: post.title, description: 'post', key: post.id, id: post.id, image: activeStorageUrlConverter(post.featured_image.url)}))
         setResults([...structUserData, ...structPostData])
       })
