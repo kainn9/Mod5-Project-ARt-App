@@ -101,7 +101,7 @@ class UserShellContainer extends Component {
 
                             }
                         </Header>
-                        <Segment inverted style={{ display: 'grid', gridTemplateColumns: '25% 25% 25% 25%', border: '2px dashed rgba(114, 186, 94, 0.35)' }} >
+                        <Segment inverted style={{ display: 'grid', gridTemplateColumns: '25% 25% 25% 25%' }} >
                         
                             {this.renderPostPreviewsFromUserData()}
                             

@@ -28,13 +28,13 @@ class UserSerializer < ActiveModel::Serializer
 
   def isFollowing
     
-    object.isFollowing.map { |user| { id: user.id, username: user.username } }
+    object.isFollowing.map { |user| { id: user.id, username: user.username, proPic: rails_blob_url(user.pro_pic), bio: user.bio } }
   
   end
 
   def isFollowedBy
     
-    object.isFollowedBy.map { |user| { id: user.id, username: user.username } }
+    object.isFollowedBy.map { |user| { id: user.id, username: user.username, proPic: rails_blob_url(user.pro_pic), bio: user.bio } }
     
   end
 
