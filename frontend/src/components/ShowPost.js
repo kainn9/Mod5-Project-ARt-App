@@ -182,16 +182,17 @@ const ShowPost = (props) => {
                     <PrimaryNav />
 
                     <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto' }} >
+                        <Segment inverted>
+                            <Header as='h2' icon textAlign='center' >
+                                <Icon name='image' />
+                                <Header.Content>{ currentPost.title }</Header.Content>
+                            </Header>
+                            
 
-                        <Header as='h2' icon textAlign='center' >
-                            <Icon name='image' />
-                            <Header.Content>{ currentPost.title }</Header.Content>
-                        </Header>
-
-                        <NavLink to={ `/home/user/${currentPost.filteredUser.id}` } >
-                            <Header color='violet' size='medium' > Post By: {currentPost.filteredUser.username} </Header>
-                        </NavLink>
-
+                            <NavLink to={ `/home/user/${currentPost.filteredUser.id}` } >
+                                <Header color='violet' size='medium' > Post By: {currentPost.filteredUser.username} </Header>
+                            </NavLink>
+                        </Segment>
                         <Menu pointing style={{ display: 'flex', justifyContent: 'center' }} >
 
                             <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {{ width: '40%', color: 'blue' }} />
@@ -201,8 +202,14 @@ const ShowPost = (props) => {
                             <Menu.Item name='Open AR View' onClick={ renderARView } style = {{ width: '20%', color: 'red' }} />
     
                         </Menu>
-                    
-                        <img id='texture' src={currentImg} style ={{ maxWidth: '100%' }} />
+                        <Segment inverted>
+                            <img id='texture' src={currentImg} style ={{ maxWidth: '100%' }} />
+                        </Segment>
+                        <Segment inverted>
+                            <h3>
+                                {currentPost.body}
+                            </h3>
+                        </Segment>
                     </Segment >
                     
                 </>

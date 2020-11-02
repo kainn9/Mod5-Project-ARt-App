@@ -55,52 +55,53 @@ class UserShellContainer extends Component {
             {
                 this.state.user ? (
                     <Segment inverted secondary style={{  width: '75%', margin: 'auto', textAlign: 'center' }}>
-                        {console.log('kain look', this.state.user.user)}
-                        {console.log('kain look2', this.props.viewingUser.user)}
-                        <Header as='h2'>
-                            <Image circular src={activeStorageUrlConverter(this.state.user.user.proPic.url)} />
-                            {this.state.user.user.username}'s {this.headerChange}
-                            <br></br>
-                            {
-                                this.isViewerUser() ? (
-                                    <NavLink to={`/home/user/${this.state.user.user.id}/connections`}>
-                                        <Button color='pink' style ={{ width: '50%' }} >My Followers/Following</Button>
-                                    </NavLink>
-                                    ) : (
-                                    <>
-                                    {
-                                        this.headerChange === 'Page:' ? (
-                                            <>
-                                                <NavLink to={`/home/user/${this.state.user.user.id}/liked`}>
-                                                    <Button color='orange' style ={{ width: '50%' }} >View Likes</Button>
-                                                </NavLink>
+                        <Segment inverted>
+                            <Header as='h2'>
+                                <Image circular src={activeStorageUrlConverter(this.state.user.user.proPic.url)} />
+                                {this.state.user.user.username}'s {this.headerChange}
+                                <br></br>
+                                <h3>Short Bio: {this.state.user.user.bio}</h3>
+                                {
+                                    this.isViewerUser() ? (
+                                        <NavLink to={`/home/user/${this.state.user.user.id}/connections`}>
+                                            <Button color='pink' style ={{ width: '50%' }} >My Followers/Following</Button>
+                                        </NavLink>
+                                        ) : (
+                                        <>
+                                        {
+                                            this.headerChange === 'Page:' ? (
+                                                <>
+                                                    <NavLink to={`/home/user/${this.state.user.user.id}/liked`}>
+                                                        <Button color='orange' style ={{ width: '50%' }} >View Likes</Button>
+                                                    </NavLink>
 
-                                                <NavLink to={`/home/user/${this.state.user.user.id}/connections`}>
-                                                    <Button color='pink' style ={{ width: '50%' }} >Followers/Following</Button>
+                                                    <NavLink to={`/home/user/${this.state.user.user.id}/connections`}>
+                                                        <Button color='pink' style ={{ width: '50%' }} >Followers/Following</Button>
+                                                    </NavLink>
+                                                </>
+                                                
+                                            ) :
+                                            (
+                                                <NavLink to={`/home/user/${this.state.user.user.id}`}>
+                                                    <Button color='orange' style ={{ width: '50%' }} >View Collection</Button>
                                                 </NavLink>
-                                            </>
-                                            
-                                        ) :
-                                        (
-                                            <NavLink to={`/home/user/${this.state.user.user.id}`}>
-                                                <Button color='orange' style ={{ width: '50%' }} >View Collection</Button>
-                                            </NavLink>
-                                        )
-                                    }
-                                    
-                                    <br></br>
-                                        {this.isViewerFollowing() ? 
-                                            (<Button color='red' onClick={this.followHandler} style ={{ width: '50%' }} >unfollow</Button>) 
-                                        : 
-                                            (<Button color='blue' onClick={this.followHandler} style ={{ width: '50%' }} >Follow</Button>)
+                                            )
                                         }
-                                    </>
-                                    
                                         
-                                )
+                                        <br></br>
+                                            {this.isViewerFollowing() ? 
+                                                (<Button color='red' onClick={this.followHandler} style ={{ width: '50%' }} >unfollow</Button>) 
+                                            : 
+                                                (<Button color='blue' onClick={this.followHandler} style ={{ width: '50%' }} >Follow</Button>)
+                                            }
+                                        </>
+                                        
+                                            
+                                    )
 
-                            }
-                        </Header>
+                                }
+                            </Header>
+                        </Segment>
                         <Segment inverted style={{ display: 'grid', gridTemplateColumns: '25% 25% 25% 25%' }} >
                         
                             {this.renderPostPreviewsFromUserData()}
