@@ -14,7 +14,8 @@ class PostSerializer < ActiveModel::Serializer
   def filteredUser
     { 
       username: object.user.username,
-      id: object.user.id
+      id: object.user.id,
+      proPic: rails_blob_url(object.user.pro_pic)
     }
   end
 end

@@ -21,6 +21,17 @@ class Api::V1::UsersController < ApplicationController
     def profile
         render json: { user: UserSerializer.new(current_user) }, status: :accepted
     end
+
+    def feed
+      user = User.find(params[:id])
+
+      ids = user.isFollowing.map { |user| user.id }
+
+      posts = Post.where(user_id: ids).left_joins(:liked_posts).group(:id).order('created_at DESC, COUNT(liked_posts.id) DESC').limit(100)
+
+      render json: posts, status: :accepted
+  
+    end
  
     private
  

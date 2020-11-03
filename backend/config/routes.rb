@@ -16,8 +16,8 @@ Rails.application.routes.draw do
 
       post '/followers', to: 'followers#create'
       delete '/followers', to: 'followers#destroy'
-      # post '/posts', to: 'posts#create'
-      # get "/posts", to: "posts#index"
+      
+      post '/feed', to: 'users#feed'
     end
   end
 end
