@@ -1,7 +1,3 @@
-
-# seeds for testing! :D
-
-
 Post.create!([
   {title: "Harry Potter GOF poster/book-cover", body: "I just really love this book cover/poster! Also I am harry potter irl", user_id: 1},
   {title: "Was feeling cute today", body: "i am harry potter irl tho", user_id: 1},
@@ -101,7 +97,14 @@ LikedPost.create!([
   {user_id: 6, post_id: 9},
   {user_id: 6, post_id: 17},
   {user_id: 6, post_id: 16},
-  {user_id: 6, post_id: 7}
+  {user_id: 6, post_id: 7},
+  {user_id: 1, post_id: 10},
+  {user_id: 1, post_id: 9},
+  {user_id: 1, post_id: 13},
+  {user_id: 1, post_id: 12},
+  {user_id: 1, post_id: 7},
+  {user_id: 1, post_id: 15},
+  {user_id: 1, post_id: 14}
 ])
 User.create!([
   {username: "harryPotter56", password_digest: "$2a$12$.0OqUmnFsUHJu9hclvgDb.3Y3l/lK1N2dPzLHZkUVuiYI.1se3.Im", bio: "yer a wizard harry"},
