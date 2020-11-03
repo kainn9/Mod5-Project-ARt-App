@@ -1,6 +1,6 @@
 //imports
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { updateUserLikes } from '../redux/actions'
@@ -10,8 +10,10 @@ import { likedPostsRoute } from '../railsRoutes';
 import { activeStorageUrlConverter } from '../railsRoutes';
 import canvasTexture from '../images/canvas.jpg'
 
-import { Card, Icon } from 'semantic-ui-react';
+import { Card, Icon, Button } from 'semantic-ui-react';
 // end of imports -------------------------------------------------------
+
+
 
 // renders a card with a img preview, handles liking/unlking and navlinks to post show page onclick
 const PostPreview = (props) => {
@@ -19,10 +21,17 @@ const PostPreview = (props) => {
     // auth token
     const artScopeJWT = localStorage.getItem('artScopeJWT');
 
+    // im not 100 on how to properly use history with broweserRouter
+    const history = useHistory()
+
     // we do a local state for like count since its not the most important information to update in realtime...probably should be moved to redux store eventually
     const [likedPostsCounter, setLikedPostsCounter] = useState(props.data.subs.length)
 
-    
+    // returns bool if logged user owns post being viewed
+    const doesPostBelongToLoggedUser = () => {
+        console.log('post owner', props.data.ownerID, 'loggedUser' ,props.user.user.id)
+        return props.data.ownerID === props.user.user.id
+    }
     // checks if we have liked this post or not
     const hasUserLikedPost = () => {
         let liked = false;
@@ -71,7 +80,6 @@ const PostPreview = (props) => {
 
     return(
         <div>
-            {console.log(props.reduxLikedPosts)}
             <NavLink to={`/home/post/${props.data.id}`}>
                 <Card style={{ height: '300px', marginTop: 0 }} onClick={ () => null } >
                     <img src={activeStorageUrlConverter(props.data.img)} wrapped ui={false} style={{ height: '50%', objectFit: 'scale-down', backgroundImage: `url(${canvasTexture})`}}/>
@@ -84,9 +92,26 @@ const PostPreview = (props) => {
 
                         {`Likes ${likedPostsCounter}`}
                     </Card.Content>
+                    {
+                            doesPostBelongToLoggedUser() ? (
+                                <>
+                                    <br></br>
+                                    <Button icon onClick={ e => {
+                                            e.preventDefault()
+                                            history.push(`/home/post/edit/${props.data.id}`)
+                                        }}
+                                    >
+                                        <Icon name='edit' />
+                                        edit my post
+                                    </Button>
+                            
+                                </>
+                            ) : (
+                                    null
+                                )
+                        }
                 </Card>
             </NavLink>
-       
         </div>
     )
 }

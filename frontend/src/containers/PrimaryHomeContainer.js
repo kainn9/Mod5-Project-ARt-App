@@ -9,6 +9,7 @@ import UserPostContainer from './UserPostContainer';
 import UserLikedContainer from './UserLikedContainer'
 import leaves from '../images/leaves.png';
 import UserConnectionsContainer from './UCC';
+import EditPost from '../components/EditPost';
 // end of imports -----------------------------------------
 
 // primary container/page for logged in users --> has client side routing
@@ -27,14 +28,16 @@ const PrimaryHomeContainer = (props) => {
                 return(
 
                     <div style={{
-                    backgroundImage: `url(${ leaves })`,
-                    backgroundRepeat: 'repeat',
-                    height: 'fit%',
-                    minHeight: '100%',
+                        backgroundImage: `url(${ leaves })`,
+                        backgroundRepeat: 'repeat',
+                        height: 'fit%',
+                        minHeight: '100%',
                     }}
-            >
-                    <PrimaryNav history={props.history} />
-                    <h1>inside edit</h1>
+                    >
+                        <PrimaryNav history={props.history} />
+                        <EditPost postID={id} />
+
+                    
                     </div>
                 )
             }}

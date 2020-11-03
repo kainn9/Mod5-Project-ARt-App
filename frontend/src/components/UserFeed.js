@@ -64,10 +64,9 @@ const UserFeed = (props) => {
                 likeCounterClone[index] -= 1
                 setLikeCounter(likeCounterClone)
                 
-                
             }
         })
-     exit
+     
         
     
     }

@@ -9,7 +9,8 @@ class UserSerializer < ActiveModel::Serializer
       title: post.title,
       body: post.body,
       img: rails_blob_url(post.featured_image),
-      subs: post.suscribedUsers
+      subs: post.suscribedUsers,
+      ownerID: post.user.id
     }
     end
     
@@ -21,7 +22,8 @@ class UserSerializer < ActiveModel::Serializer
       title: post.title,
       body: post.body,
       img: rails_blob_url(post.featured_image),
-      subs: post.suscribedUsers
+      subs: post.suscribedUsers,
+      ownerID: post.user.id
     }
     end
   end
