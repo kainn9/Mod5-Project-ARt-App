@@ -103,6 +103,13 @@ const PrimaryNav = (props) => {
             </Menu.Item>
           </NavLink>
 
+          <NavLink to={ `/home/user/${props.user.user.id}/connections` } style ={{ width: '25%' }} >
+            <Menu.Item name='My Connections'>
+              <Icon name='users' />
+              My Connections
+            </Menu.Item>
+          </NavLink>
+
           <NavLink to={ `/home/user/${props.user.user.id}/liked` } style ={{ width: '25%' }} >
             <Menu.Item name='Liked Posts'>
               <Icon name='folder open outline' />

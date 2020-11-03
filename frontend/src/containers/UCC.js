@@ -70,7 +70,7 @@ const UserConnectionsContainer = (props) => {
                             ) : null
                         } 
                         
-                        <div style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '50% 50%'}}>
                             
                             <FollowList setPageUserData={ setPageUserData } relationship='isFollowing' userID={props.userID} />
                         </div>
@@ -88,7 +88,7 @@ const UserConnectionsContainer = (props) => {
                                 
                             ) : null
                         } 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '50% 50%' }}>
                         
                             <FollowList setPageUserData= { setPageUserData } relationship='isFollowedBy' userID={props.userID} />
                         </div>

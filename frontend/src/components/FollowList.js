@@ -3,17 +3,48 @@
 import React, {useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { activeStorageUrlConverter, usersRoute } from '../railsRoutes';
-import { Card, Segment, Image, Icon }  from 'semantic-ui-react';
+import { activeStorageUrlConverter, usersRoute, followersRoute } from '../railsRoutes';
+import { Card, Segment, Image, Icon, Button }  from 'semantic-ui-react';
+import { updateFollows } from '../redux/actions'
 // end of imports --------------------------------------------------
 
 const FollowList = (props) => {
 
     const artScopeJWT = localStorage.getItem('artScopeJWT');
     const [pageUser, setPageUser] = useState(null);
+    const [loggedUserFollowingArray, setLoggedUserFollowingArray] = useState(props.loggedUser.isFollowing);
+
+    const followHandler = (ID) => {
+        const httpVerb = isViewerFollowing(ID) ? 'DELETE' : 'POST';
+        const fetchConfig = {
+            method: `${httpVerb}`,
+            headers: {
+                Authorization: `Bearer ${artScopeJWT}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                following_id: props.loggedUser.id,
+                followed_id: ID
+            })
+        }
+
+        fetch(followersRoute, fetchConfig)
+        .then( response => response.json())
+        .then(data => {
+            props.updateFollowerState(ID)
+            setLoggedUserFollowingArray(props.loggedUser.isFollowing)
+        })
+        
+    }
+
+    const isViewerFollowing = (viewingUserID) => {
+        const idsOfFollowing = loggedUserFollowingArray.map(user => user.id)
+
+        return idsOfFollowing.includes(viewingUserID)
+    }
 
     const renderCardsFromUserData = (user) => {
-        console.log('eek', user.user.id, props.loggedUser.id )
 
         const listOfIds = user.user.isFollowing.map(user => user.id)
         
@@ -21,22 +52,8 @@ const FollowList = (props) => {
             (  
             
                 <NavLink to={ `/home/user/${nestedUser.id}` } >
-                    <Segment inverted style={{ height: 'fit', width: 'fit'}}>
-                        {/* <Card
-                        image={activeStorageUrlConverter(nestedUser.proPic)}
-                        header={nestedUser.username}
-                        meta={ listOfIds.includes(props.loggedUser.id) ? nestedUser.id === props.loggedUser.id ? 'This is you' : 'Follows You' : nestedUser.id === props.loggedUser.id ? 'This is you' : 'Does Not Follow You' }
-                        description='add user bio'
-                        extra={extra}
-                        style ={{ height: '20vh',  margin: 'auto' }}
-                        >
-                        <Image src={activeStorageUrlConverter(nestedUser.proPic)} />
-                        <Card.Header>
-                            {nestedUser.username}
-                        </Card.Header>
-                        </Card> */}
-
-
+                    <Segment inverted style={{ height: 'fit', minWidth: '10%'}}>
+                        
                         <Card style={{ margin: 'auto' }}>
                             <img src={activeStorageUrlConverter(nestedUser.proPic)} wrapped ui={false}  style={{ height: '20vh', objectFit: 'scale-down' }} />
                             <Card.Content>
@@ -45,12 +62,35 @@ const FollowList = (props) => {
                                 {listOfIds.includes(props.loggedUser.id) ? nestedUser.id === props.loggedUser.id ? 'This is you' : 'Follows You' : nestedUser.id === props.loggedUser.id ? 'This is you' : 'Does Not Follow You'}
                                 <br></br>
                                 {console.log('logged', props.loggedUser)}
-                                {props.loggedUser.isFollowing.map(u => u.id).includes(nestedUser.id) ? 'You are Following' : nestedUser.id === props.loggedUser.id ? null : 'You are not Following'}
+                                {isViewerFollowing(nestedUser.id) ? 'You are Following' : nestedUser.id === props.loggedUser.id ? null : 'You are not Following'}
                             </Card.Meta>
                             <Card.Description>
                                 <b>Short Bio:</b>
                                 <br></br>
                                 { nestedUser.bio }
+                                <br></br>
+                                {
+                                    isViewerFollowing(nestedUser.id) ? (
+                                        <Button 
+                                            onClick={ e => {
+                                                e.preventDefault()
+                                                followHandler(nestedUser.id)
+                                            }}
+                                        >
+                                            Unfollow
+                                        </Button>   
+
+                                    ) : props.loggedUser.id === nestedUser.id ? null : (
+                                        <Button
+                                        onClick={ e => {
+                                            e.preventDefault()
+                                            followHandler(nestedUser.id)
+                                            }}
+                                        >
+                                            Follow
+                                        </Button>
+                                    )
+                                } 
                             </Card.Description>
                             </Card.Content>
                         </Card>
@@ -80,7 +120,8 @@ const FollowList = (props) => {
 
     useEffect(() => {
         fetchUser()
-    }, [])
+        console.log('change')
+    }, [loggedUserFollowingArray])
 
     return (
         <>
@@ -95,4 +136,6 @@ const FollowList = (props) => {
 
 const msp = state =>  ({ loggedUser: state.user.user })
 
-export default connect(msp, null)(FollowList);
+const mdp = dispatch => ({updateFollowerState: (id) => dispatch(updateFollows(id)) });
+
+export default connect(msp, mdp)(FollowList);

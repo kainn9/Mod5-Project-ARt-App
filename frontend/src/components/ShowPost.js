@@ -3,19 +3,22 @@
     // React:
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
     // three related:
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     // Semantic UI
-import { Segment, Menu, Input, Header, Icon } from 'semantic-ui-react';
+import { Segment, Menu, Button, Header, Icon, Label } from 'semantic-ui-react';
 
 // My relative imports:
 import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
+import { updateUserLikes } from '../redux/actions'
 import PrimaryNav from './PrimaryNav';
 import cityScape from '../images/cityScape.jpg';
 import canvasTexture from '../images/canvas.jpg';
 import canvasBack from '../images/canvasBack.jpg';
+import { likedPostsRoute } from '../railsRoutes';
 // end of imports ----------------------------------
 
 // Primary Show Component for Posts... Has 3 view modes set from state/hooks: 'normal, 'ar', 'three'
@@ -31,6 +34,54 @@ const ShowPost = (props) => {
     const [dimensions, setDimensions] = useState(0);
     // state/hook to track current view mode
     const [viewMode, setViewMode] = useState('normal');
+    // state for like counter
+    const [likedPostsCounter, setLikedPostsCounter] = useState(null)
+
+
+    // creates or destroys liked relationship in backend components should update
+    const likePost = () => {
+
+        const httpVerb = loggedUserLikedPost() ? 'DELETE' : 'POST'
+        const fetchConfig = {
+            method: `${httpVerb}`, 
+            headers: { 
+                Authorization: `Bearer ${artScopeJWT}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ user_id: props.loggedUser.id, post_id: currentPost.id })
+        }
+
+        fetch(likedPostsRoute, fetchConfig)
+        .then( response => response.json() )
+        .then(json => {
+            
+            //updating render, props.upateCurrentUserLikes is a redux action and maintains that state in store likeCounter is local state
+            if (json.message === 'created') {
+                
+                props.updateCurrentUserLikes(currentPost.id)
+                setLikedPostsCounter(current => current + 1 )
+
+            } else if (json.message === 'deleted') {
+                props.updateCurrentUserLikes(currentPost.id)
+                setLikedPostsCounter(current => current - 1 )
+                
+            }
+        })
+
+    }
+    
+    // returns bool if logged user has liked the post in view
+    const loggedUserLikedPost = () => {
+        return props.loggedUser.likedPosts.map(p => p.id).includes(currentPost.id)
+    }
+
+    // callback for escape key to leave AR state
+    const leaveAR = e => {
+        if (e.code === 'Escape') {
+            setViewMode('normal')
+        }
+    }
 
     // gets Dimesions from img and then uses Set Dimensions hook to save in state
     const getDimensions  = () => {
@@ -159,6 +210,7 @@ const ShowPost = (props) => {
         .then(data => {
             setCurrentPost(data)
             setCurrentImg(activeStorageUrlConverter(data.featured_image.url))
+            setLikedPostsCounter(data.suscribedUsers.length)
         })
     }
           
@@ -168,9 +220,11 @@ const ShowPost = (props) => {
 
     // on component load/mount
     useEffect(() => {
+        document.addEventListener("keydown", e => leaveAR(e), false);
         fetchCurrentPost();
     }, [])
 
+ 
 
     // normal view:
     if (viewMode === 'normal') return(
@@ -178,7 +232,7 @@ const ShowPost = (props) => {
         {
             currentPost ? (
                 <>
-                {console.log(currentPost.filteredUser.id)}
+                {console.log(currentPost)}
                     <PrimaryNav />
 
                     <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto' }} >
@@ -210,6 +264,30 @@ const ShowPost = (props) => {
                                 {currentPost.body}
                             </h3>
                         </Segment>
+                        {
+                            loggedUserLikedPost() ? (
+                                <Button as='div' labelPosition='right'style={{ width: '100%'}}  onClick={ () => likePost() } >
+                                    <Button color='black'  style={{ width: '100%'}}>
+                                        <Icon name='heart' />
+                                            Unlike
+                                    </Button>
+                                    <Label as='a' basic color='red' pointing='left'>
+                                        {likedPostsCounter}
+                                     </Label>
+                                </Button>
+                            ) : (
+                                <Button as='div' labelPosition='right'style={{ width: '100%'}}  onClick={ () => likePost() }>
+                                    <Button color='red'  style={{ width: '100%'}}>
+                                        <Icon name='heart' />
+                                            Like
+                                    </Button>
+                                    <Label as='a' basic color='red' pointing='left'>
+                                        {likedPostsCounter}
+                                     </Label>
+                                </Button>
+                            )
+                        }
+                        
                     </Segment >
                     
                 </>
@@ -224,7 +302,7 @@ const ShowPost = (props) => {
     // view mode for AR
     if (viewMode === 'ar') return (
         <>
-            <a-scene arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;' >
+            <a-scene arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;' >
                 <a-marker preset="hiro">
                     <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 256 } width={dimensions.width / 256} height='0.01'> </a-box>
                 </a-marker>
@@ -255,4 +333,7 @@ const ShowPost = (props) => {
     )
 }
 
-export default ShowPost;
+const msp = state => ({ loggedUser: state.user.user, reduxLikedPosts: state.user.user.likedPosts });
+const mdp = dispatch => ({ updateCurrentUserLikes: (newLikeID) => dispatch(updateUserLikes(newLikeID)) });
+
+export default connect(msp, mdp)(ShowPost);

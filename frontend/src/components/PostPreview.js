@@ -19,9 +19,6 @@ const PostPreview = (props) => {
     // auth token
     const artScopeJWT = localStorage.getItem('artScopeJWT');
 
-   
-    // lisening for redux change on likes --> tracking from redux to main SSOT when jumping between my posts/liked posts
-    useEffect(() => {}, [props.reduxLikedPosts])
     // we do a local state for like count since its not the most important information to update in realtime...probably should be moved to redux store eventually
     const [likedPostsCounter, setLikedPostsCounter] = useState(props.data.subs.length)
 
@@ -76,7 +73,7 @@ const PostPreview = (props) => {
         <div>
             {console.log(props.reduxLikedPosts)}
             <NavLink to={`/home/post/${props.data.id}`}>
-                <Card style={{ height: '25vh', marginTop: 0 }} onClick={ () => null } >
+                <Card style={{ height: '300px', marginTop: 0 }} onClick={ () => null } >
                     <img src={activeStorageUrlConverter(props.data.img)} wrapped ui={false} style={{ height: '50%', objectFit: 'scale-down', backgroundImage: `url(${canvasTexture})`}}/>
                     <Card.Content>
                         <Card.Header>{props.data.title}</Card.Header>
