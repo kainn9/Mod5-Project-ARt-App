@@ -5,6 +5,16 @@ import { connect } from 'react-redux';
 
 import { postsRoute } from '../railsRoutes';
 import { Segment, Header, Icon, Button, Input, Label, TextArea, Form, Message } from 'semantic-ui-react';
+
+import {
+    width75MarginAuto,
+    textCenterMaxWidth,
+    width80,
+    textAreaCreatePost,
+    height25MaxWidth,
+    chooseFile,
+    submitButton
+} from '../bigStyle';
 // end of imports ------------------------------------------------------------------------
 
 // form for uploading images with title and body
@@ -73,14 +83,14 @@ const CreatePost = (props) => {
 
     return(
         <>
-        <Segment inverted secondary placeholder style={{ width: '75%', margin: 'auto' }} >
+        <Segment inverted secondary placeholder style={width75MarginAuto}>
 
             <Header icon>
                 <Icon name='image outline' />
                 Create a Post!
             </Header>
 
-            <Form error={loginFailed} onSubmit={ submitHandler } style={{ textAlign: 'center', width: '100%' }} >
+            <Form error={loginFailed} onSubmit={ submitHandler } style={textCenterMaxWidth} >
 
                     <Message
                         error
@@ -88,7 +98,7 @@ const CreatePost = (props) => {
                         content={ errorMessage }
                     />
 
-                <Label color='purple' horizontal style={{ width: '80%'}}> 
+                <Label color='purple' horizontal style={width80}> 
                     Post Title:
                 </Label> 
 
@@ -98,7 +108,7 @@ const CreatePost = (props) => {
                 
                 <div className='filler' style ={{ height: '10vh'}}/>
                 
-                <Label color='purple' horizontal style={{ width: '80%'}} > 
+                <Label color='purple' horizontal style={width80} > 
                     Body:
                 </Label> 
                 
@@ -108,31 +118,24 @@ const CreatePost = (props) => {
                     focus 
                     placeholder='Tell people about stuff!' 
                     onChange={e => setBody(e.target.value)}
-                    style ={{ 'max-width': '100%', width: '80%', 'min-height': '20vh'}} 
+                    style ={textAreaCreatePost} 
                 />
 
                 <div className='filler' style ={{ height: '15vh'}} />
 
                 <br></br>
 
-                <img src ={img ? URL.createObjectURL(img) : null} alt='upload preview' hidden={ !img } style={{ height: '25%', width: '100%' }} />
+                <img src ={img ? URL.createObjectURL(img) : null} alt='upload preview' hidden={ !img } style={height25MaxWidth} />
 
                 <br></br>
 
-                <label style = {{
-                    border: '1px solid #ccc',
-                    display: 'inline-block',
-                    padding: '6px 12px',
-                    cursor: 'pointer',
-
-                    }}
-                >
+                <label style = {chooseFile} >
                 <input type="file" accept="image/*" multiple={false} onChange={ e => imgChangeHandler(e) } />
                 </label>
 
                 <br></br>
 
-                <Button primary style={{ width: '290px', 'max-width': '100%'}}>Submit Me!</Button>
+                <Button primary style={submitButton}>Submit Me!</Button>
             </Form>
     
         </Segment>

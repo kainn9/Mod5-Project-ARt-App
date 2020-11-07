@@ -15,11 +15,22 @@ import { Segment, Menu, Button, Header, Icon, Label, IconGroup } from 'semantic-
 import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
 import { updateUserLikes } from '../redux/actions'
 import PrimaryNav from './PrimaryNav';
-import cityScape from '../images/cityScape.jpg';
+
 import canvasTexture from '../images/canvas.jpg';
 import canvasBack from '../images/canvasBack.jpg';
 import { likedPostsRoute } from '../railsRoutes';
-import Iframe from 'react-iframe'
+
+import {
+    width75MarginAuto,
+    width40Blue,
+    width20Red,
+    maxWidthIs100,
+    flexJCenter,
+    widthIs100,
+    cityScapeBG,
+
+
+} from '../bigStyle';
 // end of imports ----------------------------------
 
 // Primary Show Component for Posts... Has 3 view modes set from state/hooks: 'normal, 'ar', 'three'
@@ -252,14 +263,13 @@ const ShowPost = (props) => {
 
     // normal view:
     if (viewMode === 'normal') return(
-        <div style ={{ backgroundImage: `url(${cityScape})`, backgroundRepeat: 'repeat', minHeight: '100%', height: 'fit', width: '100%', textAlign: 'center'}}>
+        <div style ={cityScapeBG}>
         {
             currentPost ? (
                 <>
-                {console.log(currentPost)}
                     <PrimaryNav />
 
-                    <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto' }} >
+                    <Segment inverted color='grey' style={width75MarginAuto} >
                         <Segment inverted>
                             <Header as='h2' icon textAlign='center' >
                                 <Icon name='image' />
@@ -271,17 +281,17 @@ const ShowPost = (props) => {
                                 <Header color='violet' size='medium' > Post By: {currentPost.filteredUser.username} </Header>
                             </NavLink>
                         </Segment>
-                        <Menu pointing style={{ display: 'flex', justifyContent: 'center' }} >
+                        <Menu pointing style={flexJCenter} >
 
-                            <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {{ width: '40%', color: 'blue' }} />
+                            <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {width40Blue} />
                         
-                            <Menu.Item name='Canvas View' onClick={ () => prep3D()} style = {{ width: '40%', color: 'blue' }} />
+                            <Menu.Item name='Canvas View' onClick={ () => prep3D()} style = {width40Blue} />
                         
-                            <Menu.Item name='Open AR View' onClick={ renderARView } style = {{ width: '20%', color: 'red' }} />
+                            <Menu.Item name='Open AR View' onClick={ renderARView } style = {width20Red} />
     
                         </Menu>
                         <Segment inverted>
-                            <img id='texture' src={currentImg} style ={{ maxWidth: '100%' }} />
+                            <img id='texture' src={currentImg} style ={maxWidthIs100} />
                         </Segment>
                         <Segment inverted>
                             <h3>
@@ -290,8 +300,8 @@ const ShowPost = (props) => {
                         </Segment>
                         {
                             loggedUserLikedPost() ? (
-                                <Button as='div' labelPosition='right'style={{ width: '100%'}}  onClick={ () => likePost() } >
-                                    <Button color='black'  style={{ width: '100%'}}>
+                                <Button as='div' labelPosition='right' onClick={ () => likePost() } style={maxWidthIs100}  >
+                                    <Button color='black'  style={widthIs100}>
                                         <Icon name='heart' />
                                             Unlike
                                     </Button>
@@ -300,8 +310,8 @@ const ShowPost = (props) => {
                                      </Label>
                                 </Button>
                             ) : (
-                                <Button as='div' labelPosition='right'style={{ width: '100%'}}  onClick={ () => likePost() }>
-                                    <Button color='red'  style={{ width: '100%'}}>
+                                <Button as='div' labelPosition='right'style={widthIs100}  onClick={ () => likePost() }>
+                                    <Button color='red'  style={widthIs100}>
                                         <Icon name='heart' />
                                             Like
                                     </Button>
@@ -335,21 +345,36 @@ const ShowPost = (props) => {
     // view mode for three
     if (viewMode === 'three') return (
         
-        <div style ={{ backgroundImage: `url(${ cityScape })`, backgroundRepeat: 'repeat', minHeight: '100%', height: 'fit', width: '100%'}}>
+        <div style ={cityScapeBG}>
             
             <PrimaryNav />
 
-            <Segment inverted color='grey' style={{ maxWidth: '75%', margin: 'auto'}}>
+            <Segment inverted color='grey' style={width75MarginAuto} >
+                <Segment inverted>
+                    <Header as='h2' icon textAlign='center' >
+                        <Icon name='image' />
+                        <Header.Content>{ currentPost.title }</Header.Content>
+                    </Header>
+                            
 
-                <Menu pointing  style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {{ width: '40%', color: 'blue' }} />
+                    <NavLink to={ `/home/user/${currentPost.filteredUser.id}` } >
+                            <Header color='violet' size='medium' > Post By: {currentPost.filteredUser.username} </Header>
+                    </NavLink>
+                    </Segment>
+                </Segment>
+            
 
-                    <Menu.Item name='Canvas View' onClick={ () => prep3D()} style = {{ width: '40%', color: 'blue' }} />
+            <Segment inverted color='grey' style={width75MarginAuto}>
+
+                <Menu pointing  style={flexJCenter}>
+                    <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {width40Blue} />
+
+                    <Menu.Item name='Canvas View' onClick={ () => prep3D()} style = {width40Blue} />
                     
-                    <Menu.Item name='Open AR View' onClick={ renderARView } style = {{ width: '20%', color: 'red'}} />
+                    <Menu.Item name='Open AR View' onClick={ renderARView } style = {width20Red} />
     
                 </Menu>
-                <canvas id="k" style={{ width: '100%', position: 'bottom' }} />
+                <canvas id="k" style={widthIs100} />
             </Segment>
         </div>
     

@@ -4,7 +4,12 @@ import { NavLink, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions';
 import { Button, Form, Message, Segment, Menu, Icon } from 'semantic-ui-react';
-import skyCastleImg from '../images/skyCastle.png';
+
+import {
+    formSegment,
+    loginWrapperStyle,
+
+} from '../bigStyle'
 // end of imports -----------------------------------------------------------
 
 // login page
@@ -48,7 +53,7 @@ const LoginContainer = (props) => {
 
     return(
 
-        <div id='login' style = {{ height: '100%', width: '100%', backgroundImage: `url(${skyCastleImg})` }}>
+        <div id='login' style = {loginWrapperStyle}>
             <Menu raised inverted color={'black'} icon='labeled'>
             
                 <NavLink to='/login' style={{ width: '50%' }} >
@@ -69,13 +74,7 @@ const LoginContainer = (props) => {
         
             <Segment raised
         
-                style ={{
-                    height: '30',
-                    width: '50%',
-                    margin: 'auto',
-                    top: '30%',
-                    position: 'relative',
-                }}
+                style ={formSegment}
             >
                 <Form error={ loginFailed } >
                     <Form.Input 

@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Segment, Menu, Button, Header, Image } from 'semantic-ui-react';
 import { activeStorageUrlConverter } from '../railsRoutes';
+import { followerButtons, followerGrid, width75MarginAuto } from '../bigStyle';
 
 const UserConnectionsContainer = (props) => {
     
@@ -19,7 +20,7 @@ const UserConnectionsContainer = (props) => {
 
                     <Button 
                         color='pink' 
-                        style={{ width: '37.5%', margin: 'auto' }} 
+                        style={followerButtons} 
                     > 
                         My Followers/Following
                     </Button>
@@ -30,7 +31,7 @@ const UserConnectionsContainer = (props) => {
 
                     <Button 
                         color='orange' 
-                        style={{ width: '37.5%', margin: 'auto' }}
+                        style={followerButtons}
                     >
                         Back to Collection
                     </Button>
@@ -38,7 +39,7 @@ const UserConnectionsContainer = (props) => {
                 </NavLink>
             {/* </div> */}
             </div>  
-            <Segment inverted secondary style={{ margin: 'auto', width: '75%' }}>
+            <Segment inverted secondary style={width75MarginAuto}>
                 
                 <Menu attached='top' tabular  inverted>
                     <Menu.Item
@@ -70,7 +71,7 @@ const UserConnectionsContainer = (props) => {
                             ) : null
                         } 
                         
-                        <div style={{ display: 'grid', gridTemplateColumns: '50% 50%'}}>
+                        <div style={followerGrid}>
                             
                             <FollowList setPageUserData={ setPageUserData } relationship='isFollowing' userID={props.userID} />
                         </div>
@@ -88,7 +89,7 @@ const UserConnectionsContainer = (props) => {
                                 
                             ) : null
                         } 
-                        <div style={{ display: 'grid', gridTemplateColumns: '50% 50%' }}>
+                        <div style={followerGrid}>
                         
                             <FollowList setPageUserData= { setPageUserData } relationship='isFollowedBy' userID={props.userID} />
                         </div>

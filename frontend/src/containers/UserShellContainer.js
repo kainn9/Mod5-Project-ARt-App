@@ -4,6 +4,7 @@ import { activeStorageUrlConverter, usersRoute } from '../railsRoutes';
 import PostPreview from '../components/PostPreview';
 import { Segment, Header, Image, Button } from 'semantic-ui-react';
 import { NavLink, use} from 'react-router-dom';
+import { postGrid, width75MarginAuto, width75MarginAutoCenterText } from '../bigStyle';
 // end of imports ------------------------------------------------------
 
 // class copment that handles rendering the post previews for a user
@@ -59,7 +60,7 @@ class UserShellContainer extends Component {
             <>
             {
                 this.state.user ? (
-                    <Segment inverted secondary style={{  width: '75%', margin: 'auto', textAlign: 'center' }}>
+                    <Segment inverted secondary style={width75MarginAutoCenterText}>
                         <Segment inverted>
                             <Header as='h2'>
                                 <Image circular src={activeStorageUrlConverter(this.state.user.user.proPic.url)} />
@@ -107,7 +108,7 @@ class UserShellContainer extends Component {
                                 }
                             </Header>
                         </Segment>
-                        <Segment inverted style={{ display: 'grid', gridTemplateColumns: '25% 25% 25% 25%' }} >
+                        <Segment inverted style={postGrid} >
                         
                             {this.renderPostPreviewsFromUserData()}
                             

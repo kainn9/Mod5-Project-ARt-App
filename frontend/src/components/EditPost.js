@@ -6,6 +6,17 @@ import { connect } from 'react-redux';
 import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
 import { Segment, Header, Icon, Button, Input, Label, TextArea, Form, Message } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
+
+
+import {
+    width75MarginAuto,
+    textCenterMaxWidth,
+    width80,
+    textAreaCreatePost,
+    height25MaxWidth,
+    chooseFile,
+    submitButton
+} from '../bigStyle';
 // end of imports ------------------------------------------------------------------------
 
 // form for uploading images with title and body
@@ -53,11 +64,6 @@ const EditPost = (props) => {
         })
     }
 
-    //reutrns bool if loggedUser owns post
-    const authEdit = () => {
-        return true
-    }
-
     // handles submit action
     const submitHandler = e => {
         e.preventDefault();
@@ -99,6 +105,17 @@ const EditPost = (props) => {
         
     }
 
+    const authEdit = () => {
+
+        for (const post of props.loggedUser.posts) {
+
+            if (post.id === props.postID) return true;
+
+        }
+
+        return false;
+    }
+
     // sets img hook/state to selected file/img
     const imgChangeHandler = e => {
         setImg(e.target.files[0])
@@ -112,18 +129,18 @@ const EditPost = (props) => {
     return(
         <>
         {
-            foundPost ? (
+            foundPost && authEdit ? (
                 <>
                 {
                     authEdit() ? (
-                        <Segment inverted secondary placeholder style={{ width: '75%', margin: 'auto' }} >
+                        <Segment inverted secondary placeholder style={width75MarginAuto} >
                             {console.log('img', img)}
                             <Header icon>
                                 <Icon name='image outline' />
                                 Create a Post!
                             </Header>
         
-                            <Form error={loginFailed} onSubmit={ submitHandler } style={{ textAlign: 'center', width: '100%' }} >
+                            <Form error={loginFailed} onSubmit={ submitHandler } style={textCenterMaxWidth} >
         
                                 <Message
                                     error
@@ -131,7 +148,7 @@ const EditPost = (props) => {
                                     content={ errorMessage }
                                 />
         
-                                <Label color='purple' horizontal style={{ width: '80%'}}> 
+                                <Label color='purple' horizontal style={width80}> 
                                     Post Title:
                                  </Label> 
         
@@ -141,7 +158,7 @@ const EditPost = (props) => {
                         
                                 <div className='filler' style ={{ height: '10vh'}}/>
                         
-                                <Label color='purple' horizontal style={{ width: '80%'}} > 
+                                <Label color='purple' horizontal style={width80} > 
                                     Body:
                                 </Label> 
                         
@@ -151,35 +168,28 @@ const EditPost = (props) => {
                                     focus 
                                     placeholder='Tell people about stuff!' 
                                     onChange={e => setBody(e.target.value)}
-                                    style ={{ 'max-width': '100%', width: '80%', 'min-height': '20vh'}} 
+                                    style ={textAreaCreatePost} 
                                 />
         
                                 <div className='filler' style ={{ height: '15vh'}} />
         
                                 <br></br>
                                 <h2> Image preview: </h2>
-                                <img src ={img ? URL.createObjectURL(img) : oldImg} alt='upload preview' style={{ height: '25%', width: '100%' }} />
+                                <img src ={img ? URL.createObjectURL(img) : oldImg} alt='upload preview' style={height25MaxWidth} />
         
                                 <br></br>
         
-                                <label style = {{
-                                border: '1px solid #ccc',
-                                display: 'inline-block',
-                                padding: '6px 12px',
-                                cursor: 'pointer',
-        
-                                    }}
-                                >
+                                <label style = {chooseFile} >
                                     <input type="file" accept="image/*" multiple={false} onChange={ e => imgChangeHandler(e) } />
                                 </label>
         
                                 <br></br>
         
-                                <Button primary style={{ width: '290px', 'max-width': '100%'}}>Submit Me!</Button>
+                                <Button primary style={submitButton}>Submit Me!</Button>
                             </Form>
 
                             <NavLink to={`/home/user/${props.loggedUser.id}`}>
-                                <Button color='red' style={{ width: '290px', 'max-width': '100%'}}> Cancel</Button>
+                                <Button color='red' style={submitButton}> Cancel</Button>
                              </NavLink>
             
                 </Segment>

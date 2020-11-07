@@ -8,9 +8,15 @@ import { likedPostsRoute } from '../railsRoutes';
 
 
 import { activeStorageUrlConverter } from '../railsRoutes';
-import canvasTexture from '../images/canvas.jpg'
 
 import { Card, Icon, Button } from 'semantic-ui-react';
+
+import {
+    postPreviewCard,
+    postPreviewImage,
+    
+
+} from '../bigStyle';
 // end of imports -------------------------------------------------------
 
 
@@ -81,8 +87,8 @@ const PostPreview = (props) => {
     return(
         <div>
             <NavLink to={`/home/post/${props.data.id}`}>
-                <Card style={{ height: '300px', marginTop: 0 }} onClick={ () => null } >
-                    <img src={activeStorageUrlConverter(props.data.img)} wrapped ui={false} style={{ height: '50%', objectFit: 'scale-down', backgroundImage: `url(${canvasTexture})`}}/>
+                <Card style={postPreviewCard} onClick={ () => null } >
+                    <img src={activeStorageUrlConverter(props.data.img)} wrapped ui={false} style={postPreviewImage}/>
                     <Card.Content>
                         <Card.Header>{props.data.title}</Card.Header>
                     </Card.Content>

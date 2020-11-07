@@ -5,6 +5,16 @@ import { Segment, Card, Image, Header, Button, Icon, Label } from 'semantic-ui-r
 import { activeStorageUrlConverter, feedRoute, likedPostsRoute } from '../railsRoutes';
 import { updateUserLikes } from '../redux/actions';
 
+import {
+    width75MarginAutoCenterText,
+    widthMaxMarginAutoCenterText,
+    feedImage,
+    widthIs100,
+    mainStrip,
+
+
+} from '../bigStyle';
+
 
 const UserFeed = (props) => {
 
@@ -76,11 +86,11 @@ const UserFeed = (props) => {
 
         return postsData.map( (post, i) => (
             <>
-                <Card style= {{ margin: 'auto', width: '70%', textAlign: 'center' }} >
+                <Card style= {width75MarginAutoCenterText} >
                 
                     <NavLink to={`/home/post/${post.id}`}>
-                        <Segment inverted style= {{ margin: 'auto', textAlign: 'center', width: '100%' }}>
-                            <img src={activeStorageUrlConverter(post.featured_image.url)}  style={{ width: '100%', height: '35vh', objectFit: 'scale-down'}} />
+                        <Segment inverted style= {widthMaxMarginAutoCenterText}>
+                            <img src={activeStorageUrlConverter(post.featured_image.url)}  style={feedImage} />
                         </Segment>
                     </NavLink>
 
@@ -89,8 +99,8 @@ const UserFeed = (props) => {
                         <Card.Meta>{post.body}</Card.Meta>
                         {
                             hasLoggedUserLiked(post.id) ? (
-                                <Button as='div' labelPosition='right'style={{ width: '100%'}}  onClick={ (e) => likePost(post.id, e)} code={i} >
-                                    <Button color='black'  style={{ width: '100%'}}>
+                                <Button as='div' labelPosition='right' onClick={ (e) => likePost(post.id, e)} code={i} style={widthIs100}>
+                                    <Button color='black'  style={widthIs100}>
                                         <Icon name='heart' />
                                             Unlike
                                     </Button>
@@ -99,8 +109,8 @@ const UserFeed = (props) => {
                                     </Label>
                                  </Button>
                             ) : (
-                                <Button as='div' labelPosition='right'style={{ width: '100%'}} onClick={ (e) => likePost(post.id, e)} code={i} >
-                                    <Button color='red'  style={{ width: '100%'}}>
+                                <Button as='div' labelPosition='right'style={widthIs100} onClick={ (e) => likePost(post.id, e)} code={i} >
+                                    <Button color='red'  style={widthIs100}>
                                         <Icon name='heart' />
                                             like
                                     </Button>
@@ -161,14 +171,7 @@ const UserFeed = (props) => {
             secondary
             inverted
             id='mainStrip'
-            style ={{
-                display: 'block',
-                width: '75%',
-                margin: 'auto',
-                minHeight: '100vh',
-                height: 'fit',
-                
-            }}
+            style ={mainStrip}
         >
 
         {

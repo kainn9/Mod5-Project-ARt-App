@@ -11,6 +11,7 @@ import UserLikedContainer from './UserLikedContainer'
 import leaves from '../images/leaves.png';
 import UserConnectionsContainer from './UCC';
 import EditPost from '../components/EditPost';
+import { homeBG } from '../bigStyle';
 // end of imports -----------------------------------------
 
 // primary container/page for logged in users --> has client side routing
@@ -23,13 +24,7 @@ const PrimaryHomeContainer = (props) => {
           {/* home page */}
           <Route  exact path='/home'
                 render={() => (
-                <div style={{
-                    backgroundImage: `url(${ leaves })`,
-                    backgroundRepeat: 'repeat',
-                    height: 'fit%',
-                    minHeight: '100%',
-                }}
-                >
+                <div style={homeBG} >
                     <PrimaryNav />
                     <UserFeed />
                 
@@ -45,13 +40,7 @@ const PrimaryHomeContainer = (props) => {
 
                 return(
 
-                    <div style={{
-                        backgroundImage: `url(${ leaves })`,
-                        backgroundRepeat: 'repeat',
-                        height: 'fit%',
-                        minHeight: '100%',
-                    }}
-                    >
+                    <div style={homeBG}>
                         <PrimaryNav/>
                         <EditPost postID={id} />
 
@@ -68,14 +57,7 @@ const PrimaryHomeContainer = (props) => {
 
                 return(
 
-                    <div style={{
-                    backgroundImage: `url(${ leaves })`,
-                    backgroundRepeat: 'repeat',
-                    height: 'fit%',
-                    minHeight: '100%',
-                    width: '100%'
-                    }}
-                >
+                    <div style={homeBG}>
                     <PrimaryNav />
                     <UserConnectionsContainer userID={id} />
                 
@@ -92,13 +74,7 @@ const PrimaryHomeContainer = (props) => {
 
                 return(
 
-                    <div style={{
-                    backgroundImage: `url(${ leaves })`,
-                    backgroundRepeat: 'repeat',
-                    height: 'fit%',
-                    minHeight: '100%',
-                    }}
-            >
+                    <div style={homeBG}>
                     <PrimaryNav/>
                     <UserLikedContainer userID={id} />
                 
@@ -116,13 +92,7 @@ const PrimaryHomeContainer = (props) => {
 
                 return(
 
-                    <div style={{
-                    backgroundImage: `url(${ leaves })`,
-                    backgroundRepeat: 'repeat',
-                    height: 'fit%',
-                    minHeight: '100%',
-                    }}
-            >
+                    <div style={homeBG}>
                     <PrimaryNav />
                     <UserPostContainer userID={id} />
                 
@@ -143,13 +113,7 @@ const PrimaryHomeContainer = (props) => {
             <Route 
                 path='/home/create-post'
                 render={ () => (
-                    <div style={{
-                        backgroundImage: `url(${ leaves })`,
-                        backgroundRepeat: 'repeat',
-                        height: 'fit%',
-                        minHeight: '100%',
-                        }}
-                    >
+                    <div style={homeBG}>
                         <PrimaryNav />
                         <CreatePost />
                     

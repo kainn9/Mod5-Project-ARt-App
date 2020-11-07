@@ -6,8 +6,15 @@ import { connect } from 'react-redux';
 import { signupUser } from '../redux/actions';
 
 import { Button, Form, Message, Segment, Menu, Icon } from 'semantic-ui-react';
-import cityScape from '../images/cityScape.jpg';
 import defaultPhoto from '../images/blank.png'
+
+import {
+    blockAlignCenter,
+    chooseFile,
+    cityScapeBG, formSegment, widthIs100,
+
+} from '../bigStyle';
+
 // end of imports--------------------------------------------------------------
 
 // page for user signup
@@ -61,7 +68,7 @@ const SignUpContainer = (props) => {
     }
 
     return(
-        <div id='login' style = {{ height: 'fit', width: '100%', backgroundImage: `url(${ cityScape })`, minHeight: '100%'  }} >
+        <div id='login' style = {cityScapeBG} >
 
             <Menu raised inverted color={'black'} icon='labeled'>
 
@@ -87,14 +94,7 @@ const SignUpContainer = (props) => {
 
             <Segment 
                 raised
-                style ={{
-                    height: '30',
-                    width: '50%',
-                    margin: 'auto',
-                    top: '30%',
-                    position: 'relative',
-                }}
-            >
+                style ={formSegment}>
                 <Form error={ loginFailed }>
                     <Message
                         error
@@ -136,15 +136,10 @@ const SignUpContainer = (props) => {
                         onChange={ e => setBio(e.target.value)}
                     />
 
-                    <span style={{  display: 'block', textAlign: 'center'}}>
+                    <span style={blockAlignCenter}>
                     <img src ={img ? URL.createObjectURL(img) : null } alt='upload preview' hidden={ !img } style={{ height: '25%', width: '100%' }} /> 
                     <br></br>
-                        <label style = {{
-                            display: 'inline-block',
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-
-                            }}
+                        <label style = {chooseFile}
                         >
                         Optional Profile Picture
                         <Form.Input 
@@ -152,9 +147,10 @@ const SignUpContainer = (props) => {
                             accept="image/*" 
                             multiple={false} 
                             onChange={ e => setImg(e.target.files[0]) } 
-                            style ={{ width: '100%'}} 
+                            style ={widthIs100} 
                         />
                         </label>
+                        
                         <br></br>
                         
                             

@@ -6,6 +6,11 @@ import { connect } from 'react-redux';
 
 import { Segment, Icon, Menu, Search } from 'semantic-ui-react';
 import { activeStorageUrlConverter, searchRoute } from '../railsRoutes';
+
+import {
+  width75MarginAutoCenterText,
+
+} from '../bigStyle';
 // end of imports-----------------------------------------
 
 // Primary Navbar for logged in  views
@@ -86,7 +91,7 @@ const PrimaryNav = (props) => {
   }
 
   return(
-    <div style={{ width: '75%', margin: 'auto', textAlign: 'center' }} >
+    <div style={width75MarginAutoCenterText} >
 
       <Segment raised inverted  style={{ margin: 0 }} >
 

@@ -5,7 +5,12 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { activeStorageUrlConverter, usersRoute, followersRoute } from '../railsRoutes';
 import { Card, Segment, Image, Icon, Button }  from 'semantic-ui-react';
-import { updateFollows } from '../redux/actions'
+import { updateFollows } from '../redux/actions';
+
+import { 
+    width75MarginAuto, 
+    followerCardImg 
+} from '../bigStyle';
 // end of imports --------------------------------------------------
 
 const FollowList = (props) => {
@@ -52,10 +57,10 @@ const FollowList = (props) => {
             (  
             
                 <NavLink to={ `/home/user/${nestedUser.id}` } >
-                    <Segment inverted style={{ height: 'fit', minWidth: '10%'}}>
+                    <Segment inverted>
                         
-                        <Card style={{ margin: 'auto' }}>
-                            <img src={activeStorageUrlConverter(nestedUser.proPic)} wrapped ui={false}  style={{ height: '20vh', objectFit: 'scale-down' }} />
+                        <Card style={width75MarginAuto}>
+                            <img src={activeStorageUrlConverter(nestedUser.proPic)} wrapped ui={false}  style={followerCardImg} />
                             <Card.Content>
                             <Card.Header>{nestedUser.username}</Card.Header>
                             <Card.Meta>

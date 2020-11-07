@@ -7,6 +7,14 @@ import { Segment, Icon, Menu } from 'semantic-ui-react';
 
 import ss from '../images/sskain.png';
 import skyCastleImg from '../images/skyCastle.png';
+
+import {
+  secondaryNavSeg,
+  maxWidthMinHeight60,
+  secondaryNavHeader,
+  secondaryNavSmallHeader,
+
+} from '../bigStyle';
 // end of imports-----------------------------------------
 
 // nav for logged out users
@@ -15,7 +23,7 @@ const SecondaryNav = () => {
   return(
     <div style={{ backgroundImage: `url(${ skyCastleImg })`, backgroundRepeat: 'repeat', height: 'fit', minHeight: '100%' }} >
       
-    <div style={{ width: '90%', margin: 'auto', textAlign: 'center' }} >
+    <div style={secondaryNavSeg} >
 
       <Segment raised inverted >
 
@@ -38,27 +46,20 @@ const SecondaryNav = () => {
         </Menu>
         
         <Segment inverted raised secondary >
-          <h2 style={{ 'fontFamily': 'funSized', 'fontSize': '45px' }} > 
+          <h2 style={secondaryNavHeader} > 
             Welcome to Art Scope,  <br />Login/Sign-up above 
           </h2>
         </Segment>
           
         
           <img 
-            alt= 'Wolf and forest with pixel village backround'
+            alt= 'hiro symbol for ar'
             src={ ss }  
-            style={{ width: '100%', 'maxHeight': '60%' }}
+            style={maxWidthMinHeight60}
           />
           
-          <h4
-            style={{ 
-              bottom: '15%',
-              position: 'relative',
-              fontFamily: 'funSized',
-              fontSize: '35px'
-            }}
-          >
-            Explore Samples Below...
+          <h4 style={secondaryNavSmallHeader} >
+            Use This Hiro Symbol For AR!
           </h4>
           
         </Segment>
