@@ -13,13 +13,29 @@ class Api::V1::UsersController < ApplicationController
         end
     end
 
+    def show
+        foundUser = User.find(params[:id])
+        render json: { user: UserSerializer.new(foundUser) }, status: :accepted
+    end
+
     def profile
         render json: { user: UserSerializer.new(current_user) }, status: :accepted
+    end
+
+    def feed
+      user = User.find(params[:id])
+
+      ids = user.isFollowing.map { |user| user.id }
+
+      posts = Post.where(user_id: ids).left_joins(:liked_posts).group(:id).order('created_at DESC, COUNT(liked_posts.id) DESC').limit(100)
+
+      render json: posts, status: :accepted
+  
     end
  
     private
  
     def user_params
-        params.require(:user).permit(:username, :password)
+        params.permit(:username, :password, :bio, :pro_pic)
     end
 end

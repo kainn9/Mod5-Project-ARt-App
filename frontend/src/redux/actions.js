@@ -33,13 +33,18 @@ export const signupUser = (userData, setErrorMessage, setLoginFailed, history) =
 
     return function (dispatch) {
 
+        const formData = new FormData();
+        formData.append('username', userData.username);
+        formData.append('password', userData.password);
+        formData.append('bio', userData.bio);
+        formData.append('pro_pic', userData.pro_pic);
+        console.log('ud', userData)
+
         const fetchConfig = {
             method: 'POST',
-            headers: { 
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }, 
-            body: JSON.stringify({ user: userData })
+            // idk headers for formData
+            headers: {}, 
+            body: formData
             
         }
     
@@ -98,6 +103,20 @@ export const loginUser = (userData, setErrorMessage, setLoginFailed, history) =>
 
             }
         })
+    }
+    
+}
+
+export const updateUserLikes = (newLikeID) => {
+    return function(dispatch) {
+        dispatch({ type: 'updateLikes', payload: newLikeID })
+    }
+    
+}
+
+export const updateFollows = (followID) => {
+    return function(dispatch) {
+        dispatch({ type: 'updateFollows', payload: followID })
     }
     
 }

@@ -1,3 +1,50 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id
+  include Rails.application.routes.url_helpers
+  attributes :id, :posts, :username, :likedPosts, :isFollowing, :isFollowedBy, :proPic, :bio
+
+  def posts
+    object.posts.map do |post|
+    {
+      id: post.id,
+      title: post.title,
+      body: post.body,
+      img: rails_blob_url(post.featured_image),
+      subs: post.suscribedUsers,
+      ownerID: post.user.id
+    }
+    end
+    
+  end
+  def likedPosts
+    object.likedPosts.map do |post|
+    {
+      id: post.id,
+      title: post.title,
+      body: post.body,
+      img: rails_blob_url(post.featured_image),
+      subs: post.suscribedUsers,
+      ownerID: post.user.id
+    }
+    end
+  end
+
+  def isFollowing
+    
+    object.isFollowing.map { |user| { id: user.id, username: user.username, proPic: rails_blob_url(user.pro_pic), bio: user.bio } }
+  
+  end
+
+  def isFollowedBy
+    
+    object.isFollowedBy.map { |user| { id: user.id, username: user.username, proPic: rails_blob_url(user.pro_pic), bio: user.bio } }
+    
+  end
+
+  def proPic
+    if object.pro_pic.attached?
+      {
+        url: rails_blob_url(object.pro_pic)
+      }
+    end
+  end
 end
