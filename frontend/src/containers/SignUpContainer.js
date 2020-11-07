@@ -1,6 +1,6 @@
 // imports:
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { signupUser } from '../redux/actions';
@@ -19,6 +19,9 @@ const SignUpContainer = (props) => {
     const [passwordInput2, setPasswordInput2] =  useState('');
     const [bio, setBio] =  useState('');
     const [img, setImg] = useState(null);
+
+    const history = useHistory()
+    
     // state for error messages
     const [loginFailed, setLoginFailed] =  useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -50,7 +53,7 @@ const SignUpContainer = (props) => {
                 bio: bio ? bio : 'No Bio',
                 pro_pic: img ? img : new Blob([`url(${defaultPhoto})`])
 
-            }, setErrorMessage, setLoginFailed, props.history);
+            }, setErrorMessage, setLoginFailed, history);
         }
 
         

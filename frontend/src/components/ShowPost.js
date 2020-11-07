@@ -247,7 +247,7 @@ const ShowPost = (props) => {
     useEffect(() => {
         document.addEventListener("keydown", e => leaveAR(e), false);
         fetchCurrentPost();
-    }, [])
+    }, [props])
 
 
     // normal view:

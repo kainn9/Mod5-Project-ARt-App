@@ -1,6 +1,6 @@
 // imports:
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions';
 import { Button, Form, Message, Segment, Menu, Icon } from 'semantic-ui-react';
@@ -13,9 +13,12 @@ const LoginContainer = (props) => {
     // state to control inputs:
     const [usernameInput, setUserNameInput] =  useState('');
     const [passwordInput, setPasswordInput] =  useState('');
+
     // state to control error messages/ small front end validations
     const [errorMessage, setErrorMessage] = useState('');
     const [loginFailed, setLoginFailed] =  useState(false);
+
+    const history = useHistory();
 
     // handle login
     const loginHandler = () => {
@@ -30,6 +33,7 @@ const LoginContainer = (props) => {
 
             setErrorMessage('Password Cannot be Blank');
             setLoginFailed(true);
+            
             // attempts to login
         } else {
 
@@ -38,7 +42,7 @@ const LoginContainer = (props) => {
             props.loginUser({ 
                 username: usernameInput,
                 password: passwordInput,
-            }, setErrorMessage, setLoginFailed, props.history)
+            }, setErrorMessage, setLoginFailed, history)
         }
     }
 

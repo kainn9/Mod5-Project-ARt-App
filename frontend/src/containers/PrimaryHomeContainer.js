@@ -1,6 +1,7 @@
 // imports:
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import PrimaryNav from '../components/PrimaryNav';
 import UserFeed from '../components/UserFeed';
 import ShowPost from '../components/ShowPost';
@@ -19,6 +20,23 @@ const PrimaryHomeContainer = (props) => {
         
         <Switch>
 
+          {/* home page */}
+          <Route  exact path='/home'
+                render={() => (
+                <div style={{
+                    backgroundImage: `url(${ leaves })`,
+                    backgroundRepeat: 'repeat',
+                    height: 'fit%',
+                    minHeight: '100%',
+                }}
+                >
+                    <PrimaryNav />
+                    <UserFeed />
+                
+                </div>
+                )}
+            />
+
             {/* edit page for existing posts */}
             <Route path='/home/post/edit/:id'
                 render={ routerProps => { 
@@ -34,7 +52,7 @@ const PrimaryHomeContainer = (props) => {
                         minHeight: '100%',
                     }}
                     >
-                        <PrimaryNav history={props.history} />
+                        <PrimaryNav/>
                         <EditPost postID={id} />
 
                     
@@ -58,7 +76,7 @@ const PrimaryHomeContainer = (props) => {
                     width: '100%'
                     }}
                 >
-                    <PrimaryNav history={props.history} />
+                    <PrimaryNav />
                     <UserConnectionsContainer userID={id} />
                 
                     </div>
@@ -81,7 +99,7 @@ const PrimaryHomeContainer = (props) => {
                     minHeight: '100%',
                     }}
             >
-                    <PrimaryNav history={props.history} />
+                    <PrimaryNav/>
                     <UserLikedContainer userID={id} />
                 
                     </div>
@@ -90,7 +108,8 @@ const PrimaryHomeContainer = (props) => {
             />
 
             {/* user show page */}
-            <Route path='/home/user/:id'
+            <Route 
+                path='/home/user/:id'
                 render={ routerProps => { 
                     
                 const id = parseInt(routerProps.match.params.id) 
@@ -104,7 +123,7 @@ const PrimaryHomeContainer = (props) => {
                     minHeight: '100%',
                     }}
             >
-                    <PrimaryNav history={props.history} />
+                    <PrimaryNav />
                     <UserPostContainer userID={id} />
                 
                     </div>
@@ -131,31 +150,14 @@ const PrimaryHomeContainer = (props) => {
                         minHeight: '100%',
                         }}
                     >
-                        <PrimaryNav history={props.history} />
+                        <PrimaryNav />
                         <CreatePost />
                     
                     </div>
                 )}
             />
-            {/* home page */}
-            <Route path='/home'
-                render={() => (
-                <div style={{
-                    backgroundImage: `url(${ leaves })`,
-                    backgroundRepeat: 'repeat',
-                    height: 'fit%',
-                    minHeight: '100%',
-                }}
-                >
-                    <PrimaryNav history={props.history} />
-                    <UserFeed />
-                
-                </div>
-                )}
-            />
-
-            
+          
         </Switch>
     );
 };
-export default PrimaryHomeContainer;
+export default withRouter(PrimaryHomeContainer);

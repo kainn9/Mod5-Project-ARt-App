@@ -1,6 +1,6 @@
 // imports:
 import React, { useState, useEffect } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
@@ -13,6 +13,8 @@ const PrimaryNav = (props) => {
   //auth token
   const token = localStorage.getItem('artScopeJWT')
 
+  const history = useHistory()
+  
   // search bar load state
   const [isLoading, setIsLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
@@ -26,9 +28,9 @@ const PrimaryNav = (props) => {
 
     if(result.description === 'user') {
       console.log(props)
-      props.history.push(`/home/user/${result.id}`)
+      history.push(`/home/user/${result.id}`)
     } else if (result.description === 'post') {
-      props.history.push(`/home/post/${result.id}`)
+      history.push(`/home/post/${result.id}`)
     }
     //window.location.reload()
   }
@@ -80,7 +82,7 @@ const PrimaryNav = (props) => {
   const logoutHandler = () => {
     props.logoutUser()
     localStorage.removeItem('artScopeJWT');
-    props.history.push('/')
+    history.push('/')
   }
 
   return(
@@ -155,4 +157,4 @@ const PrimaryNav = (props) => {
 // set user to null in redux
 const mdp = dispatch => ({ logoutUser: () => dispatch({ type: 'logoutUser' }) })
 const msp = state => ({ user: state.user })
-export default withRouter(connect(msp, mdp)(PrimaryNav));
+export default connect(msp, mdp)(PrimaryNav);

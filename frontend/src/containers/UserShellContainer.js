@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { activeStorageUrlConverter, usersRoute } from '../railsRoutes';
 import PostPreview from '../components/PostPreview';
 import { Segment, Header, Image, Button } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, use} from 'react-router-dom';
 // end of imports ------------------------------------------------------
 
 // class copment that handles rendering the post previews for a user
@@ -47,6 +47,11 @@ class UserShellContainer extends Component {
     // fethc user on mount
     componentDidMount () {
         this.fetchUserData()
+        console.log('ayo', this.props)
+    }
+
+    componentDidUpdate (prevProps) {
+        if ( prevProps !== this.props ) this.fetchUserData()
     }
 
     render() {
