@@ -2,14 +2,14 @@
 
     // React:
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
     // three related:
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     // Semantic UI
-import { Segment, Menu, Button, Header, Icon, Label } from 'semantic-ui-react';
+import { Segment, Menu, Button, Header, Icon, Label, IconGroup } from 'semantic-ui-react';
 
 // My relative imports:
 import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
@@ -19,6 +19,7 @@ import cityScape from '../images/cityScape.jpg';
 import canvasTexture from '../images/canvas.jpg';
 import canvasBack from '../images/canvasBack.jpg';
 import { likedPostsRoute } from '../railsRoutes';
+import Iframe from 'react-iframe'
 // end of imports ----------------------------------
 
 // Primary Show Component for Posts... Has 3 view modes set from state/hooks: 'normal, 'ar', 'three'
@@ -36,6 +37,8 @@ const ShowPost = (props) => {
     const [viewMode, setViewMode] = useState('normal');
     // state for like counter
     const [likedPostsCounter, setLikedPostsCounter] = useState(null)
+    //
+    const [videoHook, setVideoHook] = useState(null);
 
 
     // creates or destroys liked relationship in backend components should update
@@ -94,8 +97,11 @@ const ShowPost = (props) => {
 
     // sets view state to ar and grabs pic dimensions for render(if need be)
     const renderARView =() => {
+        
         setViewMode('ar');
         getDimensions();
+       
+        
     }
 
     // sets view state to three and grabs pic dimensions for render(if need be)
@@ -194,6 +200,7 @@ const ShowPost = (props) => {
         }
           
             requestAnimationFrame(render);
+    
     }
 
     // gets current post from rails api
@@ -216,7 +223,25 @@ const ShowPost = (props) => {
           
         
     // if user leaves normal view store the img dimensions for rendering later
-    useEffect(() => {if(viewMode === 'three') return render3D(dimensions.width, dimensions.height)}, [viewMode])
+    useEffect(() => { 
+        if(viewMode === 'three') return render3D(dimensions.width, dimensions.height) 
+
+        if (viewMode !== 'ar' && document.querySelector('video')) {
+            //reset video
+            const video = document.querySelector('video');
+            const mediaStream = video.srcObject;
+            const tracks = mediaStream.getTracks();
+            tracks.forEach(track => track.stop());
+            video.remove();
+
+
+          // ar js puts weird styles we need to remove
+            const htmlTag = document.querySelector('html')
+            htmlTag.classList.remove('a-fullscreen')
+            document.querySelector('body').removeAttribute('style');
+         
+        }
+    }, [viewMode])
 
     // on component load/mount
     useEffect(() => {
@@ -224,7 +249,6 @@ const ShowPost = (props) => {
         fetchCurrentPost();
     }, [])
 
- 
 
     // normal view:
     if (viewMode === 'normal') return(
@@ -301,13 +325,12 @@ const ShowPost = (props) => {
 
     // view mode for AR
     if (viewMode === 'ar') return (
-        <>
-            <a-scene arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;' >
-                <a-marker preset="hiro">
-                    <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 256 } width={dimensions.width / 256} height='0.01'> </a-box>
-                </a-marker>
-            </a-scene>    
-        </>
+        <a-scene arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
+            <a-marker preset="hiro">
+                <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 512 } width={dimensions.width / 640} height='0.035'> </a-box>
+            </a-marker>
+        </a-scene> 
+     
     )
     // view mode for three
     if (viewMode === 'three') return (
