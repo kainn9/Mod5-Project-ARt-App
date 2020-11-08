@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FollowList from '../components/FollowList';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -12,16 +12,15 @@ const UserConnectionsContainer = (props) => {
     const [activeTab, setActiveTab] = useState('following');
     const [pageUserData, setPageUserData] = useState('');
 
+    
+    
     return(
         <>
             <div id='wrapper' style={{ textAlign: 'center' }}> 
-            {/* <div> */}
+
                 <NavLink to={`/home/user/${props.loggedUser.id}/connections`} >
 
-                    <Button 
-                        color='pink' 
-                        style={followerButtons} 
-                    > 
+                    <Button color='pink' style={followerButtons} > 
                         My Followers/Following
                     </Button>
 
@@ -29,19 +28,17 @@ const UserConnectionsContainer = (props) => {
 
                 <NavLink to={`/home/user/${props.userID}`} >
 
-                    <Button 
-                        color='orange' 
-                        style={followerButtons}
-                    >
+                    <Button color='orange' style={followerButtons} >
                         Back to Collection
                     </Button>
 
                 </NavLink>
-            {/* </div> */}
+
             </div>  
             <Segment inverted secondary style={width75MarginAuto}>
                 
                 <Menu attached='top' tabular  inverted>
+
                     <Menu.Item
                         name='following'
                         active={activeTab === 'following'}
@@ -55,48 +52,60 @@ const UserConnectionsContainer = (props) => {
                         onClick={ (e, { name }) => setActiveTab(name) }
                         style={{ width: '50%'}}
                     />
+
                 </Menu>
 
-            {
-                activeTab === 'following' ? (
-                    <Segment inverted style ={{ textAlign: 'center'}}>
-                        {
-                            pageUserData ? (
-                                <Header as='h2'>
-                                    <Image circular src={activeStorageUrlConverter(pageUserData.img.url)} />
-                                    <br></br>
-                                    {`Viewing: ${pageUserData.username}`}
-                                </Header>
-                                
-                            ) : null
-                        } 
-                        
-                        <div style={followerGrid}>
+                {
+                    activeTab === 'following' ? (
+                        <Segment inverted style ={{ textAlign: 'center'}}>
+                            {
+                                pageUserData ? (
+
+                                    <Header as='h2'>
+                                        
+                                        <Image circular src={activeStorageUrlConverter(pageUserData.img.url)} />
+
+                                        <br></br>
+    
+                                        {`Viewing: ${pageUserData.username}`}
+
+                                    </Header>
+
+                                    
+                                ) : null
+                            } 
                             
-                            <FollowList setPageUserData={ setPageUserData } relationship='isFollowing' userID={props.userID} />
-                        </div>
-                    </Segment>
-                ) : (
-                
-                    <Segment inverted style ={{ textAlign: 'center'}}>
-                        {
-                            pageUserData ? (
-                                <Header as='h2'>
-                                    <Image circular src={activeStorageUrlConverter(pageUserData.img.url)} />
-                                    <br></br>
-                                    {`Viewing: ${pageUserData.username}`}
-                                </Header>
-                                
-                            ) : null
-                        } 
-                        <div style={followerGrid}>
-                        
-                            <FollowList setPageUserData= { setPageUserData } relationship='isFollowedBy' userID={props.userID} />
-                        </div>
-                    </Segment>
-            
-                )
-            }
+                            <div style={followerGrid}>
+                                <FollowList setPageUserData={ setPageUserData } relationship='isFollowing' userID={props.userID} />
+                            </div>
+                            
+                        </Segment>
+                    ) : (
+                    
+                        <Segment inverted style ={{ textAlign: 'center'}}>
+                            {
+                                pageUserData ? (
+
+                                    <Header as='h2'>
+
+                                        <Image circular src={activeStorageUrlConverter(pageUserData.img.url)} />
+
+                                        <br></br>
+
+                                        {`Viewing: ${pageUserData.username}`}
+
+                                    </Header>
+                                    
+                                ) : null
+                            } 
+                            
+                            <div style={followerGrid}>
+                                <FollowList setPageUserData= { setPageUserData } relationship='isFollowedBy' userID={props.userID} />
+                            </div>
+
+                        </Segment>
+                    )
+                }
 
             </Segment>
         </>

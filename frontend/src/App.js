@@ -1,12 +1,9 @@
 // imports:
 import React, { useEffect } from 'react';
-
 import { Route, Switch, Redirect } from 'react-router-dom';
-
 import { connect } from 'react-redux';
+
 import { getUserFromJWT } from './redux/actions';
-
-
 
 import SecondaryHomeContainer from './containers/SecondaryHomeContainer';
 import PrimaryHomeContainer from './containers/PrimaryHomeContainer';
@@ -24,7 +21,7 @@ function App(props) {
 
   return (
 
-      // routing for login-signup/home... routing for logged in users in PrimaryHomeContainer
+      // routing for login-signup/home... nested routing for logged in users in PrimaryHomeContainer
       <Switch>
         <Route exact path="/">
           <Redirect to="/home" />

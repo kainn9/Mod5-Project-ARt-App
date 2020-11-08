@@ -27,14 +27,16 @@ const SignUpContainer = (props) => {
     const [bio, setBio] =  useState('');
     const [img, setImg] = useState(null);
 
+    // hook to access browserHistory(using router v5)
     const history = useHistory()
     
     // state for error messages
     const [loginFailed, setLoginFailed] =  useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    // handle sign-up
+    // handles sign-up has small front end validations
     const signupHandler = () => {
+
         // inputs should match
         if (passwordInput !== passwordInput2) {
             setErrorMessage('passwords do not Match please try again')
@@ -50,9 +52,10 @@ const SignUpContainer = (props) => {
             setErrorMessage('password cannot be blank')
             setLoginFailed(true)
 
-            // attempt to signup
+            //  no errors than attempt to signup
         } else {
-            // redux action
+
+            // signup goes through redux action to keep user in external/redux store
             // pass in the form information, setter hooks for errors, and history hook for redirect
             props.signupUser({ 
                 username: usernameInput, 
@@ -92,17 +95,15 @@ const SignUpContainer = (props) => {
 
             </Menu>
 
-            <Segment 
-                raised
-                style ={formSegment}>
+            <Segment raised style={ formSegment }>
+
                 <Form error={ loginFailed }>
+
                     <Message
                         error
                         header='Error'
                         content={ errorMessage }
                     />
-
-
 
                     <Form.Input 
                         type='text' 
@@ -137,35 +138,36 @@ const SignUpContainer = (props) => {
                     />
 
                     <span style={blockAlignCenter}>
-                    <img src ={img ? URL.createObjectURL(img) : null } alt='upload preview' hidden={ !img } style={{ height: '25%', width: '100%' }} /> 
-                    <br></br>
-                        <label style = {chooseFile}
-                        >
-                        Optional Profile Picture
-                        <Form.Input 
-                            type="file" 
-                            accept="image/*" 
-                            multiple={false} 
-                            onChange={ e => setImg(e.target.files[0]) } 
-                            style ={widthIs100} 
-                        />
-                        </label>
-                        
+
+                        <img src ={img ? URL.createObjectURL(img) : null } alt='upload preview' hidden={ !img } style={{ height: '25%', width: '100%' }} /> 
+
                         <br></br>
                         
-                            
+                        <label style = {chooseFile}>
 
-                        
-                        <Button
-                            onClick={ signupHandler }
-                            style ={{ width: '50%'}}
-                        >
+                            Optional Profile Picture
+                            <Form.Input 
+                                type="file" 
+                                accept="image/*" 
+                                multiple={false} 
+                                onChange={ e => setImg(e.target.files[0]) } 
+                                style ={widthIs100} 
+                            />
+
+                        </label>
                             
+                        <br></br>
+                             
+                        <Button onClick={ signupHandler } style ={{ width: '50%'}} >  
                             Submit
                         </Button>
-                        </span>
+
+                    </span>
+
                 </Form>
+
             </Segment>
+            
         </div>
     );
 };

@@ -18,9 +18,10 @@ const FollowList = (props) => {
     const artScopeJWT = localStorage.getItem('artScopeJWT');
     const [pageUser, setPageUser] = useState(null);
     const [loggedUserFollowingArray, setLoggedUserFollowingArray] = useState(props.loggedUser.isFollowing);
+    const [loggedUserFollowedArray, setLoggedUserFollowedArray] = useState(props.loggedUser.isFollowedBy);
 
     const followHandler = (ID) => {
-        const httpVerb = isViewerFollowing(ID) ? 'DELETE' : 'POST';
+        const httpVerb = doesLoggedUserFollowPreviewedUser(ID) ? 'DELETE' : 'POST';
         const fetchConfig = {
             method: `${httpVerb}`,
             headers: {
@@ -43,15 +44,20 @@ const FollowList = (props) => {
         
     }
 
-    const isViewerFollowing = (viewingUserID) => {
-        const idsOfFollowing = loggedUserFollowingArray.map(user => user.id)
+    const doesPreivewedUserFollowLoggedUser = (previewedUser) => {
+        const followedByIds = loggedUserFollowedArray.map(user => user.id)
 
-        return idsOfFollowing.includes(viewingUserID)
+        return followedByIds.includes(previewedUser)
+    }
+
+    const doesLoggedUserFollowPreviewedUser = (previewedUser) => {
+        const followingIds = loggedUserFollowingArray.map(user => user.id)
+
+        return followingIds.includes(previewedUser)
     }
 
     const renderCardsFromUserData = (user) => {
 
-        const listOfIds = user.user.isFollowing.map(user => user.id)
         
         return user.user[props.relationship].map(nestedUser => 
             (  
@@ -64,10 +70,10 @@ const FollowList = (props) => {
                             <Card.Content>
                             <Card.Header>{nestedUser.username}</Card.Header>
                             <Card.Meta>
-                                {listOfIds.includes(props.loggedUser.id) ? nestedUser.id === props.loggedUser.id ? 'This is you' : 'Follows You' : nestedUser.id === props.loggedUser.id ? 'This is you' : 'Does Not Follow You'}
+                                {doesPreivewedUserFollowLoggedUser(nestedUser.id) ? nestedUser.id === props.loggedUser.id ? 'This is you' : 'Follows You' : nestedUser.id === props.loggedUser.id ? 'This is you' : 'Does Not Follow You'}
                                 <br></br>
                                 {console.log('logged', props.loggedUser)}
-                                {isViewerFollowing(nestedUser.id) ? 'You are Following' : nestedUser.id === props.loggedUser.id ? null : 'You are not Following'}
+                                {doesLoggedUserFollowPreviewedUser(nestedUser.id) ? 'You are Following' : nestedUser.id === props.loggedUser.id ? null : 'You are not Following'}
                             </Card.Meta>
                             <Card.Description>
                                 <b>Short Bio:</b>
@@ -75,7 +81,7 @@ const FollowList = (props) => {
                                 { nestedUser.bio }
                                 <br></br>
                                 {
-                                    isViewerFollowing(nestedUser.id) ? (
+                                    doesLoggedUserFollowPreviewedUser(nestedUser.id) ? (
                                         <Button 
                                             onClick={ e => {
                                                 e.preventDefault()
@@ -125,8 +131,7 @@ const FollowList = (props) => {
 
     useEffect(() => {
         fetchUser()
-        console.log('change')
-    }, [loggedUserFollowingArray])
+    }, [loggedUserFollowingArray, props.userID])
 
     return (
         <>

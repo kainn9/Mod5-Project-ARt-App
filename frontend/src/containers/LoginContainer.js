@@ -23,9 +23,10 @@ const LoginContainer = (props) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [loginFailed, setLoginFailed] =  useState(false);
 
+    // history hook
     const history = useHistory();
 
-    // handle login
+    // handles login
     const loginHandler = () => {
         // checks for username
         if (usernameInput.length < 1) {
@@ -42,7 +43,7 @@ const LoginContainer = (props) => {
             // attempts to login
         } else {
 
-            // redux action
+            // login user comes is a redux action to store user in external store/redux
             // pass in the form information, setter hooks for errors, and history hook for redirect
             props.loginUser({ 
                 username: usernameInput,
@@ -70,13 +71,13 @@ const LoginContainer = (props) => {
                         Sign-Up
                     </Menu.Item>
                 </NavLink>
+                
             </Menu>
         
-            <Segment raised
-        
-                style ={formSegment}
-            >
+            <Segment raised style ={formSegment} >
+
                 <Form error={ loginFailed } >
+
                     <Form.Input 
                         type='text' 
                         label='enter username:' 

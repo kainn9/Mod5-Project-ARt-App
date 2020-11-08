@@ -23,7 +23,7 @@ let store = createStore(rootReducer, applyMiddleware(thunk));
 
   ReactDOM.render(
     <React.StrictMode>
-      <BrowserRouter forceRefresh={false}>
+      <BrowserRouter>
         <Provider store={store}>
           <App />
         </Provider>

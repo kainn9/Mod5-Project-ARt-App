@@ -48,8 +48,7 @@ const ShowPost = (props) => {
     const [viewMode, setViewMode] = useState('normal');
     // state for like counter
     const [likedPostsCounter, setLikedPostsCounter] = useState(null)
-    //
-    const [videoHook, setVideoHook] = useState(null);
+
 
 
     // creates or destroys liked relationship in backend components should update
