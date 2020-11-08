@@ -1,3 +1,4 @@
+// imports
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -15,6 +16,7 @@ import {
 
 } from '../bigStyle';
 
+// end of imports ----------------------------------------------------------------------
 
 const UserFeed = (props) => {
 
@@ -28,7 +30,7 @@ const UserFeed = (props) => {
     const [loggedUserLikes, setLoggedUserLikes] = useState( props.loggedUser.likedPosts.map( p => p.id ) );
 
     // state for like count -> array maps to posts...got lazy could of also made components out of the previews that held their own state
-    const [likeCounter, setLikeCounter] = useState([]);
+    const [likeCounter, setLikeCounter] = useState({});
 
     // returns bool if logged user has liked post
     const hasLoggedUserLiked = (postID) => {
@@ -36,7 +38,6 @@ const UserFeed = (props) => {
     }
 
     // handles updating server/state upon clicking a like/unlike button
-    // note: Im using this function/ similair modified a lot in different components would be nice to make a single verions for all at somepoint
     const likePost = (postID, e) => {
 
         const httpVerb = hasLoggedUserLiked(postID) ? 'DELETE' : 'POST'
@@ -61,7 +62,7 @@ const UserFeed = (props) => {
                 setLoggedUserLikes(props.loggedUser.likedPosts.map( p => p.id ))
 
                 const index = parseInt(e.target.parentElement.attributes[0].value);
-                let likeCounterClone = [...likeCounter];
+                let likeCounterClone = {...likeCounter};
                 likeCounterClone[index] += 1
                 setLikeCounter(likeCounterClone)
 
@@ -70,7 +71,7 @@ const UserFeed = (props) => {
                 setLoggedUserLikes(props.loggedUser.likedPosts.map( p => p.id ))
                 
                 const index = parseInt(e.target.parentElement.attributes[0].value);
-                let likeCounterClone = [...likeCounter];
+                let likeCounterClone = {...likeCounter};
                 likeCounterClone[index] -= 1
                 setLikeCounter(likeCounterClone)
                 
@@ -81,7 +82,10 @@ const UserFeed = (props) => {
     
     }
 
-    // renders previews from feed
+    // renders previews from feed...normally my pattern would be to map out a new component for each index of postsData while passing in postsData through to the props
+    // of the new component, you could then have each preview component track its own state for user likes(locally or through redux msp)
+    // However I wanted to experiment with using an object for a useState() hook and track the state of multiple elements on the page with 1 hook
+    // I ended up using the map index to create keys for each post(stored on the dom as code attr) and would use e.target to grab the code and pass it as the key...im not really sure how I feel about this pattern
     const renderPostPreviews = (postsData) => {
 
         return postsData.map( (post, i) => (

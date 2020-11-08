@@ -48,7 +48,6 @@ const ShowPost = (props) => {
     // state for like counter
     const [likedPostsCounter, setLikedPostsCounter] = useState(null)
 
-
     // creates or destroys liked relationship 
     const likePost = () => {
 
@@ -226,16 +225,19 @@ const ShowPost = (props) => {
         })
     }
 
-    // when you render a ArJs scene it changes you html tag to full screen, adds weird styles to the body, appends a video element your body and also turns on your camera
-    // this helper fn removes the weird styles removes the video element and also turns off the camera when leaving AR mode
+    /* when you render a ArJs scene it changes you html tag to full screen,  appends a video element your body, and also turns on your camera
+     this helper fn removes the removes the video element and also turns off the camera when leaving AR mode
+     its important to have margin-top set to 0  with !important in index.css otherwise arJS will overwrite it with negative effects
+     when leaving ar mode.
+    */
     const fixArSideEffects = () => {
         const vid = document.querySelector('video')
 
         if (vid) {
 
             // remove my appended header
-            // let appendedHeader = document.querySelector('#appendedHeader');
-            // appendedHeader.remove();
+            let appendedHeader = document.querySelector('#appendedHeader');
+             if (appendedHeader) appendedHeader.remove()
 
             if (document.querySelector('video')) {
                  //reset video
@@ -247,15 +249,11 @@ const ShowPost = (props) => {
 
                 // ar js puts weird styles we need to remove
             let htmlTag = document.querySelector('html')
-            let body = document.querySelector('body');
            
             htmlTag.removeAttribute('class');
-            console.log('bodyis', body, body.attributes[0])
-            body.removeAttribute('style')
-    
             }
         }
-         
+
     }
 
     /* ar js in its src code always appends the video tag and spreads it to the body element this cannot be changed w/o editing the src code... you can embedd the video in a Iframe but I opted
@@ -293,7 +291,7 @@ const ShowPost = (props) => {
     }
           
         
-    // if user leaves normal view store the img dimensions for rendering later
+    // useEffect to manage the three viewmodes when they change around
     useEffect(() => { 
         if(viewMode === 'three') render3D(dimensions.width, dimensions.height) 
 
@@ -303,7 +301,8 @@ const ShowPost = (props) => {
         
     }, [viewMode])
 
-    // on component load/mount
+    // if the prop change(normally when the url changes the previewedPost ID) fetch the post using updated props
+    // also adds an event listner on the esc key to exit ar Mode(the callback checks viewmode state === ar before running)
     useEffect(() => {
         document.addEventListener("keydown", e => leaveAR(e), false);
         fetchCurrentPost();
@@ -430,6 +429,7 @@ const ShowPost = (props) => {
     
     )
 }
+
 
 const msp = state => ({ loggedUser: state.user.user, reduxLikedPosts: state.user.user.likedPosts });
 const mdp = dispatch => ({ updateCurrentUserLikes: (newLikeID) => dispatch(updateUserLikes(newLikeID)) });

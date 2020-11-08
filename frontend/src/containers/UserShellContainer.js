@@ -20,20 +20,6 @@ class UserShellContainer extends Component {
         user: null,
         loggedUser: this.props.loggedUser,
     }
-    // place holder for the page header... gets overwritten by components that extend this from this class
-    headerChange = ''
-
-    // place holder for components extending this class since Redux does not play nice when trying to extend a class wrapped by connect and the logged user is stored in redux store
-    // ...can be deleted in this parent just for ref
-    // isLoggedUserFollowingPreviewedUser = () => {
-    //     return true
-    // }
-
-    // place holder for components extending this class since Redux does not play nice when trying to extend a class wrapped by connect and the logged user is stored in redux store
-    // ...can be deleted in this parent just for ref
-    // isLoggedUserViewingSelf = () => {
-    //     return true;
-    // }
     
     // maps over provided users posts and creates PostPreview Components from the data
     renderPostPreviewsFromUserData = () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import FollowList from '../components/FollowList';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';

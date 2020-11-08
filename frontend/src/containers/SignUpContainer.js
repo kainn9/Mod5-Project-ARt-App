@@ -27,7 +27,7 @@ const SignUpContainer = (props) => {
     const [bio, setBio] =  useState('');
     const [img, setImg] = useState(null);
 
-    // hook to access browserHistory(using router v5)
+    // hook to access history
     const history = useHistory()
     
     // state for error messages
