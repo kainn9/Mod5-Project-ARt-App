@@ -85,8 +85,8 @@ const UserFeed = (props) => {
     const renderPostPreviews = (postsData) => {
 
         return postsData.map( (post, i) => (
-            <>
-                <Card style= {width75MarginAutoCenterText} >
+            <div key={post.id}>
+                <Card style= {width75MarginAutoCenterText}  >
                 
                     <NavLink to={`/home/post/${post.id}`}>
                         <Segment inverted style= {widthMaxMarginAutoCenterText}>
@@ -136,7 +136,7 @@ const UserFeed = (props) => {
                     
                 </Card>
                 <br></br>
-            </>
+            </div>
         ))
     }
 

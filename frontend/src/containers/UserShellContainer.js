@@ -68,7 +68,6 @@ class UserShellContainer extends Component {
 
         return (
             <>
-            {console.log('ddddd', this.props.loggedUser.isFollowing)}
                 {
                     this.state.user ? (
                         <Segment inverted secondary style={width75MarginAutoCenterText}>

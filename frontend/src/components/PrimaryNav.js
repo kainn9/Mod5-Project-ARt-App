@@ -67,18 +67,21 @@ const PrimaryNav = (props) => {
         console.log(matches);
         setQueryDelay(false);
         setIsLoading(false);
-
-        const structUserData = matches.users.map( user => ({ 
+        // we set the key to combo of the username/title and ID + index because while user ID's are unique and Post ID's are unique they are not unique to each other
+        // it is still possible for overlap even with these buffers but the duplicate keys on temp search results dont actually break the functinality but do give annoying errors in the console
+        const structUserData = matches.users.map( (user, i) => ({ 
           title: user.username, 
           description: 'user', 
-          id: user.id, key: user.id , 
+          id: user.id, 
+          key: user.username + user.id , 
           image: activeStorageUrlConverter(user.proPic.url)
         }));
 
-        const structPostData = matches.posts.map( post => ({ 
+        const structPostData = matches.posts.map( (post, i) => ({ 
           title: post.title, 
           description: 'post', 
-          key: post.id, id: post.id, 
+          key: post.id + post.title + i, 
+          id: post.id, 
           image: activeStorageUrlConverter(post.featured_image.url)
         }));
 
@@ -110,9 +113,9 @@ const PrimaryNav = (props) => {
   return(
     <div style={width75MarginAutoCenterText} >
 
-      <Segment raised inverted  style={{ margin: 0 }} >
+      <Segment inverted  style={{ margin: 0 }} >
 
-        <Menu raised inverted color={'black'} icon='labeled'>
+        <Menu inverted color={'black'} icon='labeled'>
           <NavLink to='/home' style={{ width: '25%' }} >
             <Menu.Item name='home' >
               <Icon name='home' />
@@ -176,7 +179,7 @@ const PrimaryNav = (props) => {
     
 };
 
-// set user to null in redux
+// set user to null in redux on logout
 const mdp = dispatch => ({ logoutUser: () => dispatch({ type: 'logoutUser' }) });
 const msp = state => ({ user: state.user });
 export default connect(msp, mdp)(PrimaryNav);

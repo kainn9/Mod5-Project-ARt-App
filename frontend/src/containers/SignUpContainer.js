@@ -73,7 +73,7 @@ const SignUpContainer = (props) => {
     return(
         <div id='login' style = {cityScapeBG} >
 
-            <Menu raised inverted color={'black'} icon='labeled'>
+            <Menu inverted color={'black'} icon='labeled'>
 
                 <NavLink to='/login' style={{ width: '50%' }}>
 
@@ -95,7 +95,7 @@ const SignUpContainer = (props) => {
 
             </Menu>
 
-            <Segment raised style={ formSegment }>
+            <Segment style={ formSegment }>
 
                 <Form error={ loginFailed }>
 

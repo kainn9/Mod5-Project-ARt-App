@@ -25,9 +25,9 @@ const SecondaryNav = () => {
       
     <div style={secondaryNavSeg} >
 
-      <Segment raised inverted >
+      <Segment inverted >
 
-        <Menu raised inverted color={'black'} icon='labeled'>
+        <Menu inverted color={'black'} icon='labeled'>
 
           <NavLink to='/login' style={{ width: '50%' }} >
             <Menu.Item name='login' >
@@ -45,7 +45,7 @@ const SecondaryNav = () => {
 
         </Menu>
         
-        <Segment inverted raised secondary >
+        <Segment inverted secondary >
           <h2 style={secondaryNavHeader} > 
             Welcome to Art Scope,  <br />Login/Sign-up above 
           </h2>

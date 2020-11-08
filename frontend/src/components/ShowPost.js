@@ -93,12 +93,12 @@ const ShowPost = (props) => {
         }
     }
 
-    // gets Dimesions from img and then uses Set Dimensions hook to save in state
+    // gets Dimensions from img and then uses Set Dimensions hook to save in state
     const getDimensions  = () => {
-        // grab image
+        // grab image to get scale/dimen
         const img = document.querySelector('#texture');
 
-        // if viewMode !== normal the img does not exist ,  grab natural height and length otherwise, view mode always starts as nornal
+        // if viewMode != normal the img does not exist , howver, if the image exists we grab natural height and length... view mode always starts as nornal so wecan get the data before switching to ar or 3D
         if (viewMode === 'normal') setDimensions({height: img.naturalHeight, width: img.naturalWidth});
     }
 
@@ -119,7 +119,7 @@ const ShowPost = (props) => {
     // renders 3D 'canvas' of img --> takes in image dimensions as args
     const render3D = (sWidth, sHeight) => {
         
-        // where we render renderer(canvas must exist as JSX)
+        // this canvas is created when the state is set to three... the render3D is triggered right after that moment so we can render a 3D canvas in our new canvas
         const canvas = document.querySelector('#k');
 
         // create 3D renderer using canvas
@@ -136,7 +136,7 @@ const ShowPost = (props) => {
         // small positioning change
         camera.position.z = 2;
         
-        // camera controls (declared after camera/canvas)
+        // camera controls (declared after camera/canvas) while the variable is not used its presence is required for movement in the 3D viewer
         const controls = new OrbitControls(camera, canvas);
 
         // scene to render
@@ -153,8 +153,7 @@ const ShowPost = (props) => {
         // texture loader to turn img into three material
         const loader = new THREE.TextureLoader();
 
-        
-  
+    
         // canvas textures
         const materials = [
             new THREE.MeshBasicMaterial({map: loader.load(canvasTexture)}),
@@ -226,27 +225,82 @@ const ShowPost = (props) => {
             setLikedPostsCounter(data.suscribedUsers.length)
         })
     }
-          
-        
-    // if user leaves normal view store the img dimensions for rendering later
-    useEffect(() => { 
-        if(viewMode === 'three') return render3D(dimensions.width, dimensions.height) 
 
-        if (viewMode !== 'ar' && document.querySelector('video')) {
-            //reset video
+    // when you render a ArJs scene it changes you html tag to full screen, adds weird styles to the body, appends a video element your body and also turns on your camera
+    // this helper fn removes the weird styles removes the video element and also turns off the camera when leaving AR mode
+    const fixArSideEffects = () => {
+        const vid = document.querySelector('video')
+
+        if (vid) {
+
+            // remove my appended header
+            // let appendedHeader = document.querySelector('#appendedHeader');
+            // appendedHeader.remove();
+
+            if (document.querySelector('video')) {
+                 //reset video
             const video = document.querySelector('video');
             const mediaStream = video.srcObject;
             const tracks = mediaStream.getTracks();
             tracks.forEach(track => track.stop());
             video.remove();
 
-
-          // ar js puts weird styles we need to remove
-            const htmlTag = document.querySelector('html')
-            htmlTag.classList.remove('a-fullscreen')
-            document.querySelector('body').removeAttribute('style');
-         
+                // ar js puts weird styles we need to remove
+            let htmlTag = document.querySelector('html')
+            let body = document.querySelector('body');
+           
+            htmlTag.removeAttribute('class');
+            console.log('bodyis', body, body.attributes[0])
+            body.removeAttribute('style')
+    
+            }
         }
+         
+    }
+
+    /* ar js in its src code always appends the video tag and spreads it to the body element this cannot be changed w/o editing the src code... you can embedd the video in a Iframe but I opted
+        to create a event listner(on component mount) for the esc key to exit... this helper will append a header on the body and place it over the ivdeo so the user knows to press esc to return to normal view
+        we have to use setInterval because the video element take a X amount of time to append to the body and will remove the header if it loads first. I dont like set timeout because we dont know how
+        long the video will take to mount based on connection speed. The interval clears when the h1 is mounted to the body element.
+    */ 
+    const appendHeaderForArMode = () => {
+        const checkForVideoElement = setInterval(() => {
+
+            let webCamVideo = document.querySelector('video');
+            let header = null;
+            
+            if (webCamVideo) {
+                if (!header) {
+
+                    header = document.createElement('h1');
+                
+                    header.textContent = 'Press Esc to return to normal view';
+                    header.style.position = 'fixed';
+                    header.style.top = '30px';
+                    header.style.left = '100px';
+                    header.id = 'appendedHeader';
+
+                    document.querySelector('body').appendChild(header);
+
+                    clearInterval(checkForVideoElement);
+                }
+                    
+            }
+
+        }, 500);
+
+        
+    }
+          
+        
+    // if user leaves normal view store the img dimensions for rendering later
+    useEffect(() => { 
+        if(viewMode === 'three') render3D(dimensions.width, dimensions.height) 
+
+        if (viewMode !== 'ar') fixArSideEffects()
+    
+        if (viewMode === 'ar') appendHeaderForArMode()
+        
     }, [viewMode])
 
     // on component load/mount
@@ -330,6 +384,7 @@ const ShowPost = (props) => {
 
     // view mode for AR
     if (viewMode === 'ar') return (
+        
         <a-scene arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
             <a-marker preset="hiro">
                 <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 512 } width={dimensions.width / 640} height='0.035'> </a-box>

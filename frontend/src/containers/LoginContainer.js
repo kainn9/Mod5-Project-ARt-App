@@ -55,7 +55,7 @@ const LoginContainer = (props) => {
     return(
 
         <div id='login' style = {loginWrapperStyle}>
-            <Menu raised inverted color={'black'} icon='labeled'>
+            <Menu inverted color={'black'} icon='labeled'>
             
                 <NavLink to='/login' style={{ width: '50%' }} >
 
@@ -74,7 +74,7 @@ const LoginContainer = (props) => {
                 
             </Menu>
         
-            <Segment raised style ={formSegment} >
+            <Segment style ={formSegment} >
 
                 <Form error={ loginFailed } >
 

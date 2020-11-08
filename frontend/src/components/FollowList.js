@@ -141,10 +141,11 @@ const FollowList = (props) => {
     }  
 
     // this keeps our state in sync with the backend so previews/buttons/captions are accurate for the following/follower user relationships
-    // is refetches when logged user relationsips change or when the previewed userID has chaged in props
+    // we refetch when the logged user follower/followed relationships change and also when the previewedUserID changes(from props.userID) this is important
+    // because props.userID is from the url params and without tracking it with the UE the user wont update until refresh when switching btwn two different userShowPages
     useEffect(() => {
         fetchUser()
-    }, [loggedUserIsFollowingList, props.userID])
+    }, [props.userID, loggedUserIsFollowingList])
 
     return (
         <>
@@ -159,6 +160,6 @@ const FollowList = (props) => {
 
 const msp = state =>  ({ loggedUser: state.user.user })
 
-const mdp = dispatch => ({updateFollowerState: (id) => dispatch(updateFollows(id)) });
+const mdp = dispatch => ({ updateFollowerState: (id) => dispatch(updateFollows(id)) });
 
 export default connect(msp, mdp)(FollowList);
