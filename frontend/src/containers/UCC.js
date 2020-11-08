@@ -10,7 +10,7 @@ const UserConnectionsContainer = (props) => {
     
     
     const [activeTab, setActiveTab] = useState('following');
-    const [pageUserData, setPageUserData] = useState('');
+    const [previewedUserData, setPreviewedUserData] = useState('');
 
     
     
@@ -59,15 +59,15 @@ const UserConnectionsContainer = (props) => {
                     activeTab === 'following' ? (
                         <Segment inverted style ={{ textAlign: 'center'}}>
                             {
-                                pageUserData ? (
+                                previewedUserData ? (
 
                                     <Header as='h2'>
                                         
-                                        <Image circular src={activeStorageUrlConverter(pageUserData.img.url)} />
+                                        <Image circular src={activeStorageUrlConverter(previewedUserData.img.url)} />
 
                                         <br></br>
     
-                                        {`Viewing: ${pageUserData.username}`}
+                                        {`Viewing: ${previewedUserData.username}`}
 
                                     </Header>
 
@@ -76,7 +76,7 @@ const UserConnectionsContainer = (props) => {
                             } 
                             
                             <div style={followerGrid}>
-                                <FollowList setPageUserData={ setPageUserData } relationship='isFollowing' userID={props.userID} />
+                                <FollowList setPreviewedUserData={ setPreviewedUserData } relationship='isFollowing' userID={props.userID} />
                             </div>
                             
                         </Segment>
@@ -84,15 +84,15 @@ const UserConnectionsContainer = (props) => {
                     
                         <Segment inverted style ={{ textAlign: 'center'}}>
                             {
-                                pageUserData ? (
+                                previewedUserData ? (
 
                                     <Header as='h2'>
 
-                                        <Image circular src={activeStorageUrlConverter(pageUserData.img.url)} />
+                                        <Image circular src={activeStorageUrlConverter(previewedUserData.img.url)} />
 
                                         <br></br>
 
-                                        {`Viewing: ${pageUserData.username}`}
+                                        {`Viewing: ${previewedUserData.username}`}
 
                                     </Header>
                                     
@@ -100,7 +100,7 @@ const UserConnectionsContainer = (props) => {
                             } 
                             
                             <div style={followerGrid}>
-                                <FollowList setPageUserData= { setPageUserData } relationship='isFollowedBy' userID={props.userID} />
+                                <FollowList setPreviewedUserData= { setPreviewedUserData } relationship='isFollowedBy' userID={props.userID} />
                             </div>
 
                         </Segment>

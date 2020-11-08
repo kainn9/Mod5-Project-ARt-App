@@ -43,7 +43,7 @@ const EditPost = (props) => {
     // for redirect / access to history
     const history = useHistory();
 
-    // fetches post and updates hooks/state
+    // fetches post and displays it in form so user can edit
     const fetchPost = () => {
 
         const fetchConfig = {
@@ -51,34 +51,33 @@ const EditPost = (props) => {
             headers: {
                 Authorization: `Bearer ${artScopeJWT}`
             }
-        }
+        };
 
         fetch(`${postsRoute}/${props.postID}`, fetchConfig)
         .then( response => response.json())
         .then(data => { 
-            console.log(activeStorageUrlConverter( data.featured_image.url ));
             setFoundPost(data)
             setOldImg(activeStorageUrlConverter( data.featured_image.url ));
             setTitle(data.title);
             setBody(data.body)
-        })
-    }
+        });
+    };
 
     // handles submit action
     const submitHandler = e => {
         e.preventDefault();
         
-        // front end validations
+        // small front end validations
 
         if (!title) {
             setLoginFailed(true);
-            setErrorMessage('Please Enter a post title')
+            setErrorMessage('Please Enter a post title');
         } else if (!body) {
             setLoginFailed(true);
-            setErrorMessage('Please enter a small post description in the body input')
+            setErrorMessage('Please enter a small post description in the body input');
         } else if(!img) {
             setLoginFailed(true);
-            setErrorMessage('No image selected to upload!')
+            setErrorMessage('No image selected to upload!');
         } else {
 
             // sending as formData so rails api can store img active storage
@@ -97,14 +96,13 @@ const EditPost = (props) => {
             body: formData
             })
             .then( response => response.json() )
-            // use new post id for the routing
-            .then( post => history.push(`/home/post/${post.id}`))
-        }
+            .then( post => history.push(`/home/post/${post.id}`));
+        };
 
 
         
-    }
-
+    };
+    // checks if user owns the post being previewed
     const authEdit = () => {
 
         for (const post of props.loggedUser.posts) {
@@ -118,96 +116,96 @@ const EditPost = (props) => {
 
     // sets img hook/state to selected file/img
     const imgChangeHandler = e => {
-        setImg(e.target.files[0])
+        setImg(e.target.files[0]);
     }
 
-    //on mount
+    //on mount fetch the post to edit
     useEffect(() => {
-        fetchPost()
-    }, []) 
+        fetchPost();
+    }, []) ;
 
     return(
         <>
-        {
-            foundPost && authEdit ? (
-                <>
-                {
-                    authEdit() ? (
-                        <Segment inverted secondary placeholder style={width75MarginAuto} >
-                            {console.log('img', img)}
-                            <Header icon>
-                                <Icon name='image outline' />
-                                Create a Post!
-                            </Header>
-        
-                            <Form error={loginFailed} onSubmit={ submitHandler } style={textCenterMaxWidth} >
-        
-                                <Message
-                                    error
-                                    header='Error'
-                                    content={ errorMessage }
-                                />
-        
-                                <Label color='purple' horizontal style={width80}> 
-                                    Post Title:
-                                 </Label> 
-        
-                                <br></br>
-        
-                                <Input value={ title } placeholder='enter title here...' focus onChange={ e => setTitle(e.target.value) } style ={{ width: '80%' }} /> 
-                        
-                                <div className='filler' style ={{ height: '10vh'}}/>
-                        
-                                <Label color='purple' horizontal style={width80} > 
-                                    Body:
-                                </Label> 
-                        
-                                <br></br>
-        
-                                <TextArea value={body}
-                                    focus 
-                                    placeholder='Tell people about stuff!' 
-                                    onChange={e => setBody(e.target.value)}
-                                    style ={textAreaCreatePost} 
-                                />
-        
-                                <div className='filler' style ={{ height: '15vh'}} />
-        
-                                <br></br>
-                                <h2> Image preview: </h2>
-                                <img src ={img ? URL.createObjectURL(img) : oldImg} alt='upload preview' style={height25MaxWidth} />
-        
-                                <br></br>
-        
-                                <label style = {chooseFile} >
-                                    <input type="file" accept="image/*" multiple={false} onChange={ e => imgChangeHandler(e) } />
-                                </label>
-        
-                                <br></br>
-        
-                                <Button primary style={submitButton}>Submit Me!</Button>
-                            </Form>
-
-                            <NavLink to={`/home/user/${props.loggedUser.id}`}>
-                                <Button color='red' style={submitButton}> Cancel</Button>
-                             </NavLink>
+            {
+                foundPost && authEdit ? (
+                    <>
+                    {
+                        authEdit() ? (
+                            <Segment inverted secondary placeholder style={width75MarginAuto} >
+                    
+                                <Header icon>
+                                    <Icon name='image outline' />
+                                    Create a Post!
+                                </Header>
             
-                </Segment>
-                    ) : (
-                        null
-                    )
-                }
+                                <Form error={loginFailed} onSubmit={ submitHandler } style={textCenterMaxWidth} >
+            
+                                    <Message
+                                        error
+                                        header='Error'
+                                        content={ errorMessage }
+                                    />
+            
+                                    <Label color='purple' horizontal style={width80}> 
+                                        Post Title:
+                                    </Label> 
+            
+                                    <br></br>
+            
+                                    <Input value={ title } placeholder='enter title here...' focus onChange={ e => setTitle(e.target.value) } style ={{ width: '80%' }} /> 
+                            
+                                    <div className='filler' style ={{ height: '10vh'}}/>
+                            
+                                    <Label color='purple' horizontal style={width80} > 
+                                        Body:
+                                    </Label> 
+                            
+                                    <br></br>
+            
+                                    <TextArea value={body}
+                                        focus 
+                                        placeholder='Tell people about stuff!' 
+                                        onChange={e => setBody(e.target.value)}
+                                        style ={textAreaCreatePost} 
+                                    />
+            
+                                    <div className='filler' style ={{ height: '15vh'}} />
+            
+                                    <br></br>
+                                    <h2> Image preview: </h2>
+                                    <img src ={img ? URL.createObjectURL(img) : oldImg} alt='upload preview' style={height25MaxWidth} />
+            
+                                    <br></br>
+            
+                                    <label style = {chooseFile} >
+                                        <input type="file" accept="image/*" multiple={false} onChange={ e => imgChangeHandler(e) } />
+                                    </label>
+            
+                                    <br></br>
+            
+                                    <Button primary style={submitButton}>Submit Me!</Button>
+                                </Form>
+
+                                <NavLink to={`/home/user/${props.loggedUser.id}`}>
+                                    <Button color='red' style={submitButton}> Cancel</Button>
+                                </NavLink>
                 
-                </>
-            ) : (
-                null
-            )
-        }
+                    </Segment>
+                        ) : (
+                            null
+                        )
+                    }
+                    
+                    </>
+                ) : (
+                    null
+                )
+            }
         </>
        
     );
 };
 // read current user from redux store
-const msp = state => ({ loggedUser: state.user.user })
+const msp = state => ({ loggedUser: state.user.user });
 
-export default connect(msp, null)(EditPost)
+export default connect(msp, null)(EditPost);

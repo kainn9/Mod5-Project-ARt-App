@@ -4,7 +4,7 @@ import React, {useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { activeStorageUrlConverter, usersRoute, followersRoute } from '../railsRoutes';
-import { Card, Segment, Image, Icon, Button }  from 'semantic-ui-react';
+import { Card, Segment, Button }  from 'semantic-ui-react';
 import { updateFollows } from '../redux/actions';
 
 import { 
@@ -14,14 +14,18 @@ import {
 // end of imports --------------------------------------------------
 
 const FollowList = (props) => {
-
+    // auth token
     const artScopeJWT = localStorage.getItem('artScopeJWT');
-    const [pageUser, setPageUser] = useState(null);
-    const [loggedUserFollowingArray, setLoggedUserFollowingArray] = useState(props.loggedUser.isFollowing);
-    const [loggedUserFollowedArray, setLoggedUserFollowedArray] = useState(props.loggedUser.isFollowedBy);
+    const [previewedUser, setPreviewedUser] = useState(null);
 
+    // state to update logged user following list
+    const [loggedUserIsFollowingList, setLoggedUserIsFollowingList] = useState(props.loggedUser.isFollowing);
+
+    // handles following/unfollowing button
+    // updates backend then updates front end on callback
     const followHandler = (ID) => {
         const httpVerb = doesLoggedUserFollowPreviewedUser(ID) ? 'DELETE' : 'POST';
+
         const fetchConfig = {
             method: `${httpVerb}`,
             headers: {
@@ -33,33 +37,36 @@ const FollowList = (props) => {
                 following_id: props.loggedUser.id,
                 followed_id: ID
             })
-        }
+        };
 
         fetch(followersRoute, fetchConfig)
         .then( response => response.json())
         .then(data => {
             props.updateFollowerState(ID)
-            setLoggedUserFollowingArray(props.loggedUser.isFollowing)
+            setLoggedUserIsFollowingList(props.loggedUser.isFollowing)
         })
         
-    }
+    };
 
+    // helper method returns if previewed user follows logged in user
     const doesPreivewedUserFollowLoggedUser = (previewedUser) => {
-        const followedByIds = loggedUserFollowedArray.map(user => user.id)
+        const followedByIds = props.loggedUser.isFollowedBy.map(user => user.id)
 
         return followedByIds.includes(previewedUser)
-    }
+    };
 
+    // helper method returns if previewed user is followed by logged in user
     const doesLoggedUserFollowPreviewedUser = (previewedUser) => {
-        const followingIds = loggedUserFollowingArray.map(user => user.id)
+        const followingIds = loggedUserIsFollowingList.map(user => user.id)
 
         return followingIds.includes(previewedUser)
-    }
+    };
+    
 
+    // renders JSX cards/previews for each follower/following relationship to the user argument
     const renderCardsFromUserData = (user) => {
 
-        
-        return user.user[props.relationship].map(nestedUser => 
+        return user[props.relationship].map( nestedUser => 
             (  
             
                 <NavLink to={ `/home/user/${nestedUser.id}` } >
@@ -76,9 +83,13 @@ const FollowList = (props) => {
                                 {doesLoggedUserFollowPreviewedUser(nestedUser.id) ? 'You are Following' : nestedUser.id === props.loggedUser.id ? null : 'You are not Following'}
                             </Card.Meta>
                             <Card.Description>
+
                                 <b>Short Bio:</b>
+
                                 <br></br>
+
                                 { nestedUser.bio }
+                                
                                 <br></br>
                                 {
                                     doesLoggedUserFollowPreviewedUser(nestedUser.id) ? (
@@ -112,7 +123,7 @@ const FollowList = (props) => {
             )
         )
     }
-
+    // fetches the previewed user(this can be the logged user) the followList renders the previewedUsers relationships
     const fetchUser = () => {
 
         const fetchConfig = {
@@ -124,20 +135,22 @@ const FollowList = (props) => {
         fetch(usersRoute + props.userID, fetchConfig)
         .then( response => response.json())
         .then(user => {
-            setPageUser(user)
-            props.setPageUserData({username: user.user.username, img: user.user.proPic})
+            setPreviewedUser(user.user)
+            props.setPreviewedUserData({username: user.user.username, img: user.user.proPic})
         })
     }  
 
+    // this keeps our state in sync with the backend so previews/buttons/captions are accurate for the following/follower user relationships
+    // is refetches when logged user relationsips change or when the previewed userID has chaged in props
     useEffect(() => {
         fetchUser()
-    }, [loggedUserFollowingArray, props.userID])
+    }, [loggedUserIsFollowingList, props.userID])
 
     return (
         <>
             {
-                pageUser ? (
-                    renderCardsFromUserData(pageUser)
+                previewedUser ? (
+                    renderCardsFromUserData(previewedUser)
                 ) : null
             }
         </>

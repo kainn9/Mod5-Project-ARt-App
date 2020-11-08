@@ -29,7 +29,6 @@ import {
     widthIs100,
     cityScapeBG,
 
-
 } from '../bigStyle';
 // end of imports ----------------------------------
 
@@ -50,8 +49,7 @@ const ShowPost = (props) => {
     const [likedPostsCounter, setLikedPostsCounter] = useState(null)
 
 
-
-    // creates or destroys liked relationship in backend components should update
+    // creates or destroys liked relationship 
     const likePost = () => {
 
         const httpVerb = loggedUserLikedPost() ? 'DELETE' : 'POST'
@@ -69,7 +67,6 @@ const ShowPost = (props) => {
         .then( response => response.json() )
         .then(json => {
             
-            //updating render, props.upateCurrentUserLikes is a redux action and maintains that state in store likeCounter is local state
             if (json.message === 'created') {
                 
                 props.updateCurrentUserLikes(currentPost.id)
@@ -84,7 +81,7 @@ const ShowPost = (props) => {
 
     }
     
-    // returns bool if logged user has liked the post in view
+    // returns bool if logged user has liked the post being previewed
     const loggedUserLikedPost = () => {
         return props.loggedUser.likedPosts.map(p => p.id).includes(currentPost.id)
     }
@@ -101,7 +98,7 @@ const ShowPost = (props) => {
         // grab image
         const img = document.querySelector('#texture');
 
-        // if viewMode !== normal the img does not exist,  grab natural height and length otherwise, view mode always starts as nornal
+        // if viewMode !== normal the img does not exist ,  grab natural height and length otherwise, view mode always starts as nornal
         if (viewMode === 'normal') setDimensions({height: img.naturalHeight, width: img.naturalWidth});
     }
 
@@ -111,7 +108,6 @@ const ShowPost = (props) => {
         setViewMode('ar');
         getDimensions();
        
-        
     }
 
     // sets view state to three and grabs pic dimensions for render(if need be)
@@ -299,8 +295,8 @@ const ShowPost = (props) => {
                         </Segment>
                         {
                             loggedUserLikedPost() ? (
-                                <Button as='div' labelPosition='right' onClick={ () => likePost() } style={maxWidthIs100}  >
-                                    <Button color='black'  style={widthIs100}>
+                                <Button as='div' labelPosition='right' onClick={ () => likePost() } style={widthIs100}  >
+                                    <Button color='black' style={widthIs100}>
                                         <Icon name='heart' />
                                             Unlike
                                     </Button>

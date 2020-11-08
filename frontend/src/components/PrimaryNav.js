@@ -15,6 +15,7 @@ import {
 
 // Primary Navbar for logged in  views
 const PrimaryNav = (props) => {
+
   //auth token
   const token = localStorage.getItem('artScopeJWT')
 
@@ -25,23 +26,28 @@ const PrimaryNav = (props) => {
   const [searchInput, setSearchInput] = useState('');
   const [results, setResults] = useState([]);
 
-  // state to manip to avoid spam fetches
-  const [queryDelay, setQueryDelay] = useState(false)
-  const [test, setTest] = useState(false)
+  // state to avoid spaming fetches while seatching
+  const [queryDelay, setQueryDelay] = useState(false);
 
+
+  // handles onClick for search popup box
   const handleResultSelect = (e, { result }) => {
+    
+    // different routes depening on query result
+    if (result.description === 'user') {
+    
+      history.push(`/home/user/${result.id}`);
 
-    if(result.description === 'user') {
-      console.log(props)
-      history.push(`/home/user/${result.id}`)
     } else if (result.description === 'post') {
-      history.push(`/home/post/${result.id}`)
+
+      history.push(`/home/post/${result.id}`);
     }
-    //window.location.reload()
+
   }
-  // fetches search results 
+
+  // fetches search results based on searchParams
   const fetchSearchResults = (searchParams) => {
-    console.log('fetchy', searchParams)
+  
     const fetchConfig = {
       method: 'POST',
       headers: { 
@@ -58,36 +64,47 @@ const PrimaryNav = (props) => {
       fetch(searchRoute, fetchConfig)
       .then( response => response.json())
       .then(matches => {
-        console.log(matches)
-        setQueryDelay(false)
-        setIsLoading(false)
+        console.log(matches);
+        setQueryDelay(false);
+        setIsLoading(false);
 
-        const structUserData = matches.users.map( user => ({title: user.username, description: 'user', id: user.id, key: user.id , image: activeStorageUrlConverter(user.proPic.url)}))
-        const structPostData = matches.posts.map( post => ({title: post.title, description: 'post', key: post.id, id: post.id, image: activeStorageUrlConverter(post.featured_image.url)}))
-        setResults([...structUserData, ...structPostData])
+        const structUserData = matches.users.map( user => ({ 
+          title: user.username, 
+          description: 'user', 
+          id: user.id, key: user.id , 
+          image: activeStorageUrlConverter(user.proPic.url)
+        }));
+
+        const structPostData = matches.posts.map( post => ({ 
+          title: post.title, 
+          description: 'post', 
+          key: post.id, id: post.id, 
+          image: activeStorageUrlConverter(post.featured_image.url)
+        }));
+
+        setResults([...structUserData, ...structPostData]);
       })
     }
   
   }
+
+  // fetch search results based on searchInput as it changes
   useEffect(() => {
-      console.log(searchInput)
-    if (searchInput.length > 2) {
-      console.log(searchInput)
-      fetchSearchResults(searchInput)
-    }
-  }, [searchInput])
+      fetchSearchResults(searchInput);
+  
+  }, [searchInput]);
 
   // controls search input
   const searchHandler = input => {
     setIsLoading(true);
-    setSearchInput(input.value)
+    setSearchInput(input.value);
   }
 
   // logout -- props.logoutUser() -> sets user to null in redux store, remove authToken from localStorage, redirect to home
   const logoutHandler = () => {
-    props.logoutUser()
+    props.logoutUser();
     localStorage.removeItem('artScopeJWT');
-    history.push('/')
+    history.push('/');
   }
 
   return(
@@ -160,6 +177,6 @@ const PrimaryNav = (props) => {
 };
 
 // set user to null in redux
-const mdp = dispatch => ({ logoutUser: () => dispatch({ type: 'logoutUser' }) })
-const msp = state => ({ user: state.user })
+const mdp = dispatch => ({ logoutUser: () => dispatch({ type: 'logoutUser' }) });
+const msp = state => ({ user: state.user });
 export default connect(msp, mdp)(PrimaryNav);
