@@ -369,7 +369,6 @@ const ShowPost = (props) => {
                                 </Button>
                             )
                         }
-                        
                     </Segment >
                     
                 </>

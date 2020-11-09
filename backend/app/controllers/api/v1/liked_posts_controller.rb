@@ -1,19 +1,13 @@
 class Api::V1::LikedPostsController < ApplicationController
-
+    # creates liked relationship with user and post with their ids
     def create
         likedRelationship = LikedPost.create(likedParams)
 
         render json: { message: 'created'}, status: :created
     end
 
+    # deletes liked relationship with user and post with their ids, I think .where is more more optimal than enums
     def destroy
-        # found_post = Post.find(params[:post_id])
-
-        # found_joiner = found_post.liked_posts.find do |liked_post|
-        #     liked_post.user_id == params[:user_id]
-        # end
-
-        # LikedPost.destroy(found_joiner.id)
 
         foundPost = LikedPost.where(user_id: params[:user_id], post_id: params[:post_id])
         

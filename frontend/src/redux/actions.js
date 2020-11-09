@@ -1,14 +1,12 @@
+
 import { getUserRoute, loginRoute, usersRoute } from '../railsRoutes';
 
-
+// fetches user using jwt in local storage sets to null if the resp fails/user is not logged/has no token which will lead to a homepage redirect in app.js
 export const getUserFromJWT = () => {
     
     let artScopeJWT = localStorage.getItem('artScopeJWT');
     
     return function (dispatch) {
-        if(artScopeJWT) {
-            
-        }
 
         const fetchConfig = {
             method: 'GET',
@@ -25,10 +23,9 @@ export const getUserFromJWT = () => {
             return response.ok ? (validatedResponse = response.json()) : (validatedResponse);
         })
         .then( user => dispatch({ type: 'getUser', payload: user }) )
-        .catch(console.log);
     };
 };
-
+// post method to create a user and get a jwt token also
 export const signupUser = (userData, setErrorMessage, setLoginFailed, history) => {
 
     return function (dispatch) {
@@ -38,7 +35,7 @@ export const signupUser = (userData, setErrorMessage, setLoginFailed, history) =
         formData.append('password', userData.password);
         formData.append('bio', userData.bio);
         formData.append('pro_pic', userData.pro_pic);
-        console.log('ud', userData)
+    
 
         const fetchConfig = {
             method: 'POST',
@@ -71,7 +68,7 @@ export const signupUser = (userData, setErrorMessage, setLoginFailed, history) =
     
     
 }
-
+// post method that creates jwt token in exchange for valid username/pass
 export const loginUser = (userData, setErrorMessage, setLoginFailed, history) => {
     
     return function (dispatch) {
@@ -106,14 +103,14 @@ export const loginUser = (userData, setErrorMessage, setLoginFailed, history) =>
     }
     
 }
-
+// passes in id of newly liked/unliked post to update action/reducer
 export const updateUserLikes = (newLikeID) => {
     return function(dispatch) {
         dispatch({ type: 'updateLikes', payload: newLikeID })
     }
     
 }
-
+// passes in id of newly followed/unfollowed user to update action/reducer
 export const updateFollows = (followID) => {
     return function(dispatch) {
         dispatch({ type: 'updateFollows', payload: followID })

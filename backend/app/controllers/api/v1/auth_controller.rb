@@ -1,11 +1,13 @@
 class Api::V1::AuthController < ApplicationController
     skip_before_action :authorized, only: [:create]
- 
+    
+    # LOGIN -> creates jwt token when user logs in or denies them if info is wrong, this is returning an existing user with JWT
     def create
-        
+
+        # check for username
         @user = User.find_by(username: user_login_params[:username])
     
-        #User#authenticate comes from BCrypt
+        #User#authenticate comes from BCrypt checks if password is correct
         if @user && @user.authenticate(user_login_params[:password])
 
             # encode token comes from ApplicationController

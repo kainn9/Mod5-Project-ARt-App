@@ -1,5 +1,5 @@
 class Api::V1::SearchController < ApplicationController
-
+    # queries db using .where to match first 5 users/posts each by title/username to searchParams
     def search
         usersQuery = User.where("username LIKE ?", "%" + params[:search] + "%").take(5)
 

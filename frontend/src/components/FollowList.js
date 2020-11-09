@@ -79,7 +79,6 @@ const FollowList = (props) => {
                             <Card.Meta>
                                 {doesPreivewedUserFollowLoggedUser(nestedUser.id) ? nestedUser.id === props.loggedUser.id ? 'This is you' : 'Follows You' : nestedUser.id === props.loggedUser.id ? 'This is you' : 'Does Not Follow You'}
                                 <br></br>
-                                {console.log('logged', props.loggedUser)}
                                 {doesLoggedUserFollowPreviewedUser(nestedUser.id) ? 'You are Following' : nestedUser.id === props.loggedUser.id ? null : 'You are not Following'}
                             </Card.Meta>
                             <Card.Description>

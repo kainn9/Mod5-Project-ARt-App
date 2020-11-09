@@ -5,6 +5,7 @@ import PostPreview from '../components/PostPreview';
 import { Segment, Header, Image, Button } from 'semantic-ui-react';
 import { NavLink, use} from 'react-router-dom';
 import { postGrid, width75MarginAuto, width75MarginAutoCenterText } from '../bigStyle';
+import { followersRoute } from '../railsRoutes';
 // end of imports ------------------------------------------------------
 
 // normally like to write all functional components but wanted to demonstratea little knowledge of also class based too
@@ -20,6 +21,39 @@ class UserShellContainer extends Component {
         user: null,
         loggedUser: this.props.loggedUser,
     }
+
+    // checks if logged in user is following the previewed user
+   isLoggedUserFollowingPreviewedUser = () => {
+    const idsOfFollowing = this.props.loggedUser.isFollowing.map(user => user.id)
+    return idsOfFollowing.includes(this.state.user.id)
+}
+
+// checks if the logged in user is the previewed user
+isLoggedUserViewingSelf = () => this.props.loggedUser.id === this.state.user.id
+
+followHandler = () => {
+    const httpVerb = this.isViewerFollowing() ? 'DELETE' : 'POST';
+    const fetchConfig = {
+        method: `${httpVerb}`,
+        headers: {
+            Authorization: `Bearer ${this.state.token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            following_id: this.props.viewingUser.user.id,
+            followed_id: this.state.user.id
+        })
+    }
+
+    fetch(followersRoute, fetchConfig)
+    .then( response => response.json())
+    .then(data => {
+        this.props.updateFollowerState(this.state.user.id)
+
+    })
+    
+}
 
     // maps over provided users posts and creates PostPreview Components from the data
     renderPostPreviewsFromUserData = () => {

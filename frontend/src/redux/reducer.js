@@ -7,15 +7,17 @@ let defaultState = {
 function userReducer(state = defaultState.user, action) {
     
     switch (action.type) {
-
+        // getUser -->  signup user set the payload as the loggedUser because the payload is a user
         case 'getUser': return action.payload;
 
         case 'loginUser': return action.payload;
 
         case 'signupUser': return action.payload;
 
+        // sets logged user to null on logout
         case 'logoutUser': return null;
-
+        
+        // either removes or adds an {id: someID} object to the likedPosts of the logged user. This keeps the front end relationships in state consistent with the backend
         case 'updateLikes':
             let shallowClone = {...state}
             let isLiked = false;
@@ -32,7 +34,8 @@ function userReducer(state = defaultState.user, action) {
             )
             
         return shallowClone
-
+        
+        // same pattern as update likes but with followers
         case 'updateFollows':
             let shallowClone2 = {...state}
             let following = false;

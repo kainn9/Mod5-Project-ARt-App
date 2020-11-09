@@ -64,7 +64,7 @@ const PrimaryNav = (props) => {
       fetch(searchRoute, fetchConfig)
       .then( response => response.json())
       .then(matches => {
-        console.log(matches);
+      
         setQueryDelay(false);
         setIsLoading(false);
         // we set the key to combo of the username/title and ID + index because while user ID's are unique and Post ID's are unique they are not unique to each other
