@@ -84,8 +84,8 @@ const UserFeed = (props) => {
 
     // renders previews from feed...normally my pattern would be to map out a new component for each index of postsData while passing in postsData through to the props
     // of the new component, you could then have each preview component track its own state for user likes(locally or through redux msp)
-    // However I wanted to experiment with using an object for a useState() hook and track the state of multiple elements on the page with 1 hook
-    // I ended up using the map index to create keys for each post(stored on the dom as code attr) and would use e.target to grab the code and pass it as the key...im not really sure how I feel about this pattern
+    // I wanted to try and use an object for the useState() hook and track the state of multiple elements on the page with 1 hook(normally I do like one useState for some small bit of state)
+    // I ended up using the map index to create keys for each post(stored on the dom as code attr) and would use e.target to grab the code and pass it as the key...im not really sure how I feel about this pattern to be honest
     const renderPostPreviews = (postsData) => {
 
         return postsData.map( (post, i) => (

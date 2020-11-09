@@ -6,9 +6,9 @@ import { followersRoute } from '../railsRoutes';
 import UserShellContainer from './UserShellContainer';
 // end of imports ------------------------------------------------------
 
-// I normally like to write all functional components but wanted to demonstrate knowledge of also class based for legacy code.
-// I used UserShellContainer as a parent for UserLikedContainer and UserPostContainer since they are so similair
-// however I personally dont think class based inheritance plays nice with redux and more modern react patterns
+// normally like to write all functional components but wanted to demonstratea little knowledge of also class based too
+// I used UserShellContainer as a parent for UserLikedContainer and UserPostContainer since they are similair
+// class based doesnt seem to play so nicely with redux
 class UserPostContainer extends UserShellContainer {
     
     // for user header

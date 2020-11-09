@@ -7,9 +7,9 @@ import { NavLink, use} from 'react-router-dom';
 import { postGrid, width75MarginAuto, width75MarginAutoCenterText } from '../bigStyle';
 // end of imports ------------------------------------------------------
 
-// I normally like to write all functional components but wanted to demonstrate knowledge of also class based for legacy code.
-// I used UserShellContainer as a parent for UserLikedContainer and UserPostContainer since they are so similair
-// however I personally dont think class based inheritance plays nice with redux and more modern react patterns
+// normally like to write all functional components but wanted to demonstratea little knowledge of also class based too
+// I used UserShellContainer as a parent for UserLikedContainer and UserPostContainer since they are similair
+// class based doesnt seem to play so nicely with redux
 class UserShellContainer extends Component {
 
     // we store the jwt token in state for easy reach
@@ -20,7 +20,7 @@ class UserShellContainer extends Component {
         user: null,
         loggedUser: this.props.loggedUser,
     }
-    
+
     // maps over provided users posts and creates PostPreview Components from the data
     renderPostPreviewsFromUserData = () => {
         return this.state.user.user.posts.map( postData => <PostPreview key={postData.id} data={postData} userID={this.props.userID} />)
