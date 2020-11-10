@@ -10,7 +10,10 @@ import UserPostContainer from './UserPostContainer';
 import UserLikedContainer from './UserLikedContainer'
 import UserConnectionsContainer from './UCC';
 import EditPost from '../components/EditPost';
+import hiro from '../images/hiro.png';
 import { homeBG } from '../bigStyle';
+import { Segment, Header } from 'semantic-ui-react';
+import { width75MarginAutoCenterText } from '../bigStyle';
 // end of imports -----------------------------------------
 
 // primary container/page for logged in users --> nested routing for logged in user actions
@@ -27,6 +30,22 @@ const PrimaryHomeContainer = (props) => {
                     <div style={homeBG} >
                         <PrimaryNav />
                         <UserFeed />
+                    
+                    </div>
+
+                )}
+            />
+
+            <Route path='/home/hiro'
+                render={ () => (
+
+                    <div style={homeBG} >
+                        <PrimaryNav />
+
+                        <Segment inverted style={width75MarginAutoCenterText}>
+                            <h1> Print this image or load it from a second device for AR Photos</h1>
+                            <img src={ hiro }  />
+                        </Segment>
                     
                     </div>
 

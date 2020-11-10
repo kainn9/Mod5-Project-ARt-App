@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import { Segment, Icon, Menu } from 'semantic-ui-react';
 
-import ss from '../images/sskain.png';
+import hiro from '../images/hiro.png';
 import skyCastleImg from '../images/skyCastle.png';
 
 import {
@@ -54,7 +54,7 @@ const SecondaryNav = () => {
         
           <img 
             alt= 'hiro symbol for ar'
-            src={ ss }  
+            src={ hiro }  
             style={maxWidthMinHeight60}
           />
           
