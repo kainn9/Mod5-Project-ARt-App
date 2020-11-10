@@ -22,44 +22,7 @@ class UserShellContainer extends Component {
         loggedUser: this.props.loggedUser,
     }
 
-    // checks if logged in user is following the previewed user
-   isLoggedUserFollowingPreviewedUser = () => {
-    const idsOfFollowing = this.props.loggedUser.isFollowing.map(user => user.id)
-    return idsOfFollowing.includes(this.state.user.id)
-}
-
-// checks if the logged in user is the previewed user
-isLoggedUserViewingSelf = () => this.props.loggedUser.id === this.state.user.id
-
-followHandler = () => {
-    const httpVerb = this.isViewerFollowing() ? 'DELETE' : 'POST';
-    const fetchConfig = {
-        method: `${httpVerb}`,
-        headers: {
-            Authorization: `Bearer ${this.state.token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            following_id: this.props.viewingUser.user.id,
-            followed_id: this.state.user.id
-        })
-    }
-
-    fetch(followersRoute, fetchConfig)
-    .then( response => response.json())
-    .then(data => {
-        this.props.updateFollowerState(this.state.user.id)
-
-    })
-    
-}
-
-    // maps over provided users posts and creates PostPreview Components from the data
-    renderPostPreviewsFromUserData = () => {
-        return this.state.user.user.posts.map( postData => <PostPreview key={postData.id} data={postData} userID={this.props.userID} />)
-    }
-    
+  
     // fetchs user based on provided user(router params)
     fetchUserData = () => {
         const fetchConfig = {
@@ -88,6 +51,7 @@ followHandler = () => {
 
         return (
             <>
+    
                 {
                     this.state.user ? (
                         <Segment inverted secondary style={width75MarginAutoCenterText}>

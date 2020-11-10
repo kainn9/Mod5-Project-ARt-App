@@ -15,6 +15,7 @@ import { Segment, Menu, Button, Header, Icon, Label, IconGroup } from 'semantic-
 import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
 import { updateUserLikes } from '../redux/actions'
 import PrimaryNav from './PrimaryNav';
+import CommentZone from './CommentZone';
 
 import canvasTexture from '../images/canvas.jpg';
 import canvasBack from '../images/canvasBack.jpg';
@@ -368,7 +369,8 @@ const ShowPost = (props) => {
                                      </Label>
                                 </Button>
                             )
-                        }
+                        }   
+                            <CommentZone loggedUser={props.loggedUser} comments={currentPost.comments} postID={currentPost.id} setCurrentPost={ setCurrentPost } />
                     </Segment >
                     
                 </>

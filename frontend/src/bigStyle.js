@@ -142,4 +142,6 @@ export const followerGrid = {
 }
 
 export const postGrid = { display: 'grid', gridTemplateColumns: '25% 25% 25% 25%' }
+
+export const commentBox = { maxHeight: '30vh', height: 'fit', overflow: 'scroll'}
     

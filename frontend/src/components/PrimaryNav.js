@@ -37,10 +37,12 @@ const PrimaryNav = (props) => {
     if (result.description === 'user') {
     
       history.push(`/home/user/${result.id}`);
+      setSearchInput('');
 
     } else if (result.description === 'post') {
 
       history.push(`/home/post/${result.id}`);
+      setSearchInput('');
     }
 
   }

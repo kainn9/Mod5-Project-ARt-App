@@ -53,6 +53,11 @@ const SignUpContainer = (props) => {
             setLoginFailed(true)
 
             //  no errors than attempt to signup
+        } else if (!img) {
+            setErrorMessage('Please Select a Profile Image')
+            setLoginFailed(true)
+
+            //  no errors than attempt to signup
         } else {
 
             // signup goes through redux action to keep user in external/redux store
@@ -61,7 +66,7 @@ const SignUpContainer = (props) => {
                 username: usernameInput, 
                 password: passwordInput,
                 bio: bio ? bio : 'No Bio',
-                pro_pic: img ? img : new Blob([`url(${defaultPhoto})`])
+                pro_pic: img
 
             }, setErrorMessage, setLoginFailed, history);
         }
@@ -145,7 +150,7 @@ const SignUpContainer = (props) => {
                         
                         <label style = {chooseFile}>
 
-                            Optional Profile Picture
+                            Profile Picture
                             <Form.Input 
                                 type="file" 
                                 accept="image/*" 

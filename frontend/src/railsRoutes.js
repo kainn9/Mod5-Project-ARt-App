@@ -21,6 +21,9 @@ export const followersRoute = 'http://localhost:3000/api/v1/followers';
 // post req with user id to get their feed
 export const feedRoute = 'http://localhost:3000/api/v1/feed';
 
+// post to create comment with userID and postID
+export const commentRoute = 'http://localhost:3000/api/v1/comments';
+
 // converts activeStorage url into usable url:
 export const activeStorageUrlConverter = (url) => {
     return `http://localhost:3000/rails${url.split('rails')[1]}`
