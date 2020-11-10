@@ -1,6 +1,6 @@
 class PostSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :title, :body, :featured_image, :filteredUser, :suscribedUsers
+  attributes :id, :title, :body, :featured_image, :filteredUser, :suscribedUsers, :comments
 
   # note: pasword_digest is filtered out by serializers
 
@@ -26,4 +26,10 @@ class PostSerializer < ActiveModel::Serializer
     object.suscribedUsers.map { |user| user.id }
     
   end
+  
+  # so we can render comments right from a post show page with 1 fetch
+  def comments
+    object.comments.map { |comment| {proPic: rails_blob_url(comment.user.pro_pic), username: comment.user.username, body: comment.body} }
+  end
+
 end

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :users, only: [:create, :show]
       resources :posts, only: [:create, :index, :show, :update]
       resources :liked_posts, only: [:create]
+      resources :comments, only: [:create]
       
       post '/login', to: 'auth#create'
       get '/profile', to:'users#profile'

@@ -9,6 +9,8 @@ class User < ApplicationRecord
     has_many :following_relationships, foreign_key: :following_id, class_name: 'FollowJoin'
     has_many :isFollowing, through: :following_relationships, source: :followed
 
+    has_many :comments
+
     has_one_attached :pro_pic
 
     has_secure_password
