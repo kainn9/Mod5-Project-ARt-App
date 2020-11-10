@@ -1,5 +1,5 @@
 // imports
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Segment, Image, Form, TextArea, Header, Button } from 'semantic-ui-react';
 import { commentBox, maxWidthIs100 } from '../bigStyle';
@@ -77,6 +77,10 @@ const CommentZone = (props) => {
         };
     };
 
+    useEffect(() => {
+
+    }, [props.comments])
+
 
     return (
         <>
@@ -93,7 +97,7 @@ const CommentZone = (props) => {
                 </Header>
                 <Form onSubmit={ body ?  e => addComment(e) : null }>
                     <TextArea placeholder='add a comment' style={{ minHeight: 100 }} value={body} onChange={  e => setBody(e.target.value)} />
-                    <Button primary style ={ maxWidthIs100 }>
+                    <Button primary style ={{ width: '100%' }}>
                         Post Comment
                     </Button>
                 </Form>
