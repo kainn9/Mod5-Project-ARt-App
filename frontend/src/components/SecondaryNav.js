@@ -47,7 +47,7 @@ const SecondaryNav = () => {
         
         <Segment inverted secondary >
           <h2 style={secondaryNavHeader} > 
-            Welcome to Art Scope,  <br />Login/Sign-up above 
+            Welcome to ARt App,  <br />Login/Sign-up above 
           </h2>
         </Segment>
           

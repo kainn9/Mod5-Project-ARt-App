@@ -52,6 +52,13 @@ function userReducer(state = defaultState.user, action) {
             )
             
         return shallowClone2
+
+        case 'updatePosts':
+            let shallowClone3 = {...state}
+            console.log(shallowClone3.user.posts)
+            shallowClone3.user.posts.push({id: action.payload })
+           
+        return shallowClone3
         
 
 

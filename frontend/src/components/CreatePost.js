@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { connect } from 'react-redux';
-
+import { updatePosts } from '../redux/actions';
 import { postsRoute } from '../railsRoutes';
 import { Segment, Header, Icon, Button, Input, Label, TextArea, Form, Message } from 'semantic-ui-react';
 
@@ -68,10 +68,15 @@ const CreatePost = (props) => {
             body: formData
             })
             .then( response => response.json() )
+            
             // use new post id for the routing
-            .then( post => history.push(`/home/post/${post.id}`));
-        }; 
-    };
+            .then( post => {
+                props.updatePosts(post.id)
+                history.push(`/home/post/${post.id}`)
+            })
+        };
+    }; 
+
 
     return(
         <>
@@ -137,4 +142,6 @@ const CreatePost = (props) => {
 // read current user from redux store
 const msp = state => ({ user: state.user });
 
-export default connect(msp, null)(CreatePost);
+const mdp = dispatch => ({ updatePosts: (id) => dispatch(updatePosts(id)) });
+
+export default connect(msp, mdp)(CreatePost);

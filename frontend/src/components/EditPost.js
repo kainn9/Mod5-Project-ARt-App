@@ -122,7 +122,7 @@ const EditPost = (props) => {
     //on mount fetch the post to edit
     useEffect(() => {
         fetchPost();
-    }, []) ;
+    }, [props.postID]) ;
 
     return(
         <>

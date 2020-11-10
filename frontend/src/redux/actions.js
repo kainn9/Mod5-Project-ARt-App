@@ -117,3 +117,10 @@ export const updateFollows = (followID) => {
     }
     
 }
+
+export const updatePosts = (postID) => {
+    return function(dispatch) {
+        dispatch({ type: 'updatePosts', payload: postID })
+    }
+}
+    
