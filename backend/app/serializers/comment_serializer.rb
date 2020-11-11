@@ -1,6 +1,6 @@
 class CommentSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :body, :proPic, :username
+  attributes :id, :body, :proPic, :username, :userID
 
   # we use this serialzer to return a newly created comment after a post method in correct format for the front end to append to state
   def username
@@ -9,5 +9,9 @@ class CommentSerializer < ActiveModel::Serializer
 
   def proPic
     rails_blob_url(object.user.pro_pic)
+  end
+
+  def userID
+    object.user.id
   end
 end

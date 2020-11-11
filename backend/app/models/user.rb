@@ -14,5 +14,7 @@ class User < ApplicationRecord
     has_one_attached :pro_pic
 
     has_secure_password
+
     validates :username, uniqueness: { case_sensitive: false }
+    validates :username, :bio, :password_digest, presence: true
 end

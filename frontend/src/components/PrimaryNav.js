@@ -118,28 +118,28 @@ const PrimaryNav = (props) => {
       <Segment inverted  style={{ minWidth: '0', margin: 0 }} >
 
         <Menu inverted color={'black'} icon='labeled'>
-          <NavLink to='/home' style={{ width: '17%' }} >
+          <NavLink to='/home' style={{ width: '15%' }} >
             <Menu.Item name='home' >
               <Icon name='home' />
               Home
             </Menu.Item>
           </NavLink>
 
-          <NavLink to={ `/home/user/${props.user.user.id}` } style ={{ width: '17%' }} >
+          <NavLink to={ `/home/user/${props.user.user.id}` } style ={{ width: '15%' }} >
             <Menu.Item name='My Page'>
               <Icon name='folder open' />
               My Page
             </Menu.Item>
           </NavLink>
 
-          <NavLink to={ `/home/user/${props.user.user.id}/connections` } style ={{ width: '17%' }} >
+          <NavLink to={ `/home/user/${props.user.user.id}/connections` } style ={{ width: '15%' }} >
             <Menu.Item name='My Connections'>
               <Icon name='users' />
               My Connections
             </Menu.Item>
           </NavLink>
 
-          <NavLink to={ `/home/user/${props.user.user.id}/liked` } style ={{ width: '17%' }} >
+          <NavLink to={ `/home/user/${props.user.user.id}/liked` } style ={{ width: '15%' }} >
             <Menu.Item name='Liked Posts'>
               <Icon name='folder open outline' />
               Liked Posts
@@ -147,21 +147,21 @@ const PrimaryNav = (props) => {
           </NavLink>
 
 
-          <NavLink to='/home/create-post' style={{ width: '17%' }} >
+          <NavLink to='/home/create-post' style={{ width: '15%' }} >
             <Menu.Item name='create-post'>
               <Icon name='file image outline' />
               Create Post
             </Menu.Item>
           </NavLink>
           
-          <NavLink to='/home/hiro' style={{minWidth: '0px',  width: '7.5%' }} >
+          <NavLink to='/home/hiro' style={{minWidth: '0px',  width: '13%' }} >
             <Menu.Item name='Hiro Img'>
               <Icon name='hand peace' />
               Hiro Img
             </Menu.Item>
           </NavLink>
 
-          <Menu.Item name='logOut' onClick={ logoutHandler }  style={{ minWidth: '0px', width: '7.5%' }}>
+          <Menu.Item name='logOut' onClick={ logoutHandler }  style={{ minWidth: '0px', width: '13%' }}>
             <Icon name='hand peace' />
             Log Out
           </Menu.Item>

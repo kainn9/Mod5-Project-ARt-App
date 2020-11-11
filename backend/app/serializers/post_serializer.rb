@@ -29,7 +29,7 @@ class PostSerializer < ActiveModel::Serializer
   
   # so we can render comments right from a post show page with 1 fetch
   def comments
-    object.comments.map { |comment| {proPic: rails_blob_url(comment.user.pro_pic), username: comment.user.username, body: comment.body} }
+    object.comments.map { |comment| {proPic: rails_blob_url(comment.user.pro_pic), username: comment.user.username, body: comment.body, userID: comment.user.id} }
   end
 
 end

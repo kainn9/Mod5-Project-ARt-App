@@ -4,4 +4,6 @@ class Post < ApplicationRecord
     has_many :liked_posts
     has_many :suscribedUsers, through: :liked_posts, source: :user
     has_many :comments
+
+    validates :body, :title, presence: true
 end

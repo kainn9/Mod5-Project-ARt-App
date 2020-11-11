@@ -11,7 +11,7 @@ import UserLikedContainer from './UserLikedContainer'
 import UserConnectionsContainer from './UCC';
 import EditPost from '../components/EditPost';
 import hiro from '../images/hiro.png';
-import { homeBG } from '../bigStyle';
+import { homeBG, maxWidthIs100 } from '../bigStyle';
 import { Segment, Header } from 'semantic-ui-react';
 import { width75MarginAutoCenterText } from '../bigStyle';
 // end of imports -----------------------------------------
@@ -44,7 +44,7 @@ const PrimaryHomeContainer = (props) => {
 
                         <Segment inverted style={width75MarginAutoCenterText}>
                             <h1> Print this image or load it from a second device for AR Photos</h1>
-                            <img src={ hiro }  />
+                            <img src={ hiro }  style={ maxWidthIs100 } />
                         </Segment>
                     
                     </div>

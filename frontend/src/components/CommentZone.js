@@ -1,8 +1,8 @@
 // imports
 import React, { useState, useEffect } from 'react';
-
+import { NavLink } from 'react-router-dom';
 import { Segment, Image, Form, TextArea, Header, Button } from 'semantic-ui-react';
-import { commentBox, maxWidthIs100 } from '../bigStyle';
+import { commentBox } from '../bigStyle';
 import { activeStorageUrlConverter } from '../railsRoutes';
 import { commentRoute } from '../railsRoutes';
 // end of imports
@@ -57,10 +57,10 @@ const CommentZone = (props) => {
                 return (
                     <Segment inverted>
                         <div>
-
-                            <Image src={ activeStorageUrlConverter(comment.proPic) } avatar />
-                            <span>{comment.username} commented:</span>
-
+                            <NavLink to={ `/home/user/${comment.userID}` }>
+                                <Image src={ activeStorageUrlConverter(comment.proPic) } avatar />
+                                <span>{comment.username} commented:</span>
+                            </NavLink>
                             <Segment inverted secondary>
                             <h3>
                                 {comment.body}
