@@ -341,7 +341,7 @@ const ShowPost = (props) => {
     
                         </Menu>
                         <Segment inverted>
-                            <img id='texture' src={currentImg} style ={maxWidthIs100} />
+                            <img id='texture' src={currentImg} style ={widthIs100} />
                         </Segment>
                         <Segment inverted>
                             <h3>

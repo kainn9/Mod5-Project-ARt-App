@@ -41,7 +41,7 @@ end
 
 end
 
-6.times do 
+12.times do 
   User.all.each do |u|
     Comment.create(user: u, post: Post.all.sample, body: Faker::Hipster.sentences)
   end
