@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { Segment, Card, Image, Header, Button, Icon, Label } from 'semantic-ui-react';
+import { Segment, Card, Image, Header, Button, Icon, Label, Dimmer, Loader } from 'semantic-ui-react';
 import { activeStorageUrlConverter, feedRoute, likedPostsRoute } from '../railsRoutes';
 import { updateUserLikes } from '../redux/actions';
 
@@ -182,7 +182,14 @@ const UserFeed = (props) => {
             feed ? (
                 renderPostPreviews(feed)
             ) : (
-                null
+                
+                <Segment style={{ height: '30vh'}}>
+                  <Dimmer active>
+                    <Loader content='Loading' />
+                  </Dimmer>
+            
+                </Segment>
+
             )
         }
             

@@ -307,6 +307,7 @@ const ShowPost = (props) => {
     useEffect(() => {
         document.addEventListener("keydown", e => leaveAR(e), false);
         fetchCurrentPost();
+        setViewMode('normal');
     }, [props])
 
 
@@ -387,7 +388,7 @@ const ShowPost = (props) => {
         
         <a-scene arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
             <a-marker preset="hiro">
-                <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 512 } width={dimensions.width / 640} height='0.035'> </a-box>
+                <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 256 } width={dimensions.width / 320} height='0.035'> </a-box>
             </a-marker>
         </a-scene> 
      
