@@ -7,20 +7,20 @@ ARt App is a web application inspired by the likes of Instagram, Tumbler, Pinter
 ## Installation:
 * clone the project directory
 
-### Backend Setup:
-* cd into folder 'backend'
-* run 'bundle install'
-* run 'rails db:create'
-* Note: if using WSL you may need to run 'sudo service postgresql start' prior to 'rails db:create'
-* If you want demo users/posts/comments/relationships run 'rails db:seed'
-* run 'rails s' to run the backend server
+  ### Backend Steps:
+  * cd into folder 'backend'
+  * run 'bundle install'
+  * run 'rails db:create'
+  * Note: if using WSL you may need to run 'sudo service postgresql start' prior to 'rails db:create'
+  * If you want demo users/posts/comments/relationships run 'rails db:seed'
+  * run 'rails s' to run the backend server
 
-### Frontend Setup
-* cd into folder 'frontend'
-* run 'npm i'
-* run 'npm start'
-* agree when prompted to run on port 3001
-* you can now access the web app locally at: http://localhost:3001/
+  ### Frontend Steps
+  * cd into folder 'frontend'
+  * run 'npm i'
+  * run 'npm start'
+  * agree when prompted to run on port 3001
+  * you can now access the web app locally at: http://localhost:3001/
 
   
 ## Resources Used:
