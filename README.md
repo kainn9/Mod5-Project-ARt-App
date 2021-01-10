@@ -25,9 +25,9 @@ ARt App is a web application inspired by the likes of Instagram, Tumbler, Pinter
   
 ## Resources Used:
 
-https://www.dafont.com/funsized.font
-https://react-redux.js.org/
-https://rubyonrails.org/
-https://threejs.org/
-https://github.com/AR-js-org
-https://aframe.io/
+* https://www.dafont.com/funsized.font
+* https://react-redux.js.org/
+* https://rubyonrails.org/
+* https://threejs.org/
+* https://github.com/AR-js-org
+* https://aframe.io/
