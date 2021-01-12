@@ -1,4 +1,4 @@
-// imports:
+
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
@@ -14,18 +14,18 @@ import hiro from '../images/hiro.png';
 import { homeBG, maxWidthIs100 } from '../bigStyle';
 import { Segment, Header } from 'semantic-ui-react';
 import { width75MarginAutoCenterText } from '../bigStyle';
-// end of imports -----------------------------------------
+
 
 // primary container/page for logged in users --> nested routing for logged in user actions
 const PrimaryHomeContainer = (props) => {
 
-    return(
+    return (
         
         <Switch>
 
           {/* home page */}
-          <Route  exact path='/home'
-                render={ () => (
+          <Route  exact path="/home"
+                render={() => (
 
                     <div style={homeBG} >
                         <PrimaryNav />
@@ -35,47 +35,43 @@ const PrimaryHomeContainer = (props) => {
 
                 )}
             />
-
-            <Route path='/home/hiro'
-                render={ () => (
+            {/* hiro marker preview page */}
+            <Route path="/home/hiro"
+                render={() => (
 
                     <div style={homeBG} >
                         <PrimaryNav />
 
                         <Segment inverted style={width75MarginAutoCenterText}>
                             <h1> Print this image or load it from a second device for AR Photos</h1>
-                            <img src={ hiro }  style={ maxWidthIs100 } />
+                            <img src={hiro}  style={maxWidthIs100} />
                         </Segment>
-                    
                     </div>
-
                 )}
             />
 
             {/* edit page for existing posts */}
-            <Route path='/home/post/edit/:id'
-                render={ routerProps => { 
+            <Route path="/home/post/edit/:id"
+                render={routerProps => { 
                     
-                    const id = parseInt(routerProps.match.params.id) 
+                    const id = parseInt(routerProps.match.params.id);
 
-                    return(
+                    return (
 
                         <div style={homeBG}>
                             <PrimaryNav/>
                             <EditPost postID={id} />
-
-                        
                         </div>
                     )
                 }}
             />
             {/* for followers/following */}
-            <Route path='/home/user/:id/connections'
-                render={ routerProps => { 
+            <Route path="/home/user/:id/connections"
+                render={routerProps => { 
                     
-                    const id = parseInt(routerProps.match.params.id) 
+                    const id = parseInt(routerProps.match.params.id); 
 
-                    return(
+                    return (
 
                         <div style={homeBG}>
 
@@ -88,13 +84,13 @@ const PrimaryHomeContainer = (props) => {
             />
 
             {/* page for liked posts of a specific user based on id param */}
-            <Route path='/home/user/:id/liked'
+            <Route path="/home/user/:id/liked"
 
-                render={ routerProps => { 
+                render={routerProps => { 
                     
-                    const id = parseInt(routerProps.match.params.id) 
+                    const id = parseInt(routerProps.match.params.id);
 
-                    return(
+                    return (
 
                         <div style={homeBG}>
 
@@ -108,13 +104,13 @@ const PrimaryHomeContainer = (props) => {
 
             {/* user show page */}
             <Route 
-                path='/home/user/:id'
+                path="/home/user/:id"
 
-                render={ routerProps => { 
+                render={routerProps => { 
                     
-                    const id = parseInt(routerProps.match.params.id) 
+                    const id = parseInt(routerProps.match.params.id);
 
-                    return(
+                    return (
 
                         <div style={homeBG}>
                         <PrimaryNav />
@@ -131,8 +127,8 @@ const PrimaryHomeContainer = (props) => {
 
                 render={routerProps => {
 
-                    let id = parseInt(routerProps.match.params.id)
-                    return <ShowPost postID={ id } />
+                    let id = parseInt(routerProps.match.params.id);
+                    return <ShowPost postID={id} />
 
                 }}
             />

@@ -1,4 +1,4 @@
-// imports:
+
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { connect } from 'react-redux';
@@ -15,7 +15,6 @@ import {
     chooseFile,
     submitButton
 } from '../bigStyle';
-// end of imports ------------------------------------------------------------------------
 
 // form-like component for uploading images with title and body
 const CreatePost = (props) => {
@@ -43,14 +42,20 @@ const CreatePost = (props) => {
         // small front end validations
 
         if (!title) {
+
             setLoginFailed(true);
             setErrorMessage('Please Enter a post title');
+
         } else if (!body) {
+
             setLoginFailed(true);
             setErrorMessage('Please enter a small post description in the body input');
+
         } else if(!img) {
+
             setLoginFailed(true);
             setErrorMessage('No image selected to upload!');
+            
         } else {
 
             // sending as formData so rails api can store img active storage
@@ -61,13 +66,13 @@ const CreatePost = (props) => {
             formData.append('featured_image', img);
 
             fetch(postsRoute, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${artScopeJWT}`, 
-            },
-            body: formData
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${artScopeJWT}`, 
+                }, 
+                body: formData
             })
-            .then( response => response.json() )
+            .then(response => response.json())
             
             // use new post id for the routing
             .then( post => {
@@ -80,68 +85,114 @@ const CreatePost = (props) => {
 
     return(
         <>
-            <Segment inverted secondary placeholder style={width75MarginAuto}>
+            <Segment 
+                inverted 
+                secondary 
+                placeholder 
+                style={width75MarginAuto}
+            >
 
                 <Header icon>
-                    <Icon name='image outline' />
+                    <Icon name="image outline" />
                     Create a Post!
                 </Header>
 
-                <Form error={loginFailed} onSubmit={ submitHandler } style={textCenterMaxWidth} >
+                <Form 
+                    error={loginFailed} 
+                    onSubmit={submitHandler} 
+                    style={textCenterMaxWidth} 
+                >
 
-                        <Message
-                            error
-                            header='Error'
-                            content={ errorMessage }
-                        />
+                    <Message
+                        error
+                        header="Error"
+                        content={errorMessage}
+                    />
 
-                    <Label color='purple' horizontal style={width80}> 
+                    <Label 
+                        color="purple"
+                        horizontal 
+                        style={width80}
+                    > 
                         Post Title:
                     </Label> 
 
                     <br></br>
 
-                    <Input value={ title } placeholder='enter title here...' focus onChange={ e => setTitle(e.target.value) } style ={{ width: '80%' }} /> 
+                    <Input 
+                        value={title} 
+                        placeholder="enter title here..."
+                        focus 
+                        onChange={e => setTitle(e.target.value)} 
+                        style={{width: "80%"}} 
+                    /> 
                     
-                    <div className='filler' style ={{ height: '10vh'}}/>
+                    <div 
+                        className="filler" 
+                        style={{height: "10vh"}}
+                    />
                     
-                    <Label color='purple' horizontal style={width80} > 
+                    <Label 
+                        color="purple" 
+                        horizontal style={width80} 
+                    > 
                         Body:
                     </Label> 
                     
                     <br></br>
 
-                    <TextArea value={body}
+                    <TextArea 
+                        value={body}
                         focus 
-                        placeholder='Tell people about stuff!' 
+                        placeholder="Tell people about stuff!"
                         onChange={e => setBody(e.target.value)}
                         style ={textAreaCreatePost} 
                     />
 
-                    <div className='filler' style ={{ height: '15vh'}} />
+                    <div 
+                        className="filler" 
+                        style={{height: "15vh"}} 
+                    />
 
                     <br></br>
 
-                    <img src ={img ? URL.createObjectURL(img) : null} alt='upload preview' hidden={ !img } style={height25MaxWidth} />
+                    <img 
+                        src={img ? URL.createObjectURL(img) : null} 
+                        alt="upload preview" 
+                        hidden={!img} 
+                        style={height25MaxWidth} 
+                    />
 
                     <br></br>
 
-                    <label style = {chooseFile} >
-                    <input type="file" accept="image/*" multiple={false} onChange={ e => setImg(e.target.files[0]) } />
+                    <label style={chooseFile}>
+                    <input 
+                        type="file" 
+                        accept="image/*" 
+                        multiple={false} 
+                        onChange={ e => setImg(e.target.files[0]) } 
+                    />
                     </label>
 
                     <br></br>
 
-                    <Button primary style={submitButton}>Submit Me!</Button>
+                    <Button 
+                        primary 
+                        style={submitButton}
+                    >
+                        Submit Me!
+                    </Button>
                 </Form>
-        
             </Segment>
         </>
     );
 };
-// read current user from redux store
-const msp = state => ({ user: state.user });
 
-const mdp = dispatch => ({ updatePosts: (id) => dispatch(updatePosts(id)) });
+// read current user from redux store
+const msp = state => ({user: state.user});
+
+const mdp = dispatch => ({
+    updatePosts: (id) => dispatch(updatePosts(id))
+});
 
 export default connect(msp, mdp)(CreatePost);

@@ -1,4 +1,4 @@
-//imports
+
 import React, { useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
@@ -16,7 +16,6 @@ import {
     postPreviewImage,
 
 } from '../bigStyle';
-// end of imports -------------------------------------------------------
 
 
 
@@ -88,46 +87,63 @@ const PostPreview = (props) => {
             
             <NavLink to={`/home/post/${props.data.id}`} >
 
-                <Card style={postPreviewCard} onClick={ () => null } >
+                <Card style={postPreviewCard} onClick={() => null} >
 
-                    <img src={activeStorageUrlConverter(props.data.img)} wrapped ui={false} style={postPreviewImage}/>
+                    <img 
+                        src={activeStorageUrlConverter(props.data.img)} 
+                        wrapped ui={false} 
+                        style={postPreviewImage}
+                        alt="post preview"
+                    />
 
                     <Card.Content>
                         <Card.Header>{props.data.title}</Card.Header>
                     </Card.Content>
 
-                    <Card.Content extra onClick ={ e => likePost(e) } >
+                    <Card.Content extra onClick ={e => likePost(e)} >
 
-                        { !hasUserLikedPost() ? <Icon name='heart' /> : <Icon color='red' name='heart' /> }
+                        {!hasUserLikedPost() ? (
+                            <Icon name='heart' /> 
+                        ) : ( 
+                            <Icon color='red' name='heart' /> 
+                        )}
 
                         {`Likes ${likedPostsCounter}`}
                     </Card.Content>
 
-                        {
-                            doesPostBelongToLoggedUser() ? (
-
+                        {doesPostBelongToLoggedUser() ? (
                                 <>
                                     <br></br>
-                                    <Button icon onClick={ e => {
-                                            e.preventDefault()
-                                            history.push(`/home/post/edit/${props.data.id}`)
-                                        }}
+                                    <Button 
+                                        icon 
+                                        onClick={ 
+                                            e => {
+                                                e.preventDefault()
+                                                history.push(`/home/post/edit/${props.data.id}`)
+                                            }
+                                        }
                                     >
                                         <Icon name='edit' />
                                         edit my post
                                     </Button>
                             
                                 </>
-                            ) : null
-                        }
+                            ) : (
+                                null
+                            )}
                 </Card>
-
             </NavLink>
-
         </div>
-    )
-}
+    );
+};
 
-const msp = state => ({ loggedUser: state.user.user, reduxLikedPosts: state.user.user.likedPosts });
-const mdp = dispatch => ({ updateCurrentUserLikes: (newLikeID) => dispatch(updateUserLikes(newLikeID)) });
+const msp = state => ({
+    loggedUser: state.user.user, 
+    reduxLikedPosts: state.user.user.likedPosts 
+});
+
+const mdp = dispatch => ({ 
+    updateCurrentUserLikes: (newLikeID) => dispatch(updateUserLikes(newLikeID)) 
+});
+
 export default connect(msp, mdp)(PostPreview);

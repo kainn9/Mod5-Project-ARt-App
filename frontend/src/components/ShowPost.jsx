@@ -15,8 +15,7 @@ import { Segment, Menu, Button, Header, Icon, Label, IconGroup } from 'semantic-
 import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
 import { updateUserLikes } from '../redux/actions'
 import PrimaryNav from './PrimaryNav';
-import CommentZone from './CommentZone';
-
+import CommentZone from'./CommentZone';
 import canvasTexture from '../images/canvas.jpg';
 import canvasBack from '../images/canvasBack.jpg';
 import { likedPostsRoute } from '../railsRoutes';
@@ -52,7 +51,8 @@ const ShowPost = (props) => {
     // creates or destroys liked relationship 
     const likePost = () => {
 
-        const httpVerb = loggedUserLikedPost() ? 'DELETE' : 'POST'
+        const httpVerb = loggedUserLikedPost() ? 'DELETE' : 'POST';
+
         const fetchConfig = {
             method: `${httpVerb}`, 
             headers: { 
@@ -61,7 +61,7 @@ const ShowPost = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ user_id: props.loggedUser.id, post_id: currentPost.id })
-        }
+        };
 
         fetch(likedPostsRoute, fetchConfig)
         .then( response => response.json() )
@@ -77,21 +77,21 @@ const ShowPost = (props) => {
                 setLikedPostsCounter(current => current - 1 )
                 
             }
-        })
+        });
 
-    }
+    };
     
     // returns bool if logged user has liked the post being previewed
     const loggedUserLikedPost = () => {
-        return props.loggedUser.likedPosts.map(p => p.id).includes(currentPost.id)
-    }
+        return props.loggedUser.likedPosts.map(p => p.id).includes(currentPost.id);
+    };
 
     // callback for escape key to leave AR state
     const leaveAR = e => {
         if (e.code === 'Escape') {
-            setViewMode('normal')
-        }
-    }
+            setViewMode('normal');
+        };
+    };
 
     // gets Dimensions from img and then uses Set Dimensions hook to save in state
     const getDimensions  = () => {
@@ -100,7 +100,7 @@ const ShowPost = (props) => {
 
         // if viewMode != normal the img does not exist , howver, if the image exists we grab natural height and length... view mode always starts as nornal so wecan get the data before switching to ar or 3D
         if (viewMode === 'normal') setDimensions({height: img.naturalHeight, width: img.naturalWidth});
-    }
+    };
 
     // sets view state to ar and grabs pic dimensions for render(if need be)
     const renderARView =() => {
@@ -108,7 +108,7 @@ const ShowPost = (props) => {
         setViewMode('ar');
         getDimensions();
        
-    }
+    };
 
     // sets view state to three and grabs pic dimensions for render(if need be)
     const prep3D = () => {
@@ -183,10 +183,10 @@ const ShowPost = (props) => {
             // resizes renderer if bool is true
             if (needResize) {
                 renderer.setSize(width, height, false);
-            }
+            };
             
             return needResize;
-        }
+        };
           
         function render(time) {
             time *= 0.001;
@@ -197,25 +197,26 @@ const ShowPost = (props) => {
                 // adjusts camera accordingly
                 camera.aspect = canvas.clientWidth / canvas.clientHeight;
                 camera.updateProjectionMatrix();
-            }
+            };
 
             // render scene
             renderer.render(scene, camera);
             requestAnimationFrame(render);
         }
           
-            requestAnimationFrame(render);
+        requestAnimationFrame(render);
     
-    }
+    };
 
     // gets current post from rails api
     const fetchCurrentPost = () => {
+
         const fetchConfig = {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${artScopeJWT}`
             }
-        }
+        };
 
         fetch(`${postsRoute}/${props.postID}`, fetchConfig)
         .then( response => response.json())
@@ -223,45 +224,43 @@ const ShowPost = (props) => {
             setCurrentPost(data)
             setCurrentImg(activeStorageUrlConverter(data.featured_image.url))
             setLikedPostsCounter(data.suscribedUsers.length)
-        })
-    }
+        });
+    };
 
-    /* when you render a ArJs scene it changes you html tag to full screen,  appends a video element your body, and also turns on your camera
+    /* when you render a ArJs scene it changes you html tag to full screen,  appends a video element  to body, and also turns on camera
      this helper fn removes the removes the video element and also turns off the camera when leaving AR mode
-     its important to have margin-top set to 0  with !important in index.css otherwise arJS will overwrite it with negative effects
+
+     Note2Self: important to have margin-top set to 0  with !important in index.css otherwise arJS will overwrite it with negative effects
      when leaving ar mode.
     */
     const fixArSideEffects = () => {
-        const vid = document.querySelector('video')
+        const vid = document.querySelector('video');
 
         if (vid) {
 
             // remove my appended header
             let appendedHeader = document.querySelector('#appendedHeader');
-             if (appendedHeader) appendedHeader.remove()
+            if (appendedHeader) appendedHeader.remove();
 
             if (document.querySelector('video')) {
                  //reset video
-            const video = document.querySelector('video');
-            const mediaStream = video.srcObject;
-            const tracks = mediaStream.getTracks();
-            tracks.forEach(track => track.stop());
-            video.remove();
+                const video = document.querySelector('video');
+                const mediaStream = video.srcObject;
+                const tracks = mediaStream.getTracks();
+                tracks.forEach(track => track.stop());
+                video.remove();
 
-                // ar js puts weird styles we need to remove
-            let htmlTag = document.querySelector('html')
-           
-            htmlTag.removeAttribute('class');
-            }
-        }
+                    // ar js puts styles we need to remove
+                let htmlTag = document.querySelector('html');
+            
+                htmlTag.removeAttribute('class');
+            };
+        };
 
-    }
+    };
 
-    /* ar js in its src code always appends the video tag and spreads it to the body element this cannot be changed w/o editing the src code... you can embedd the video in a Iframe but I opted
-        to create a event listner(on component mount) for the esc key to exit... this helper will append a header on the body and place it over the ivdeo so the user knows to press esc to return to normal view
-        we have to use setInterval because the video element take a X amount of time to append to the body and will remove the header if it loads first. I dont like set timeout because we dont know how
-        long the video will take to mount based on connection speed. The interval clears when the h1 is mounted to the body element.
-    */ 
+    
+    //appends header to help user escape ar Mode
     const appendHeaderForArMode = () => {
         const checkForVideoElement = setInterval(() => {
 
@@ -282,28 +281,28 @@ const ShowPost = (props) => {
                     document.querySelector('body').appendChild(header);
 
                     clearInterval(checkForVideoElement);
-                }
+                };
                     
             }
 
         }, 500);
 
         
-    }
+    };
           
         
     // useEffect to manage the three viewmodes when they change around
     useEffect(() => { 
-        if(viewMode === 'three') render3D(dimensions.width, dimensions.height) 
+        if(viewMode === 'three') render3D(dimensions.width, dimensions.height);
 
-        if (viewMode !== 'ar') fixArSideEffects()
+        if (viewMode !== 'ar') fixArSideEffects();
     
-        if (viewMode === 'ar') appendHeaderForArMode()
+        if (viewMode === 'ar') appendHeaderForArMode();
         
-    }, [viewMode])
+    }, [viewMode]);
 
     // if the prop change(normally when the url changes the previewedPost ID) fetch the post using updated props
-    // also adds an event listner on the esc key to exit ar Mode(the callback checks viewmode state === ar before running)
+    // also adds an event listner on the esc key to exit ar Mode
     useEffect(() => {
         document.addEventListener("keydown", e => leaveAR(e), false);
         fetchCurrentPost();
@@ -312,83 +311,151 @@ const ShowPost = (props) => {
 
 
     // normal view:
-    if (viewMode === 'normal') return(
+    if (viewMode === 'normal') return (
         <div style ={cityScapeBG}>
-        {
-            currentPost ? (
-                <>
-                    <PrimaryNav />
+        {currentPost ? (
+            <>
+                <PrimaryNav />
 
-                    <Segment inverted color='grey' style={width75MarginAuto} >
-                        <Segment inverted>
-                            <Header as='h2' icon textAlign='center' >
-                                <Icon name='image' />
-                                <Header.Content>{ currentPost.title }</Header.Content>
-                            </Header>
+                <Segment 
+                    inverted 
+                    color="grey" 
+                    style={width75MarginAuto} 
+                >
+                    <Segment inverted>
+                        <Header 
+                            as="h2" 
+                            icon 
+                            textAlign="center" 
+                        >
+                            <Icon name="image" />
+                            <Header.Content>{currentPost.title}</Header.Content>
+                        </Header>
                             
+                        <NavLink to={`/home/user/${currentPost.filteredUser.id}`} >
+                            <Header 
+                                color="violet" 
+                                size="medium"
+                            > 
+                                Post By: {currentPost.filteredUser.username} 
+                            </Header>
+                        </NavLink>
+                    </Segment>
 
-                            <NavLink to={ `/home/user/${currentPost.filteredUser.id}` } >
-                                <Header color='violet' size='medium' > Post By: {currentPost.filteredUser.username} </Header>
-                            </NavLink>
-                        </Segment>
-                        <Menu pointing style={flexJCenter} >
+                    <Menu 
+                        pointing 
+                        style={flexJCenter} 
+                    >
 
-                            <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {width40Blue} />
+                        <Menu.Item 
+                            name="Standard View" 
+                            onClick={ () => setViewMode('normal')} 
+                            style={width40Blue} 
+                        />
                         
-                            <Menu.Item name='Canvas View' onClick={ () => prep3D()} style = {width40Blue} />
+                        <Menu.Item 
+                            name="Canvas View" 
+                            onClick={prep3D} 
+                            style={width40Blue}
+                        />
                         
-                            <Menu.Item name='Open AR View' onClick={ renderARView } style = {width20Red} />
-    
-                        </Menu>
-                        <Segment inverted>
-                            <img id='texture' src={currentImg} style ={widthIs100} />
-                        </Segment>
-                        <Segment inverted>
-                            <h3>
-                                {currentPost.body}
-                            </h3>
-                        </Segment>
-                        {
-                            loggedUserLikedPost() ? (
-                                <Button as='div' labelPosition='right' onClick={ () => likePost() } style={widthIs100}  >
-                                    <Button color='black' style={widthIs100}>
-                                        <Icon name='heart' />
-                                            Unlike
-                                    </Button>
-                                    <Label as='a' basic color='red' pointing='left'>
-                                        {likedPostsCounter}
-                                     </Label>
-                                </Button>
-                            ) : (
-                                <Button as='div' labelPosition='right'style={widthIs100}  onClick={ () => likePost() }>
-                                    <Button color='red'  style={widthIs100}>
-                                        <Icon name='heart' />
-                                            Like
-                                    </Button>
-                                    <Label as='a' basic color='red' pointing='left'>
-                                        {likedPostsCounter}
-                                     </Label>
-                                </Button>
-                            )
-                        }   
-                            <CommentZone loggedUser={props.loggedUser} comments={currentPost.comments} postID={currentPost.id} setCurrentPost={ setCurrentPost } />
-                    </Segment >
-                    
-                </>
-                
-            ) : (
-                null
-            )
-        }
+                        <Menu.Item 
+                            name="Open AR View" 
+                            onClick={renderARView} 
+                            style={width20Red} 
+                        />
+                    </Menu>
+
+                    <Segment inverted>
+                        <img 
+                            id="texture" 
+                            alt="post"
+                            src={currentImg} 
+                            style ={widthIs100} 
+                        />
+
+                    </Segment>
+
+                    <Segment inverted>
+                        <h3>
+                            {currentPost.body}
+                        </h3>
+                    </Segment>
+
+                    {loggedUserLikedPost() ? (
+                        <Button 
+                            as="div" 
+                            labelPosition="right" 
+                            onClick={likePost} 
+                            style={widthIs100}  
+                        >
+                            <Button 
+                                color="black" 
+                                style={widthIs100}
+                            >
+                                <Icon name="heart" />
+                                Unlike
+                            </Button>
+                            <Label 
+                                as="a"
+                                basic 
+                                color="red" 
+                                pointing="left"
+                            >
+                                {likedPostsCounter}
+                            </Label>
+                        </Button>
+                    ) : (
+                        <Button 
+                            as="div" 
+                            labelPosition="right"
+                            style={widthIs100}  
+                            onClick={likePost}
+                        >
+                            <Button 
+                                color="red"  
+                                style={widthIs100}
+                            >
+                                <Icon name="heart" />
+                                Like
+                            </Button>
+                            <Label 
+                                as="a" basic 
+                                color="red"
+                                pointing="left"
+                            >
+                                {likedPostsCounter}
+                            </Label>
+                        </Button>
+                    )}   
+
+                    <CommentZone 
+                        loggedUser={props.loggedUser} 
+                        comments={currentPost.comments} 
+                        postID={currentPost.id} 
+                        setCurrentPost={setCurrentPost} 
+                    />
+                </Segment>
+            </>
+        ) : (
+            null
+        )}
         </div>
     )
 
     // view mode for AR
     if (viewMode === 'ar') return (
         
-        <a-scene arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
+        <a-scene 
+            arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;">
             <a-marker preset="hiro">
-                <a-box src={ currentImg } position ='0 0 -2' depth = { dimensions.height / 256 } width={dimensions.width / 320} height='0.035'> </a-box>
+                <a-box 
+                    src={currentImg} 
+                    position ='0 0 -2' 
+                    depth = {dimensions.height / 256} 
+                    width={dimensions.width / 320} 
+                    height='0.035'> 
+                </a-box>
             </a-marker>
         </a-scene> 
      
@@ -400,32 +467,67 @@ const ShowPost = (props) => {
             
             <PrimaryNav />
 
-            <Segment inverted color='grey' style={width75MarginAuto} >
+            <Segment 
+                inverted 
+                color="grey" 
+                style={width75MarginAuto} 
+            >
                 <Segment inverted>
-                    <Header as='h2' icon textAlign='center' >
-                        <Icon name='image' />
-                        <Header.Content>{ currentPost.title }</Header.Content>
+                    <Header 
+                        as="h2" 
+                        icon
+                        textAlign="center" 
+                    >
+                        <Icon name="image" />
+                        <Header.Content>
+                            {currentPost.title}
+                        </Header.Content>
                     </Header>
                             
 
-                    <NavLink to={ `/home/user/${currentPost.filteredUser.id}` } >
-                            <Header color='violet' size='medium' > Post By: {currentPost.filteredUser.username} </Header>
+                    <NavLink to={`/home/user/${currentPost.filteredUser.id}`} >
+                        <Header 
+                            color="violet" 
+                            size="medium" 
+                        > 
+                            Post By: {currentPost.filteredUser.username} 
+                        </Header>
                     </NavLink>
-                    </Segment>
+
                 </Segment>
+            </Segment>
             
 
-            <Segment inverted color='grey' style={width75MarginAuto}>
+            <Segment 
+                inverted 
+                color="grey" 
+                style={width75MarginAuto}
+            >
 
                 <Menu pointing  style={flexJCenter}>
-                    <Menu.Item name='Standard View' onClick={ () => setViewMode('normal')} style = {width40Blue} />
+                    <Menu.Item 
+                        name="Standard View" 
+                        onClick={() => setViewMode('normal')} 
+                        style={width40Blue} 
+                    />
 
-                    <Menu.Item name='Canvas View' onClick={ () => prep3D()} style = {width40Blue} />
+                    <Menu.Item 
+                        name="Canvas View" 
+                        onClick={prep3D} 
+                        style={width40Blue} 
+                    />
                     
-                    <Menu.Item name='Open AR View' onClick={ renderARView } style = {width20Red} />
+                    <Menu.Item 
+                        name="Open AR View" 
+                        onClick={renderARView} 
+                        style={width20Red} 
+                    />
     
                 </Menu>
-                <canvas id="k" style={widthIs100} />
+                <canvas 
+                    id="k" 
+                    style={widthIs100} 
+                />
             </Segment>
         </div>
     
@@ -433,7 +535,13 @@ const ShowPost = (props) => {
 }
 
 
-const msp = state => ({ loggedUser: state.user.user, reduxLikedPosts: state.user.user.likedPosts });
-const mdp = dispatch => ({ updateCurrentUserLikes: (newLikeID) => dispatch(updateUserLikes(newLikeID)) });
+const msp = state => ({ 
+    loggedUser: state.user.user, 
+    reduxLikedPosts: state.user.user.likedPosts 
+});
+
+const mdp = dispatch => ({ 
+    updateCurrentUserLikes: (newLikeID) => dispatch(updateUserLikes(newLikeID)) 
+});
 
 export default connect(msp, mdp)(ShowPost);

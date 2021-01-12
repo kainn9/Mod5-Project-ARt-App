@@ -1,4 +1,4 @@
-// imports:
+
 import React, { useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -9,8 +9,7 @@ import {
     formSegment,
     loginWrapperStyle,
 
-} from '../bigStyle'
-// end of imports -----------------------------------------------------------
+} from '../bigStyle';
 
 // login page
 const LoginContainer = (props) => {
@@ -48,61 +47,80 @@ const LoginContainer = (props) => {
             props.loginUser({ 
                 username: usernameInput,
                 password: passwordInput,
-            }, setErrorMessage, setLoginFailed, history)
-        }
-    }
+            }, setErrorMessage, setLoginFailed, history);
+        };
+    };
 
-    return(
+    return (
 
-        <div id='login' style = {loginWrapperStyle}>
-            <Menu inverted color={'black'} icon='labeled'>
+        <div 
+            id="login" 
+            style={loginWrapperStyle}
+        >
+            <Menu 
+                inverted color="black"
+                icon='labeled'
+            >
             
-                <NavLink to='/login' style={{ width: '50%' }} >
-
-                    <Menu.Item name='login' >
-                        <Icon name='id badge' />
+                <NavLink 
+                    to="/login" 
+                    style={{width: '50%'}} 
+                >
+                    <Menu.Item name="login" >
+                        <Icon name="id badge" />
                         Login
                     </Menu.Item>
                 </NavLink>
 
-                <NavLink to='/signup' style ={{ width: '50%' }}>
-                    <Menu.Item name='sign-up'>
-                        <Icon name='user secret' />
+                <NavLink 
+                    to="/signup" 
+                    style={{width: '50%'}}
+                >
+                    <Menu.Item name="sign-up">
+                        <Icon name="user secret" />
                         Sign-Up
                     </Menu.Item>
                 </NavLink>
-                
             </Menu>
         
-            <Segment style ={formSegment} >
+            <Segment style={formSegment} >
 
-                <Form error={ loginFailed } >
+                <Form error={loginFailed} >
 
                     <Form.Input 
-                        type='text' 
-                        label='enter username:' 
-                        placeholder='username42'
-                        value={ usernameInput }
-                        onChange={ e => setUserNameInput(e.target.value) }
+                        type="text" 
+                        label="enter username:" 
+                        placeholder="username42"
+                        value={usernameInput}
+                        onChange={e => setUserNameInput(e.target.value)}
                     />
 
                     <Form.Input 
-                        type='password' 
-                        label='enter password:' 
-                        placeholder='password goes here'
-                        value={ passwordInput }
-                        onChange={ e => setPasswordInput(e.target.value) }
+                        type="password" 
+                        label="enter password:" 
+                        placeholder="password goes here"
+                        value={passwordInput}
+                        onChange={e => setPasswordInput(e.target.value)}
                     />
                     
-                    <Message error header='Error' content={ errorMessage } />
+                    <Message 
+                        error 
+                        header="Error" 
+                        content={errorMessage} 
+                    />
                     
-                    <Button onClick={ loginHandler } > Submit </Button>
+                    <Button onClick={loginHandler} > 
+                        Submit 
+                    </Button>
                 </Form>
-            
             </Segment>
         </div>
     );
 };
+
 // pass in the form information, setter hooks for errors, and history hook for redirect
-const mdp = dispatch => ({ loginUser: (userData, setErrorMessage, setLoginFailed, history) => dispatch(loginUser(userData, setErrorMessage, setLoginFailed, history)) });
+const mdp = dispatch => ({ 
+    loginUser: (userData, setErrorMessage, setLoginFailed, history) => dispatch(loginUser(userData, setErrorMessage, setLoginFailed, history)) 
+});
+
 export default connect(null, mdp)(LoginContainer);
