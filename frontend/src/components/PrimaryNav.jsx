@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import {
@@ -12,6 +12,29 @@ import { width75MarginAutoCenterText } from '../bigStyle';
 
 // Primary Navbar for logged in  views
 const PrimaryNav = (props) => {
+  PrimaryNav.propTypes = {
+    user: {
+      user: {
+        id: PropTypes.number,
+      },
+    },
+    logoutUser: PropTypes.func,
+  };
+
+  PrimaryNav.defaultProps = {
+    user: null,
+    logoutUser: null,
+  };
+
+  const {
+    user: {
+      user: {
+        id,
+
+      },
+    },
+  } = props;
+
   // auth token
   const token = localStorage.getItem('artScopeJWT');
 
@@ -21,9 +44,6 @@ const PrimaryNav = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [results, setResults] = useState([]);
-
-  // state to avoid spaming fetches while seatching <- dont think this actually does anything should be 'code smelled' out
-  const [queryDelay, setQueryDelay] = useState(false);
 
   // handles onClick for search popup box
   const handleResultSelect = (e, { result }) => {
@@ -52,11 +72,9 @@ const PrimaryNav = (props) => {
     fetch(searchRoute, fetchConfig)
       .then((response) => response.json())
       .then((matches) => {
-        setQueryDelay(false);
         setIsLoading(false);
 
-        // we set the key to combo of the username/title and ID + index because while user ID's are unique and Post ID's are unique they are not unique to each other
-        const structUserData = matches.users.map((user, i) => ({
+        const structUserData = matches.users.map((user) => ({
           title: user.username,
           description: 'user',
           id: user.id,
@@ -87,7 +105,6 @@ const PrimaryNav = (props) => {
     setSearchInput(input.value);
   };
 
-  // logout -- props.logoutUser() -> sets user to null in redux store, remove authToken from localStorage, redirect to home
   const logoutHandler = () => {
     props.logoutUser();
     localStorage.removeItem('artScopeJWT');
@@ -106,7 +123,7 @@ const PrimaryNav = (props) => {
           </NavLink>
 
           <NavLink
-            to={`/home/user/${props.user.user.id}`}
+            to={`/home/user/${id}`}
             style={{ width: '15%' }}
           >
             <Menu.Item name="My Page">
@@ -116,7 +133,7 @@ const PrimaryNav = (props) => {
           </NavLink>
 
           <NavLink
-            to={`/home/user/${props.user.user.id}/connections`}
+            to={`/home/user/${id}/connections`}
             style={{ width: '15%' }}
           >
             <Menu.Item name="My Connections">
@@ -126,7 +143,7 @@ const PrimaryNav = (props) => {
           </NavLink>
 
           <NavLink
-            to={`/home/user/${props.user.user.id}/liked`}
+            to={`/home/user/${id}/liked`}
             style={{ width: '15%' }}
           >
             <Menu.Item name="Liked Posts">
