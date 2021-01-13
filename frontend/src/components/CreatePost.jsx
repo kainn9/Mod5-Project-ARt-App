@@ -1,198 +1,190 @@
-
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { connect } from 'react-redux';
+import {
+  Segment, Header, Icon, Button, Input, Label, TextArea, Form, Message,
+} from 'semantic-ui-react';
 import { updatePosts } from '../redux/actions';
 import { postsRoute } from '../railsRoutes';
-import { Segment, Header, Icon, Button, Input, Label, TextArea, Form, Message } from 'semantic-ui-react';
 
 import {
-    width75MarginAuto,
-    textCenterMaxWidth,
-    width80,
-    textAreaCreatePost,
-    height25MaxWidth,
-    chooseFile,
-    submitButton
+  width75MarginAuto,
+  textCenterMaxWidth,
+  width80,
+  textAreaCreatePost,
+  height25MaxWidth,
+  chooseFile,
+  submitButton,
 } from '../bigStyle';
 
 // form-like component for uploading images with title and body
 const CreatePost = (props) => {
+  // auth token
+  const artScopeJWT = localStorage.getItem('artScopeJWT');
 
-    // auth token
-    const artScopeJWT = localStorage.getItem('artScopeJWT');
+  // state for error messages
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-    // state for error messages
-    const [loginFailed, setLoginFailed] =  useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+  // state for controlling the inputs and img src
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [img, setImg] = useState(null);
 
+  // for access to history
+  const history = useHistory();
 
-    // state for controlling the inputs and img src
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
-    const [img, setImg] = useState(null);
-    
-    // for access to history
-    const history = useHistory();
+  // handles submit action
+  const submitHandler = (e) => {
+    e.preventDefault();
 
-    // handles submit action
-    const submitHandler = e => {
-        e.preventDefault();
-        
-        // small front end validations
+    // small front end validations
 
-        if (!title) {
+    if (!title) {
+      setLoginFailed(true);
+      setErrorMessage('Please Enter a post title');
+    } else if (!body) {
+      setLoginFailed(true);
+      setErrorMessage('Please enter a small post description in the body input');
+    } else if (!img) {
+      setLoginFailed(true);
+      setErrorMessage('No image selected to upload!');
+    } else {
+      // sending as formData so rails api can store img active storage
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('body', body);
+      formData.append('user_id', props.user.user.id);
+      formData.append('featured_image', img);
 
-            setLoginFailed(true);
-            setErrorMessage('Please Enter a post title');
+      fetch(postsRoute, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${artScopeJWT}`,
+        },
+        body: formData,
+      })
+        .then((response) => response.json())
 
-        } else if (!body) {
+      // use new post id for the routing
+        .then((post) => {
+          props.updatePosts(post.id);
+          history.push(`/home/post/${post.id}`);
+        });
+    }
+  };
 
-            setLoginFailed(true);
-            setErrorMessage('Please enter a small post description in the body input');
+  return (
+    <>
+      <Segment
+        inverted
+        secondary
+        placeholder
+        style={width75MarginAuto}
+      >
 
-        } else if(!img) {
+        <Header icon>
+          <Icon name="image outline" />
+          Create a Post!
+        </Header>
 
-            setLoginFailed(true);
-            setErrorMessage('No image selected to upload!');
-            
-        } else {
+        <Form
+          error={loginFailed}
+          onSubmit={submitHandler}
+          style={textCenterMaxWidth}
+        >
 
-            // sending as formData so rails api can store img active storage
-            const formData = new FormData();
-            formData.append('title', title);
-            formData.append('body', body);
-            formData.append('user_id', props.user.user.id);
-            formData.append('featured_image', img);
+          <Message
+            error
+            header="Error"
+            content={errorMessage}
+          />
 
-            fetch(postsRoute, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${artScopeJWT}`, 
-                }, 
-                body: formData
-            })
-            .then(response => response.json())
-            
-            // use new post id for the routing
-            .then( post => {
-                props.updatePosts(post.id)
-                history.push(`/home/post/${post.id}`)
-            })
-        };
-    }; 
+          <Label
+            color="purple"
+            horizontal
+            style={width80}
+          >
+            Post Title:
+          </Label>
 
+          <br />
 
-    return(
-        <>
-            <Segment 
-                inverted 
-                secondary 
-                placeholder 
-                style={width75MarginAuto}
-            >
+          <Input
+            value={title}
+            placeholder="enter title here..."
+            focus
+            onChange={(e) => setTitle(e.target.value)}
+            style={{ width: '80%' }}
+          />
 
-                <Header icon>
-                    <Icon name="image outline" />
-                    Create a Post!
-                </Header>
+          <div
+            className="filler"
+            style={{ height: '10vh' }}
+          />
 
-                <Form 
-                    error={loginFailed} 
-                    onSubmit={submitHandler} 
-                    style={textCenterMaxWidth} 
-                >
+          <Label
+            color="purple"
+            horizontal
+            style={width80}
+          >
+            Body:
+          </Label>
 
-                    <Message
-                        error
-                        header="Error"
-                        content={errorMessage}
-                    />
+          <br />
 
-                    <Label 
-                        color="purple"
-                        horizontal 
-                        style={width80}
-                    > 
-                        Post Title:
-                    </Label> 
+          <TextArea
+            value={body}
+            focus
+            placeholder="Tell people about stuff!"
+            onChange={(e) => setBody(e.target.value)}
+            style={textAreaCreatePost}
+          />
 
-                    <br></br>
+          <div
+            className="filler"
+            style={{ height: '15vh' }}
+          />
 
-                    <Input 
-                        value={title} 
-                        placeholder="enter title here..."
-                        focus 
-                        onChange={e => setTitle(e.target.value)} 
-                        style={{width: "80%"}} 
-                    /> 
-                    
-                    <div 
-                        className="filler" 
-                        style={{height: "10vh"}}
-                    />
-                    
-                    <Label 
-                        color="purple" 
-                        horizontal style={width80} 
-                    > 
-                        Body:
-                    </Label> 
-                    
-                    <br></br>
+          <br />
 
-                    <TextArea 
-                        value={body}
-                        focus 
-                        placeholder="Tell people about stuff!"
-                        onChange={e => setBody(e.target.value)}
-                        style ={textAreaCreatePost} 
-                    />
+          <img
+            src={img ? URL.createObjectURL(img) : null}
+            alt="upload preview"
+            hidden={!img}
+            style={height25MaxWidth}
+          />
 
-                    <div 
-                        className="filler" 
-                        style={{height: "15vh"}} 
-                    />
+          <br />
 
-                    <br></br>
+          <label style={chooseFile}>
+            <input
+              type="file"
+              accept="image/*"
+              multiple={false}
+              onChange={(e) => setImg(e.target.files[0])}
+            />
+          </label>
 
-                    <img 
-                        src={img ? URL.createObjectURL(img) : null} 
-                        alt="upload preview" 
-                        hidden={!img} 
-                        style={height25MaxWidth} 
-                    />
+          <br />
 
-                    <br></br>
-
-                    <label style={chooseFile}>
-                    <input 
-                        type="file" 
-                        accept="image/*" 
-                        multiple={false} 
-                        onChange={ e => setImg(e.target.files[0]) } 
-                    />
-                    </label>
-
-                    <br></br>
-
-                    <Button 
-                        primary 
-                        style={submitButton}
-                    >
-                        Submit Me!
-                    </Button>
-                </Form>
-            </Segment>
-        </>
-    );
+          <Button
+            primary
+            style={submitButton}
+          >
+            Submit Me!
+          </Button>
+        </Form>
+      </Segment>
+    </>
+  );
 };
 
 // read current user from redux store
-const msp = state => ({user: state.user});
+const msp = (state) => ({ user: state.user });
 
-const mdp = dispatch => ({
-    updatePosts: (id) => dispatch(updatePosts(id))
+const mdp = (dispatch) => ({
+  updatePosts: (id) => dispatch(updatePosts(id)),
 });
 
 export default connect(msp, mdp)(CreatePost);

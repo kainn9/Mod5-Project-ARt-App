@@ -22,9 +22,10 @@ export const getUserFromJWT = () => {
             let validatedResponse = null;
             return response.ok ? (validatedResponse = response.json()) : (validatedResponse);
         })
-        .then( user => dispatch({ type: 'getUser', payload: user }) )
+        .then( user => dispatch({type: 'getUser', payload: user}) )
     };
 };
+
 // post method to create a user and get a jwt token also
 export const signupUser = (userData, setErrorMessage, setLoginFailed, history) => {
 
@@ -43,7 +44,7 @@ export const signupUser = (userData, setErrorMessage, setLoginFailed, history) =
             headers: {}, 
             body: formData
             
-        }
+        };
     
         fetch(usersRoute, fetchConfig)
         .then( response => {
@@ -58,21 +59,18 @@ export const signupUser = (userData, setErrorMessage, setLoginFailed, history) =
             } else {
                 setErrorMessage('Username already taken')
                 setLoginFailed(true)
-                dispatch({ type: 'signupUser', payload: user })
+                dispatch({type: 'signupUser', payload: user})
 
-            }
-        })
-
-
-    }
-    
-    
-}
+            };
+        });
+    }; 
+};
 // post method that creates jwt token in exchange for valid username/pass
 export const loginUser = (userData, setErrorMessage, setLoginFailed, history) => {
     
     return function (dispatch) {
-        const fetchConfig ={
+
+        const fetchConfig = {
             method:'POST',
             headers: {
               'content-type':'application/json',
@@ -91,36 +89,36 @@ export const loginUser = (userData, setErrorMessage, setLoginFailed, history) =>
         .then( user => {
             if (user) {
                 localStorage.setItem('artScopeJWT', user.jwt);
-                dispatch({ type: 'loginUser', payload: user })
+                dispatch({type: 'loginUser', payload: user});
                 history.push('/')
             } else {
-                setErrorMessage('Username or password did not match')
-                setLoginFailed(true)
-                dispatch({ type: 'loginUser', payload: user })
+                setErrorMessage('Username or password did not match');
+                setLoginFailed(true);
+                dispatch({type: 'loginUser', payload: user})
 
-            }
-        })
-    }
+            };
+        });
+    };
     
-}
+};
 // passes in id of newly liked/unliked post to update action/reducer
 export const updateUserLikes = (newLikeID) => {
-    return function(dispatch) {
-        dispatch({ type: 'updateLikes', payload: newLikeID })
-    }
+    return (function(dispatch) {
+        dispatch({type: 'updateLikes', payload: newLikeID})
+    })
     
-}
+};
 // passes in id of newly followed/unfollowed user to update action/reducer
 export const updateFollows = (followID) => {
-    return function(dispatch) {
-        dispatch({ type: 'updateFollows', payload: followID })
-    }
+    return (function(dispatch) {
+        dispatch({ type: 'updateFollows', payload: followID})
+    });
     
-}
+};
 
 export const updatePosts = (postID) => {
-    return function(dispatch) {
+    return (function(dispatch) {
         dispatch({ type: 'updatePosts', payload: postID })
-    }
-}
+    });
+};
     

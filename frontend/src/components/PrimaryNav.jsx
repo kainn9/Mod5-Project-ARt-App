@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { Segment, Icon, Menu, Search } from "semantic-ui-react";
-import { activeStorageUrlConverter, searchRoute } from "../railsRoutes";
+import {
+  Segment, Icon, Menu, Search,
+} from 'semantic-ui-react';
+import { activeStorageUrlConverter, searchRoute } from '../railsRoutes';
 
-import { width75MarginAutoCenterText } from "../bigStyle";
+import { width75MarginAutoCenterText } from '../bigStyle';
 
 // Primary Navbar for logged in  views
 const PrimaryNav = (props) => {
-  //auth token
-  const token = localStorage.getItem("artScopeJWT");
+  // auth token
+  const token = localStorage.getItem('artScopeJWT');
 
   const history = useHistory();
 
   // search bar load state
   const [isLoading, setIsLoading] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   const [results, setResults] = useState([]);
 
   // state to avoid spaming fetches while seatching <- dont think this actually does anything should be 'code smelled' out
@@ -26,23 +28,23 @@ const PrimaryNav = (props) => {
   // handles onClick for search popup box
   const handleResultSelect = (e, { result }) => {
     // different routes depening on query result
-    if (result.description === "user") {
+    if (result.description === 'user') {
       history.push(`/home/user/${result.id}`);
-      setSearchInput("");
-    } else if (result.description === "post") {
+      setSearchInput('');
+    } else if (result.description === 'post') {
       history.push(`/home/post/${result.id}`);
-      setSearchInput("");
+      setSearchInput('');
     }
   };
 
   // fetches search results based on searchParams
   const fetchSearchResults = (searchParams) => {
     const fetchConfig = {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ search: searchParams }),
     };
@@ -56,7 +58,7 @@ const PrimaryNav = (props) => {
         // we set the key to combo of the username/title and ID + index because while user ID's are unique and Post ID's are unique they are not unique to each other
         const structUserData = matches.users.map((user, i) => ({
           title: user.username,
-          description: "user",
+          description: 'user',
           id: user.id,
           key: user.username + user.id,
           image: activeStorageUrlConverter(user.proPic.url),
@@ -64,7 +66,7 @@ const PrimaryNav = (props) => {
 
         const structPostData = matches.posts.map((post, i) => ({
           title: post.title,
-          description: "post",
+          description: 'post',
           key: post.id + post.title + i,
           id: post.id,
           image: activeStorageUrlConverter(post.featured_image.url),
@@ -88,15 +90,15 @@ const PrimaryNav = (props) => {
   // logout -- props.logoutUser() -> sets user to null in redux store, remove authToken from localStorage, redirect to home
   const logoutHandler = () => {
     props.logoutUser();
-    localStorage.removeItem("artScopeJWT");
-    history.push("/");
+    localStorage.removeItem('artScopeJWT');
+    history.push('/');
   };
 
   return (
     <div style={width75MarginAutoCenterText}>
-      <Segment inverted style={{ minWidth: "0", margin: 0 }}>
+      <Segment inverted style={{ minWidth: '0', margin: 0 }}>
         <Menu inverted color="black" icon="labeled">
-          <NavLink to="/home" style={{ width: "15%" }}>
+          <NavLink to="/home" style={{ width: '15%' }}>
             <Menu.Item name="home">
               <Icon name="home" />
               Home
@@ -105,7 +107,7 @@ const PrimaryNav = (props) => {
 
           <NavLink
             to={`/home/user/${props.user.user.id}`}
-            style={{ width: "15%" }}
+            style={{ width: '15%' }}
           >
             <Menu.Item name="My Page">
               <Icon name="folder open" />
@@ -115,7 +117,7 @@ const PrimaryNav = (props) => {
 
           <NavLink
             to={`/home/user/${props.user.user.id}/connections`}
-            style={{ width: "15%" }}
+            style={{ width: '15%' }}
           >
             <Menu.Item name="My Connections">
               <Icon name="users" />
@@ -125,7 +127,7 @@ const PrimaryNav = (props) => {
 
           <NavLink
             to={`/home/user/${props.user.user.id}/liked`}
-            style={{ width: "15%" }}
+            style={{ width: '15%' }}
           >
             <Menu.Item name="Liked Posts">
               <Icon name="folder open outline" />
@@ -133,14 +135,14 @@ const PrimaryNav = (props) => {
             </Menu.Item>
           </NavLink>
 
-          <NavLink to="/home/create-post" style={{ width: "15%" }}>
+          <NavLink to="/home/create-post" style={{ width: '15%' }}>
             <Menu.Item name="create-post">
               <Icon name="file image outline" />
               Create Post
             </Menu.Item>
           </NavLink>
 
-          <NavLink to="/home/hiro" style={{ minWidth: "0px", width: "13%" }}>
+          <NavLink to="/home/hiro" style={{ minWidth: '0px', width: '13%' }}>
             <Menu.Item name="Hiro Img">
               <Icon name="hand peace" />
               Hiro Img
@@ -150,7 +152,7 @@ const PrimaryNav = (props) => {
           <Menu.Item
             name="logOut"
             onClick={logoutHandler}
-            style={{ minWidth: "0px", width: "13%" }}
+            style={{ minWidth: '0px', width: '13%' }}
           >
             <Icon name="hand peace" />
             Log Out
@@ -176,7 +178,7 @@ const PrimaryNav = (props) => {
 
 // set user to null in redux store on logout
 const mdp = (dispatch) => ({
-  logoutUser: () => dispatch({ type: "logoutUser" }),
+  logoutUser: () => dispatch({ type: 'logoutUser' }),
 });
 
 const msp = (state) => ({ user: state.user });

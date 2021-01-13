@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 import { NavLink } from 'react-router-dom';
@@ -16,43 +15,40 @@ import {
 
 } from '../bigStyle';
 
-
 // nav for logged out users
-const SecondaryNav = () => {
+const SecondaryNav = () => (
+  <div
+    style={{
+      backgroundImage: `url(${skyCastleImg})`,
+      backgroundRepeat: 'repeat',
+      height: 'fit',
+      minHeight: '100%',
+    }}
+  >
 
-  return(
-    <div 
-      style={{ 
-        backgroundImage: `url(${ skyCastleImg })`,
-        backgroundRepeat: 'repeat', 
-        height: 'fit', 
-        minHeight: '100%' 
-      }} 
-    >
-      
-    <div style={secondaryNavSeg} >
+    <div style={secondaryNavSeg}>
 
-      <Segment inverted >
+      <Segment inverted>
 
-        <Menu 
-          inverted 
-          color="black" 
-          icon='labeled'
+        <Menu
+          inverted
+          color="black"
+          icon="labeled"
         >
 
-          <NavLink 
+          <NavLink
             to="/login"
-            style={{width: '50%'}} 
+            style={{ width: '50%' }}
           >
-            <Menu.Item name="login" >
+            <Menu.Item name="login">
               <Icon name="id badge" />
               Login
             </Menu.Item>
           </NavLink>
 
-          <NavLink 
-            to="/signup" 
-            style={{width: '50%'}} 
+          <NavLink
+            to="/signup"
+            style={{ width: '50%' }}
           >
             <Menu.Item name="sign-up">
               <Icon name="user secret" />
@@ -61,31 +57,29 @@ const SecondaryNav = () => {
           </NavLink>
 
         </Menu>
-        
-        <Segment inverted secondary >
-          <h2 style={secondaryNavHeader} > 
-            Welcome to ARt App,  
+
+        <Segment inverted secondary>
+          <h2 style={secondaryNavHeader}>
+            Welcome to ARt App,
             <br />
-            Login/Sign-up above 
+            Login/Sign-up above
           </h2>
         </Segment>
-          
-        
-          <img 
-            alt= "hiro symbol for ar"
-            src={hiro}  
-            style={maxWidthMinHeight60}
-          />
-          
-          <h4 style={secondaryNavSmallHeader} >
-            Use This Hiro Symbol For AR!
-          </h4>
-          
-        </Segment>
-      </div>
 
-    </div> 
-  );
-};
+        <img
+          alt="hiro symbol for ar"
+          src={hiro}
+          style={maxWidthMinHeight60}
+        />
+
+        <h4 style={secondaryNavSmallHeader}>
+          Use This Hiro Symbol For AR!
+        </h4>
+
+      </Segment>
+    </div>
+
+  </div>
+);
 
 export default SecondaryNav;

@@ -1,4 +1,4 @@
-// imports:
+
 import './index.css';
 import 'semantic-ui-css/semantic.min.css'
 
@@ -15,7 +15,6 @@ import rootReducer from './redux/reducer';
 import App from './App';
 
 import * as serviceWorker from './serviceWorker';
-// end of imports---------------------------------
 
 let store = createStore(rootReducer, applyMiddleware(thunk));
 
