@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   Segment, Image, Form, TextArea, Header, Button,
 } from 'semantic-ui-react';
@@ -10,8 +11,34 @@ import { activeStorageUrlConverter, commentRoute } from '../railsRoutes';
     loads from show post, renders existing comments from props,
     has a form that adds comments to post and manips state to reflect that until next fetch
 */
+
 const CommentZone = (props) => {
-  // auth token
+  CommentZone.propTypes = {
+    loggedUser: PropTypes.shape({
+      bio: PropTypes.string,
+      id: PropTypes.number,
+      isFollowedBy: PropTypes.array,
+      isFollowing: PropTypes.array,
+      likedPosts: PropTypes.array,
+      posts: PropTypes.array,
+      proPic: PropTypes.object,
+      username: PropTypes.string,
+      postID: PropTypes.number,
+    }),
+
+    setCurrentPost: PropTypes.func,
+    postID: PropTypes.number,
+    comments: PropTypes.shape([{ proPic: PropTypes.string }]),
+  };
+
+  CommentZone.defaultProps = {
+    loggedUser: PropTypes.object,
+    setCurrentPost: PropTypes.func,
+    postID: PropTypes.number,
+    comments: PropTypes.array,
+  };
+
+  const { loggedUser: { username, proPic: { url } } } = props;
   const artScopeJWT = localStorage.getItem('artScopeJWT');
   const [body, setBody] = useState('');
 
@@ -29,7 +56,6 @@ const CommentZone = (props) => {
     });
   };
 
-  // sends a post request for a new comment passing in the logged user and the current previewed post ids, it then calls updateCommentState on the callback which is a serlialzed post in json format
   const addComment = (e) => {
     e.preventDefault();
 
@@ -50,7 +76,7 @@ const CommentZone = (props) => {
         setBody('');
       });
   };
-    // maps through props.comments data to make jsx comments, if theyre no comments on post it just renders that instead
+
   const renderComments = () => {
     if (props.comments.length) {
       return props.comments.map((comment) => (
@@ -92,10 +118,10 @@ const CommentZone = (props) => {
       <Segment inverted>
         <Header as="h2">
           <Image
-            src={activeStorageUrlConverter(props.loggedUser.proPic.url)}
+            src={activeStorageUrlConverter(url)}
             alt="profile picture"
           />
-          {props.loggedUser.username}
+          {username}
           :
         </Header>
 

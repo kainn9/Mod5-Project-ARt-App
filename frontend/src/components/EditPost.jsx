@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
 import {
   Segment, Header, Icon, Button, Input, Label, TextArea, Form, Message,
 } from 'semantic-ui-react';
@@ -18,8 +18,33 @@ import {
   submitButton,
 } from '../bigStyle';
 
-// form for uploading images with title and body
 const EditPost = (props) => {
+  EditPost.propTypes = {
+    loggedUser: PropTypes.shape({
+      bio: PropTypes.string,
+      id: PropTypes.number,
+      isFollowedBy: PropTypes.array,
+      isFollowing: PropTypes.array,
+      likedPosts: PropTypes.array,
+      posts: PropTypes.array,
+      proPic: PropTypes.object,
+      username: PropTypes.string,
+      postID: PropTypes.number,
+    }),
+
+    postID: PropTypes.number,
+  };
+
+  EditPost.defaultProps = {
+    loggedUser: null,
+    postID: null,
+  };
+
+  const {
+    postID,
+    loggedUser: { id },
+  } = props;
+
   // auth token
   const artScopeJWT = localStorage.getItem('artScopeJWT');
 
@@ -112,7 +137,7 @@ const EditPost = (props) => {
   // on mount fetch the post to edit
   useEffect(() => {
     fetchPost();
-  }, [props.postID]);
+  }, [postID]);
 
   return (
     <>
@@ -211,7 +236,7 @@ const EditPost = (props) => {
                 </Button>
               </Form>
 
-              <NavLink to={`/home/user/${props.loggedUser.id}`}>
+              <NavLink to={`/home/user/${id}`}>
                 <Button
                   color="red"
                   style={submitButton}

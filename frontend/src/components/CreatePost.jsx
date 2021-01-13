@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { connect } from 'react-redux';
 import {
@@ -17,8 +18,20 @@ import {
   submitButton,
 } from '../bigStyle';
 
-// form-like component for uploading images with title and body
 const CreatePost = (props) => {
+  CreatePost.propTypes = {
+    user: {
+      user: {
+        id: PropTypes.number,
+      },
+    },
+    updatePosts: PropTypes.func,
+  };
+
+  CreatePost.defaultProps = {
+    user: null,
+    updatePosts: null,
+  };
   // auth token
   const artScopeJWT = localStorage.getItem('artScopeJWT');
 
