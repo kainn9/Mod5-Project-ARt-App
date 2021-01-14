@@ -15,7 +15,6 @@ import {
 
 // login page
 function LoginContainer(props) {
-
   LoginContainer.propTypes = {
     loginUser: PropType.func,
   };
@@ -124,7 +123,7 @@ function LoginContainer(props) {
       </Segment>
     </div>
   );
-};
+}
 
 // pass in the form information, setter hooks for errors, and history hook for redirect
 const mdp = (dispatch) => ({

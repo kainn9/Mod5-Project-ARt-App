@@ -216,7 +216,7 @@ function FollowList(props) {
       )}
     </>
   );
-};
+}
 
 const msp = (state) => ({ loggedUser: state.user.user });
 

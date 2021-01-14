@@ -19,7 +19,6 @@ import {
 } from '../bigStyle';
 
 function EditPost(props) {
-  
   EditPost.propTypes = {
     loggedUser: PropTypes.shape({
       bio: PropTypes.string,
@@ -257,7 +256,7 @@ function EditPost(props) {
       )}
     </>
   );
-};
+}
 // read current user from redux store
 const msp = (state) => ({ loggedUser: state.user.user });
 

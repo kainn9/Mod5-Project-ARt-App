@@ -15,7 +15,7 @@ import { homeBG, maxWidthIs100, width75MarginAutoCenterText } from '../bigStyle'
 
 // primary container/page for logged in users --> nested routing for logged in user actions
 function PrimaryHomeContainer() {
-  (
+  return (
     <Switch>
 
       {/* home page */}

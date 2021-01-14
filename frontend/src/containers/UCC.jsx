@@ -10,7 +10,32 @@ import { activeStorageUrlConverter } from '../railsRoutes';
 import { followerButtons, followerGrid, width75MarginAuto } from '../bigStyle';
 
 function UserConnectionsContainer(props) {
+  UserConnectionsContainer.propTypes = {
+    loggedUser: PropTypes.shape({
+      bio: PropTypes.string,
+      id: PropTypes.number,
+      isFollowedBy: PropTypes.array,
+      isFollowing: PropTypes.array,
+      likedPosts: PropTypes.array,
+      posts: PropTypes.array,
+      proPic: PropTypes.object,
+      username: PropTypes.string,
+      postID: PropTypes.number,
+    }),
 
+    userID: PropTypes.number,
+  };
+  UserConnectionsContainer.defaultProps = {
+    loggedUser: null,
+    userID: null,
+  };
+
+  const {
+    userID,
+    loggedUser: {
+      id,
+    },
+  } = props;
 
   const [activeTab, setActiveTab] = useState('following');
   const [previewedUserData, setPreviewedUserData] = useState('');
@@ -22,7 +47,7 @@ function UserConnectionsContainer(props) {
         style={{ textAlign: 'center' }}
       >
 
-        <NavLink to={`/home/user/${props.loggedUser.id}/connections`}>
+        <NavLink to={`/home/user/${id}/connections`}>
 
           <Button
             color="pink"
@@ -33,7 +58,7 @@ function UserConnectionsContainer(props) {
 
         </NavLink>
 
-        <NavLink to={`/home/user/${props.userID}`}>
+        <NavLink to={`/home/user/${userID}`}>
 
           <Button
             color="orange"
@@ -91,7 +116,7 @@ function UserConnectionsContainer(props) {
               <FollowList
                 setPreviewedUserData={setPreviewedUserData}
                 relationship="isFollowing"
-                userID={props.userID}
+                userID={userID}
               />
             </div>
 
@@ -122,7 +147,7 @@ function UserConnectionsContainer(props) {
               <FollowList
                 setPreviewedUserData={setPreviewedUserData}
                 relationship="isFollowedBy"
-                userID={props.userID}
+                userID={userID}
               />
             </div>
 
@@ -132,7 +157,7 @@ function UserConnectionsContainer(props) {
       </Segment>
     </>
   );
-};
+}
 
 const msp = (state) => ({ loggedUser: state.user.user });
 export default connect(msp, null)(UserConnectionsContainer);

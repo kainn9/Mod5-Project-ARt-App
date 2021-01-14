@@ -13,7 +13,6 @@ import { activeStorageUrlConverter, commentRoute } from '../railsRoutes';
 */
 
 function CommentZone(props) {
-  
   CommentZone.propTypes = {
     loggedUser: PropTypes.shape({
       bio: PropTypes.string,
@@ -143,6 +142,6 @@ function CommentZone(props) {
       </Segment>
     </>
   );
-};
+}
 
 export default CommentZone;

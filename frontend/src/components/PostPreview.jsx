@@ -160,7 +160,7 @@ function PostPreview(props) {
       </NavLink>
     </div>
   );
-};
+}
 
 const msp = (state) => ({
   loggedUser: state.user.user,

@@ -191,7 +191,7 @@ function CreatePost(props) {
       </Segment>
     </>
   );
-};
+}
 
 // read current user from redux store
 const msp = (state) => ({ user: state.user });

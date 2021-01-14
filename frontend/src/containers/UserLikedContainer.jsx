@@ -11,7 +11,7 @@ import { followersRoute } from '../railsRoutes';
 // I used UserShellContainer as a parent for UserLikedContainer and UserPostContainer since they are so similair
 // however I dont think class based inheritance played nice with redux so that was challenging
 class UserLikedContainer extends UserShellContainer {
-    headerChange = 'Likes:';
+    headerChange = 'Likes:'
 
     // checks if logged in user is following the previewed user
     isLoggedUserFollowingPreviewedUser = () => {

@@ -17,7 +17,6 @@ import {
 } from '../bigStyle';
 
 function UserFeed(props) {
-  
   UserFeed.propTypes = {
     updateCurrentUserLikes: PropTypes.func,
     loggedUser: {
@@ -222,7 +221,7 @@ function UserFeed(props) {
 
     </Segment>
   );
-};
+}
 
 const msp = (state) => ({ loggedUser: state.user.user });
 

@@ -191,7 +191,7 @@ function PrimaryNav(props) {
       </Segment>
     </div>
   );
-};
+}
 
 // set user to null in redux store on logout
 const mdp = (dispatch) => ({
