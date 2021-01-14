@@ -12,7 +12,7 @@ import {
 
 } from '../bigStyle';
 
-const PostPreview = (props) => {
+function PostPreview(props) {
   PostPreview.propTypes = {
 
     updateCurrentUserLikes: PropTypes.func,

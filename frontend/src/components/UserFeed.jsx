@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import {
   Segment, Card, Image, Header, Button, Icon, Label, Dimmer, Loader,
@@ -15,7 +16,27 @@ import {
   mainStrip,
 } from '../bigStyle';
 
-const UserFeed = (props) => {
+function UserFeed(props) {
+  
+  UserFeed.propTypes = {
+    updateCurrentUserLikes: PropTypes.func,
+    loggedUser: {
+      id: PropTypes.number,
+      likedPosts: PropTypes.array,
+    },
+  };
+
+  UserFeed.defaultProps = {
+    updateCurrentUserLikes: null,
+    loggedUser: null,
+  };
+
+  const {
+    loggedUser: {
+      likedPosts,
+    },
+  } = props;
+
   // auth token
   const artScopeJWT = localStorage.getItem('artScopeJWT');
 
@@ -23,7 +44,7 @@ const UserFeed = (props) => {
   const [feed, setFeed] = useState(null);
 
   // state for likes
-  const [loggedUserLikes, setLoggedUserLikes] = useState(props.loggedUser.likedPosts.map((p) => p.id));
+  const [loggedUserLikes, setLoggedUserLikes] = useState(likedPosts.map((p) => p.id));
 
   // state map for number of likes on the posts in the feed
   const [likeCounter, setLikeCounter] = useState({});
@@ -53,7 +74,7 @@ const UserFeed = (props) => {
           props.updateCurrentUserLikes(postID);
           setLoggedUserLikes(props.loggedUser.likedPosts.map((p) => p.id));
 
-          const index = parseInt(e.target.parentElement.attributes[0].value);
+          const index = parseInt(e.target.parentElement.attributes[0].value, 10);
           const likeCounterClone = { ...likeCounter };
           likeCounterClone[index] += 1;
           setLikeCounter(likeCounterClone);
@@ -61,7 +82,7 @@ const UserFeed = (props) => {
           props.updateCurrentUserLikes(postID);
           setLoggedUserLikes(props.loggedUser.likedPosts.map((p) => p.id));
 
-          const index = parseInt(e.target.parentElement.attributes[0].value);
+          const index = parseInt(e.target.parentElement.attributes[0].value, 10);
           const likeCounterClone = { ...likeCounter };
           likeCounterClone[index] -= 1;
           setLikeCounter(likeCounterClone);
@@ -75,7 +96,11 @@ const UserFeed = (props) => {
 
         <NavLink to={`/home/post/${post.id}`}>
           <Segment inverted style={widthMaxMarginAutoCenterText}>
-            <img src={activeStorageUrlConverter(post.featured_image.url)} style={feedImage} />
+            <img
+              src={activeStorageUrlConverter(post.featured_image.url)}
+              style={feedImage}
+              alt={post.title}
+            />
           </Segment>
         </NavLink>
 
@@ -166,9 +191,9 @@ const UserFeed = (props) => {
 
     fetch(feedRoute, fetchConfig)
       .then((response) => response.json())
-      .then((feed) => {
-        setFeed(feed);
-        setLikeCounter(feed.map((p) => (p.suscribedUsers.length)));
+      .then((respFeed) => {
+        setFeed(respFeed);
+        setLikeCounter(respFeed.map((p) => (p.suscribedUsers.length)));
       });
   };
     // calls fetch on mount

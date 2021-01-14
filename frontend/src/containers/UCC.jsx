@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   Segment, Menu, Button, Header, Image,
 } from 'semantic-ui-react';
@@ -8,7 +9,9 @@ import FollowList from '../components/FollowList';
 import { activeStorageUrlConverter } from '../railsRoutes';
 import { followerButtons, followerGrid, width75MarginAuto } from '../bigStyle';
 
-const UserConnectionsContainer = (props) => {
+function UserConnectionsContainer(props) {
+
+
   const [activeTab, setActiveTab] = useState('following');
   const [previewedUserData, setPreviewedUserData] = useState('');
 

@@ -11,7 +11,7 @@ import {
   followerCardImg,
 } from '../bigStyle';
 
-const FollowList = (props) => {
+function FollowList(props) {
   FollowList.propTypes = {
 
     updateFollowerState: PropTypes.func,

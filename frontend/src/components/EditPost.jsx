@@ -18,7 +18,8 @@ import {
   submitButton,
 } from '../bigStyle';
 
-const EditPost = (props) => {
+function EditPost(props) {
+  
   EditPost.propTypes = {
     loggedUser: PropTypes.shape({
       bio: PropTypes.string,

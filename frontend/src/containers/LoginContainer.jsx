@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropType from 'prop-types';
 import {
   Button, Form, Message, Segment, Menu, Icon,
 } from 'semantic-ui-react';
@@ -13,7 +14,16 @@ import {
 } from '../bigStyle';
 
 // login page
-const LoginContainer = (props) => {
+function LoginContainer(props) {
+
+  LoginContainer.propTypes = {
+    loginUser: PropType.func,
+  };
+
+  LoginContainer.defaultProps = {
+    loginUser: null,
+  };
+
   // state to control inputs:
   const [usernameInput, setUserNameInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');

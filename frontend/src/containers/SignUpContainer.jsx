@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   Button, Form, Message, Segment, Menu, Icon,
 } from 'semantic-ui-react';
 import { signupUser } from '../redux/actions';
-
-import defaultPhoto from '../images/blank.png';
 
 import {
   blockAlignCenter,
@@ -16,8 +14,15 @@ import {
 
 } from '../bigStyle';
 
-// page for user signup
-const SignUpContainer = (props) => {
+function SignUpContainer(props) {
+  SignUpContainer.propTypes = {
+    signupUser: PropTypes.func,
+  };
+
+  SignUpContainer.defaultProps = {
+    signupUser: null,
+  };
+
   // state to control forms:
   const [usernameInput, setUserNameInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
@@ -189,7 +194,7 @@ const SignUpContainer = (props) => {
       </Segment>
     </div>
   );
-};
+}
 
 // pass in the form information, setter hooks for errors, and history hook for redirect
 const mdp = (dispatch) => ({

@@ -1,5 +1,3 @@
-// imports
-
 // React:
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -10,32 +8,30 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 // Semantic UI
 import {
-  Segment, Menu, Button, Header, Icon, Label, IconGroup,
+  Segment, Menu, Button, Header, Icon, Label,
 } from 'semantic-ui-react';
 
 // My relative imports:
-import { activeStorageUrlConverter, postsRoute } from '../railsRoutes';
+import { activeStorageUrlConverter, postsRoute, likedPostsRoute } from '../railsRoutes';
 import { updateUserLikes } from '../redux/actions';
 import PrimaryNav from './PrimaryNav';
 import CommentZone from './CommentZone';
 import canvasTexture from '../images/canvas.jpg';
 import canvasBack from '../images/canvasBack.jpg';
-import { likedPostsRoute } from '../railsRoutes';
 
 import {
   width75MarginAuto,
   width40Blue,
   width20Red,
-  maxWidthIs100,
   flexJCenter,
   widthIs100,
   cityScapeBG,
 
 } from '../bigStyle';
-// end of imports ----------------------------------
 
-// Primary Show Component for Posts... Has 3 view modes set from state/hooks: 'normal, 'ar', 'three'
-const ShowPost = (props) => {
+function ShowPost(props) {
+  const { loggedUser } = props;
+
   // auth token
   const artScopeJWT = localStorage.getItem('artScopeJWT');
   // state/hook for post being viewed
@@ -48,6 +44,11 @@ const ShowPost = (props) => {
   const [viewMode, setViewMode] = useState('normal');
   // state for like counter
   const [likedPostsCounter, setLikedPostsCounter] = useState(null);
+
+  // returns bool if logged user has liked the post being previewed
+  const loggedUserLikedPost = () => props.loggedUser.likedPosts
+    .map((p) => p.id)
+    .includes(currentPost.id);
 
   // creates or destroys liked relationship
   const likePost = () => {
@@ -76,9 +77,6 @@ const ShowPost = (props) => {
       });
   };
 
-  // returns bool if logged user has liked the post being previewed
-  const loggedUserLikedPost = () => props.loggedUser.likedPosts.map((p) => p.id).includes(currentPost.id);
-
   // callback for escape key to leave AR state
   const leaveAR = (e) => {
     if (e.code === 'Escape') {
@@ -91,7 +89,6 @@ const ShowPost = (props) => {
     // grab image to get scale/dimen
     const img = document.querySelector('#texture');
 
-    // if viewMode != normal the img does not exist , howver, if the image exists we grab natural height and length... view mode always starts as nornal so wecan get the data before switching to ar or 3D
     if (viewMode === 'normal') setDimensions({ height: img.naturalHeight, width: img.naturalWidth });
   };
 
@@ -109,7 +106,6 @@ const ShowPost = (props) => {
 
   // renders 3D 'canvas' of img --> takes in image dimensions as args
   const render3D = (sWidth, sHeight) => {
-    // this canvas is created when the state is set to three... the render3D is triggered right after that moment so we can render a 3D canvas in our new canvas
     const canvas = document.querySelector('#k');
 
     // create 3D renderer using canvas
@@ -125,8 +121,7 @@ const ShowPost = (props) => {
 
     // small positioning change
     camera.position.z = 2;
-
-    // camera controls (declared after camera/canvas) while the variable is not used its presence is required for movement in the 3D viewer
+    // cam contorls
     const controls = new OrbitControls(camera, canvas);
 
     // scene to render
@@ -211,12 +206,6 @@ const ShowPost = (props) => {
       });
   };
 
-  /* when you render a ArJs scene it changes you html tag to full screen,  appends a video element  to body, and also turns on camera
-     this helper fn removes the removes the video element and also turns off the camera when leaving AR mode
-
-     Note2Self: important to have margin-top set to 0  with !important in index.css otherwise arJS will overwrite it with negative effects
-     when leaving ar mode.
-    */
   const fixArSideEffects = () => {
     const vid = document.querySelector('video');
 
@@ -274,8 +263,6 @@ const ShowPost = (props) => {
     if (viewMode === 'ar') appendHeaderForArMode();
   }, [viewMode]);
 
-  // if the prop change(normally when the url changes the previewedPost ID) fetch the post using updated props
-  // also adds an event listner on the esc key to exit ar Mode
   useEffect(() => {
     document.addEventListener('keydown', (e) => leaveAR(e), false);
     fetchCurrentPost();
@@ -406,7 +393,7 @@ const ShowPost = (props) => {
               )}
 
               <CommentZone
-                loggedUser={props.loggedUser}
+                loggedUser={loggedUser}
                 comments={currentPost.comments}
                 postID={currentPost.id}
                 setCurrentPost={setCurrentPost}
@@ -514,7 +501,7 @@ const ShowPost = (props) => {
 
     );
   }
-};
+}
 
 const msp = (state) => ({
   loggedUser: state.user.user,

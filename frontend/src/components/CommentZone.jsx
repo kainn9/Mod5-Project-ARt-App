@@ -12,7 +12,8 @@ import { activeStorageUrlConverter, commentRoute } from '../railsRoutes';
     has a form that adds comments to post and manips state to reflect that until next fetch
 */
 
-const CommentZone = (props) => {
+function CommentZone(props) {
+  
   CommentZone.propTypes = {
     loggedUser: PropTypes.shape({
       bio: PropTypes.string,

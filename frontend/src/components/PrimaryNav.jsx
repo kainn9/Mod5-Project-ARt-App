@@ -11,7 +11,7 @@ import { activeStorageUrlConverter, searchRoute } from '../railsRoutes';
 import { width75MarginAutoCenterText } from '../bigStyle';
 
 // Primary Navbar for logged in  views
-const PrimaryNav = (props) => {
+function PrimaryNav(props) {
   PrimaryNav.propTypes = {
     user: {
       user: {

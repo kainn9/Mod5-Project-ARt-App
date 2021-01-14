@@ -18,7 +18,7 @@ import {
   submitButton,
 } from '../bigStyle';
 
-const CreatePost = (props) => {
+function CreatePost(props) {
   CreatePost.propTypes = {
     user: {
       user: {
